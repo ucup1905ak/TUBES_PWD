@@ -7,19 +7,17 @@
         <link rel="stylesheet" href="./css/stylesheet.css" />
         <script type="text/javascript" src="js/script.js"></script>
     </head>
-
-
     <body>
         <h1 id="new">Judul</h1>
         
         <h4>Your Data</h4>
         <form action="" method="get">
-            <input type="search" name="searchName"/><br>
+            <input type="search" name="searchName" id="searchName"/><br>
             <input type="button" value="GET DATA" onclick="fetchData()"><br>
         </form>
         <p id="DATA"> myData</p>
 
-        <form action="http://localhost/PWD/TUBES_PWD/backend/index.php?endpoint=users" method="post">
+        <form action="api/index.php" method="post">
             <input type="text" name="name" id="name"/><br>
             <input type="text" name="age" id="age"/>  <br>
             <input type="submit" name="submit"/><br>
