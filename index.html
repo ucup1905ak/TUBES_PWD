@@ -7,14 +7,18 @@
         <link rel="stylesheet" href="./css/stylesheet.css" />
         <script type="text/javascript" src="js/script.js"></script>
     </head>
+
+
     <body>
         <h1 id="new">Judul</h1>
-        <label for="url">URL</label>
-        <input type="url" value="URL" name="url"/>
-        <input type="radio" value="GET" name="method"/>
-        <input type="radio" value="POST" name="method"/>
-        <input type="text" name="json"/> 
-        <input type="submit" name="submit" onclick="handleClick()"/>
+        <input type="button" value="GET DATA" onclick="fetchData()"><br>
+        <form action="http://localhost/PWD/TUBES_PWD/backend/index.php?endpoint=users" method="post">
+            <input type="text" name="name" id="name"/><br>
+            <input type="text" name="age" id="age"/>  <br>
+            <input type="submit" name="submit"/><br>
+        </form>
+
+        
     </body>
 
 </html>
