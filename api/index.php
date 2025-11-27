@@ -4,27 +4,16 @@ $DB_PORT=3306;
 $DB_USER="root";
 $DB_PASSWORD="123";
 $DB_NAME="pwd";
+include 'initialize_database.php';
 
+
+initDatabase($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
 
 $conn = new mysqli( $DB_HOST,
                     $DB_USER,
                     $DB_PASSWORD,
                     $DB_NAME,
                     $DB_PORT);
-
-//check database table users
-// initialize if not exist
-$tableCheck = $conn->query("SHOW TABLES LIKE 'users'");
-if ($tableCheck->num_rows == 0) {
-    $createTableSQL = "CREATE TABLE users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        age INT NOT NULL
-    )";
-    $conn->query($createTableSQL);
-}
-
-
 
 $myObj = new stdClass();
 $myObj->name = "UCUP";
