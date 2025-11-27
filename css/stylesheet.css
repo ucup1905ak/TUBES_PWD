@@ -1,0 +1,300 @@
+ body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    background-color: #0F8A5F;
+    color: white;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .brand {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header button {
+    padding: 8px 16px;
+    background-color: white;
+    color:#0c6b48;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* foto bg fullscreen */
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: url('../img/Dog-Daycare-1.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* teks di atas gambar */
+.hero-text {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    max-width: 650px;
+    padding: 20px;
+}
+
+.hero-text h1 {
+    color: #ffffff;
+    font-size: 45px;
+    margin-bottom: 10px;
+    text-shadow: 0 0px 8px rgb(0, 0, 0);
+}
+
+.hero-text p {
+    font-size: 20px;
+    line-height: 1.5;
+    text-shadow: 0 0px 10px rgba(0, 0, 0);
+}
+
+/* tombol titip */
+.hero-btn {
+    margin-top: 20px;
+    padding: 15px 25px;
+    background-color: #0f8a5f;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 0px 20px rgba(0, 0, 0);
+    transition: box-shadow 0.25s ease;
+}
+
+/* transisi button */
+.hero-btn:hover {
+    box-shadow: 0 0px 30px rgba(0, 0, 0);
+}
+
+/* FASILITAS */
+.facility {
+    padding: 70px 25px;
+    background-color: #ffffff; 
+    display: flex; 
+    gap: 50px; /* Jarak antara kolom kiri dan kanan */
+    align-items: flex-start; /* Sejajarkan di bagian atas */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Kolom Kiri: Galeri Foto */
+.facility-gallery {
+    flex: 1; /* Ambil 50% lebar */
+    padding-right: 20px; /* Sedikit padding agar tidak terlalu rapat */
+}
+
+.facility-gallery h2 {
+    color: #0F8A5F;
+    font-size: 30px;
+    margin-bottom: 25px;
+    border-left: 5px solid #0F8A5F; /* Contoh aksen visual */
+    padding-left: 10px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom, lebar sama */
+    gap: 20px; /* Jarak antar kotak 2x2 */
+}
+
+.facility-item {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Penting agar gambar tidak keluar dari radius */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.facility-item:hover {
+    transform: translateY(-5px); /* Efek hover saat mouse masuk */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.facility-photo {
+    width: 100%;
+    height: 150px; /* Tinggi foto */
+    background-size: cover;
+    background-position: center;
+}
+
+.facility-item p {
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 5px;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Kolom Kanan: Deskripsi dan Tombol */
+.place-order {
+    flex: 1; /* Ambil 50% lebar */
+    padding-top: 50px; /* Agar sejajar dengan tengah grid foto di sebelah kiri */
+}
+
+.place-order h2 {
+    color: #333;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.place-order p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Tombol Order Khusus */
+.order-action-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #0F8A5F;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(15, 138, 95, 0.4);
+    transition: background-color 0.3s ease;
+}
+
+.order-action-btn:hover {
+    background-color: #0c6b48;
+}
+
+/* Media Query untuk tata letak mobile */
+@media (max-width: 900px) {
+    .facility {
+        flex-direction: column; /* Tumpuk kolom di layar kecil/tablet */
+        gap: 30px;
+    }
+
+    .facility-gallery {
+        padding-right: 0;
+    }
+
+    .place-order {
+        padding-top: 0; /* Hapus padding agar rata atas di mode tumpuk */
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr); /* Tetap 2x2, tapi elemennya lebih lebar */
+    }
+}
+
+@media (max-width: 500px) {
+    .gallery-grid {
+        grid-template-columns: 1fr; /* Tumpuk menjadi 1 kolom di layar HP yang sangat kecil */
+    }
+}
+
+/* BAGIAN LANGKAH PEMESANAN */
+
+/* --- How To Order Section --- */
+.how-to-order {
+    padding: 70px 25px;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.how-to-order h2 {
+    color: #333;
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+.order-steps-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.step-item {
+    flex: 1;
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.step-item:hover {
+    transform: translateY(-5px);
+}
+
+.step-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px auto;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%; /* Membuat lingkaran untuk icon */
+    border: 3px solid #0F8A5F;
+}
+
+.step-item h3 {
+    color: #0F8A5F;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.step-item p {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Tombol Link Paket Khusus */
+.package-link-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #0F8A5F;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.package-link-btn:hover {
+    background-color: #0c6b48;
+}
+
+/* Tombol Titip Sekarang di Tengah */
+.how-to-order .center-btn {
+    /* Ini menggunakan styling .order-action-btn yang sudah ada */
+    display: inline-block;
+}
+
+
+/* Media Query untuk tata letak mobile */
+@media (max-width: 768px) {
+    .order-steps-container {
+        flex-direction: column; /* Tumpuk langkah-langkah di layar kecil */
+    }
+}
