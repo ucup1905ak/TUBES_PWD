@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* ===== BASE ===== */
+/* BASE  */
 
 body {
     margin: 0;
@@ -21,14 +21,13 @@ body {
     gap: 40px;
 }
 
-/* ===== LEFT SIDE (IMAGES) ===== */
+/* LEFT SIDE (IMAGES) */
 
 .left {
     width: 50%;
     position: relative;
 }
 
-/* Main photo wrapper (no visible box, only neumorph shadow via image) */
 .mainPhotoWrap {
     position: relative;
     display: flex;
@@ -101,7 +100,7 @@ body {
     border-radius: 14px;
 }
 
-/* ===== RIGHT SIDE (FORM CARD) ===== */
+/* RIGHT SIDE (FORM CARD)  */
 
 .right {
     width: 45%;
@@ -146,7 +145,7 @@ body {
     margin: 12px auto 24px auto;
 }
 
-/* ===== FORM ELEMENTS ===== */
+/*  FORM ELEMENTS */
 
 label {
     display: block;
