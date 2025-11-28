@@ -1,0 +1,124 @@
+/* body */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* BACKGROUND FULL */
+.login-background {
+    width: 100vw;
+    height: 100vh;
+    background: #E9DFC4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* CARD LOGIN */
+.login-container {
+    width: 420px;
+    padding: 35px;
+    background: #F7F1E3;
+    border-radius: 16px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+/* TITLE */
+.title {
+    font-size: 28px;
+    color: #0D4635;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #3f3f3f;
+}
+
+/* INPUTS */
+.input-group {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #0D4635;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    background: white;
+}
+
+/* ERROR BUBBLE */
+.input-error {
+    margin-top: 6px;
+    background: #C25252;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 40px;      /* pill shape */
+    font-size: 13px;
+    width: fit-content;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+/* smooth fade */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* OPTIONS */
+.options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.forgot {
+    color: #0D4635;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* BUTTON */
+.btn-login {
+    width: 100%;
+    background-color: #0D4635;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-login:hover {
+    background-color: #083528;
+}
+
+/* Checkbox color */
+input[type="checkbox"] {
+    accent-color: #0D4635;
+}
