@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
-        <title>Judul</title>
+        <title>PawHaven</title>
         <link rel="stylesheet" href="./css/stylesheet.css" />
 
         <script type="text/javascript" src="js/script.js"></script>
@@ -24,10 +24,10 @@
             <input type="submit" name="submit"/><br>
         </form>
 
-        <div class="header">
-            <div class="brand">PetHaven</div>
+       <div class="header">
+            <div class="brand">PawHaven</div>
             <!-- PErgi ke halaman login -->
-            <button>Sign in</button>
+            <a class="sign-in" href="pages/login.xhtml">Sign in</a>
         </div>
 
         <div class="hero">
@@ -38,34 +38,34 @@
                 </p>
 
                 <!-- Pergi ke halaman pemesanan -->
-                <button class="hero-btn">Titip Sekarang!</button>
+                <a href="pages/order.html" class="hero-btn">Titip Sekarang!</a>
             </div>
         </div>
 
         <div class="facility">
             
             <div class="facility-gallery">
-                <h2>Fasilitas Premium Kami</h2>
+                <h2>Fasilitas Kami</h2>
                 
                 <div class="gallery-grid">
                     
                     <div class="facility-item">
-                        <div class="facility-photo" style="background-image: url('assets/img/kamar.JPG');"></div>
+                        <div class="facility-photo" style="background-image: url('../public/img/dog_cat_food.jpg');"></div>
                         <p>Makanan/Minuman <br/> Terjadwal</p>
                     </div>
                     
                     <div class="facility-item">
-                        <div class="facility-photo" style="background-image: url('assets/img/area-main.JPG');"></div>
+                        <div class="facility-photo" style="background-image: url('../public/img/dog-trainer.jpg');"></div>
                         <p>Staff Terlatih</p>
                     </div>
                     
                     <div class="facility-item">
-                        <div class="facility-photo" style="background-image: url('assets/img/vet.JPG');"></div>
+                        <div class="facility-photo" style="background-image: url('../public/img/dog_playground.jpg');"></div>
                         <p>Tempat Nyaman dan Bersih</p> <br/>
                     </div>
                     
                     <div class="facility-item">
-                        <div class="facility-photo" style="background-image: url('assets/img/makanan.JPG');"></div>
+                        <div class="facility-photo" style="background-image: url('../public/img/dog_delivery.jpg');"></div>
                         <p>Jasa Antar Jemput</p>
                     </div>
                     
@@ -75,7 +75,7 @@
             <div class="place-order">
                 <h2>Berikan Yang Terbaik Untuk Anabul Kesayangan Anda.</h2>
                 <p>
-                    PetHaven dirancang untuk memberikan pengalaman menginap seperti di rumah. 
+                    PawHaven dirancang untuk memberikan pengalaman menginap seperti di rumah. 
                     Dengan fasilitas premium, tim berpengalaman, dan lingkungan yang steril, 
                     Anda dapat meninggalkan hewan kesayangan tanpa rasa khawatir.
                 </p>
@@ -84,7 +84,7 @@
                 </p>
 
                 <!-- Pergi ke halaman fitur -->
-                <button class="order-action-btn">Fitur Lainnya &#8599; </button>
+                 <a href="pages/feature.html" class="more-facility-btn">Fitur Lainnya &#8599;</a>
             </div>
             
         </div>
@@ -95,28 +95,64 @@
             <div class="order-steps-container">
                 
                 <div class="step-item">
-                    <div class="step-icon" style="background-image: url('assets/img/icon-register.JPG');"></div>
+                    <div class="step-icon" style="background-image: url('../public/img/login.png');"></div>
                     <h3>1. Daftar atau Masuk</h3>
                     <p>Buat akun baru atau masuk menggunakan akun Anda yang sudah terdaftar.</p>
                 </div>
                 
                 <div class="step-item">
-                    <div class="step-icon" style="background-image: url('assets/img/icon-package.JPG');"></div>
+                    <div class="step-icon" style="background-image: url('../public/img/package_choices.png');"></div>
                     <h3>2. Pilih Paket Menginap</h3>
                     <p>Pilih durasi dan jenis fasilitas yang paling sesuai dengan kebutuhan hewan Anda.</p>
-                    <a href="package.html" class="package-link-btn">Lihat Semua Paket</a>
+                    <a href="package.html" class="package-link-btn">Lihat Semua Paket &#8599;</a>
                 </div>
                 
                 <div class="step-item">
-                    <div class="step-icon" style="background-image: url('assets/img/icon-pay.JPG');"></div>
+                    <div class="step-icon" style="background-image: url('../public/img/payment.png');"></div>
                     <h3>3. Lakukan Pembayaran</h3>
                     <p>Selesaikan transaksi Anda. Kami akan segera konfirmasi pemesanan Anda via email.</p>
                 </div>
                 
             </div>
+            <!-- pergii ke halaman login -->
+            <a href="pages/order.html" class="order-btn">Titip Sekarang!</a>
 
-            <button class="order-action-btn center-btn">Titip Sekarang!</button>
+        </div>
 
+        <!-- FOOTER -->
+        <div class="footer-info">
+            <div class="info-container">
+                
+                <div class="info-contact">
+                    <h3>PawHaven</h3>
+                    <p>
+                        Alamat:<br/>
+                        Jl. Kenangan No. 123, Yogyakarta<br/>
+                    </p>
+                    <p>
+                        Telepon: 0821-99887766<br/>
+                        Email: info@pawhaven.com
+                    </p>
+                </div>
+
+                <div class="info-about-social">
+                    <h3>Tentang Kami</h3>
+                    <p>
+                        PawHaven adalah rumah kedua bagi hewan kesayangan Anda. Kami berkomitmen memberikan layanan penitipan terbaik dengan pengawasan profesional dan lingkungan yang penuh kasih sayang. Prioritas kami adalah kenyamanan dan keselamatan sahabat berbulu Anda.
+                    </p>
+
+                    <div class="social-links">
+                        <a href="#" class="social-btn instagram">Instagram</a>
+                        <a href="#" class="social-btn facebook">Facebook</a>
+                        <a href="#" class="social-btn whatsapp">WhatsApp</a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 PawHaven. All rights reserved.
+            </div>
         </div>
     </body>
 

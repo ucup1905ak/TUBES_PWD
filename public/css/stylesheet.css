@@ -1,5 +1,6 @@
- body {
+body {
     margin: 0;
+    background-color: #fffaea;
     font-family: Arial, sans-serif;
 }
 
@@ -20,7 +21,7 @@
     font-weight: bold;
 }
 
-.header button {
+.header .sign-in {
     padding: 8px 16px;
     background-color: white;
     color:#0c6b48;
@@ -28,16 +29,18 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
 }
 
 /* foto bg fullscreen */
 .hero {
     width: 100%;
     height: 100vh;
-    background-image: url('../img/Dog-Daycare-1.png');
+    background-image: url('../img/dog_daycare_yeah.jpg');
     background-size: cover;
     background-position: center;
     position: relative;
+    
 }
 
 /* teks di atas gambar */
@@ -63,12 +66,13 @@
     font-size: 20px;
     line-height: 1.5;
     text-shadow: 0 0px 10px rgba(0, 0, 0);
+    padding-bottom: 30px;
 }
 
 /* tombol titip */
 .hero-btn {
     margin-top: 20px;
-    padding: 15px 25px;
+    padding: 10px 20px;
     background-color: #0f8a5f;
     color: #ffffff;
     border: none;
@@ -76,62 +80,65 @@
     cursor: pointer;
     font-size: 20px;
     font-weight: bold;
+    text-decoration: none;
     box-shadow: 0 0px 20px rgba(0, 0, 0);
+    display: inline-block;
     transition: box-shadow 0.25s ease;
 }
 
 /* transisi button */
 .hero-btn:hover {
+    background-color: #0b734f;
     box-shadow: 0 0px 30px rgba(0, 0, 0);
 }
 
 /* FASILITAS */
 .facility {
     padding: 70px 25px;
-    background-color: #ffffff; 
+    background-color: #fffaea; 
     display: flex; 
-    gap: 50px; /* Jarak antara kolom kiri dan kanan */
-    align-items: flex-start; /* Sejajarkan di bagian atas */
+    gap: 50px;
+    align-items: flex-start;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* Kolom Kiri: Galeri Foto */
 .facility-gallery {
-    flex: 1; /* Ambil 50% lebar */
-    padding-right: 20px; /* Sedikit padding agar tidak terlalu rapat */
+    flex: 1; 
+    padding-right: 20px; 
 }
 
 .facility-gallery h2 {
     color: #0F8A5F;
     font-size: 30px;
     margin-bottom: 25px;
-    border-left: 5px solid #0F8A5F; /* Contoh aksen visual */
+    border-left: 5px solid #0F8A5F; 
     padding-left: 10px;
 }
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 kolom, lebar sama */
-    gap: 20px; /* Jarak antar kotak 2x2 */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
 }
 
 .facility-item {
     background-color: white;
     border-radius: 8px;
-    overflow: hidden; /* Penting agar gambar tidak keluar dari radius */
+    overflow: hidden; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease;
 }
 
 .facility-item:hover {
-    transform: translateY(-5px); /* Efek hover saat mouse masuk */
+    transform: translateY(-5px); 
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
 .facility-photo {
     width: 100%;
-    height: 150px; /* Tinggi foto */
+    height: 150px; 
     background-size: cover;
     background-position: center;
 }
@@ -145,10 +152,10 @@
     font-size: 14px;
 }
 
-/* Kolom Kanan: Deskripsi dan Tombol */
+/* Kolom kanan: Deskripsi sama tombol */
 .place-order {
-    flex: 1; /* Ambil 50% lebar */
-    padding-top: 50px; /* Agar sejajar dengan tengah grid foto di sebelah kiri */
+    flex: 1; 
+    padding-top: 50px; 
 }
 
 .place-order h2 {
@@ -163,11 +170,11 @@
     margin-bottom: 20px;
 }
 
-/* Tombol Order Khusus */
-.order-action-btn {
+/* more facility */
+.more-facility-btn {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #0F8A5F;
+    background-color: #0f8a5f;
     color: white;
     border: none;
     border-radius: 6px;
@@ -175,17 +182,18 @@
     font-weight: bold;
     font-size: 15px;
     box-shadow: 0 4px 10px rgba(15, 138, 95, 0.4);
+    text-decoration: none;
     transition: background-color 0.3s ease;
 }
 
-.order-action-btn:hover {
+.more-facility-btn:hover {
     background-color: #0c6b48;
 }
 
 /* Media Query untuk tata letak mobile */
 @media (max-width: 900px) {
     .facility {
-        flex-direction: column; /* Tumpuk kolom di layar kecil/tablet */
+        flex-direction: column; 
         gap: 30px;
     }
 
@@ -194,24 +202,27 @@
     }
 
     .place-order {
-        padding-top: 0; /* Hapus padding agar rata atas di mode tumpuk */
+        padding-top: 0; 
     }
     
     .gallery-grid {
-        grid-template-columns: repeat(2, 1fr); /* Tetap 2x2, tapi elemennya lebih lebar */
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
 @media (max-width: 500px) {
     .gallery-grid {
-        grid-template-columns: 1fr; /* Tumpuk menjadi 1 kolom di layar HP yang sangat kecil */
+        grid-template-columns: 1fr; 
     }
 }
 
-/* BAGIAN LANGKAH PEMESANAN */
 
-/* --- How To Order Section --- */
+
+
+
+/* BAGIAN LANGKAH PEMESANAN */
 .how-to-order {
+    background-color: #fffaea;
     padding: 70px 25px;
     text-align: center;
     max-width: 1200px;
@@ -245,12 +256,13 @@
 }
 
 .step-icon {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     margin: 0 auto 20px auto;
-    background-size: cover;
+    background-size: 60px;
     background-position: center;
-    border-radius: 50%; /* Membuat lingkaran untuk icon */
+    background-repeat: no-repeat;
+    border-radius: 50%;
     border: 3px solid #0F8A5F;
 }
 
@@ -272,8 +284,10 @@
 .package-link-btn {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #0F8A5F;
-    color: white;
+    background-color: #ffffff;
+    border: 2px solid #0c6b48;
+    border-radius: 50px;
+    color: #0c6b48;
     text-decoration: none;
     border-radius: 4px;
     font-weight: bold;
@@ -282,19 +296,134 @@
 }
 
 .package-link-btn:hover {
+    color: white;
     background-color: #0c6b48;
 }
 
-/* Tombol Titip Sekarang di Tengah */
-.how-to-order .center-btn {
-    /* Ini menggunakan styling .order-action-btn yang sudah ada */
+/* Tombol Titip Sekarang di tengah */
+.order-btn {
+    margin-top: 20px;
+    padding: 8px 18px;
+    background-color: #0F8A5F;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
     display: inline-block;
+    transition: box-shadow 0.25s ease;
+}
+
+/* transisi button */
+.order-btn:hover {
+    background-color: #0c6b48;
+    box-shadow: 0 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Media Query untuk tata letak mobile */
+@media (max-width: 768px) {
+    .order-steps-container {
+        flex-direction: column; 
+    }
+}
+
+
+
+/* --- Footer --- */
+.footer-info {
+    background-color: #0F8A5F;
+    color: white;
+    padding-top: 30px;
+}
+
+.info-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px 25px;
+    gap: 40px;
+}
+
+/* kontak 30% kiri */
+.info-contact {
+    flex: 0 0 30%;
+}
+
+/* about us 70% kanan */
+.info-about-social {
+    flex: 1;
+}
+
+.footer-info h3 {
+    color: white;
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.info-contact p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Media Sosial Buttons */
+.social-links {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.social-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.social-btn.instagram {
+    background-color: #E4405F; /* Instagram */
+}
+
+.social-btn.facebook {
+    background-color: #3B5998; /* Facebook */
+}
+
+.social-btn.whatsapp {
+    background-color: #25D366; /* WhatsApp */
+}
+
+.social-btn:hover {
+    opacity: 0.8; /* Sedikit pudar saat dihover */
+}
+
+/* Copyright Bar */
+.copyright {
+    text-align: center;
+    padding: 15px;
+    background-color: #0c6b48; /* Warna hijau sedikit lebih gelap */
+    font-size: 14px;
 }
 
 
 /* Media Query untuk tata letak mobile */
 @media (max-width: 768px) {
-    .order-steps-container {
-        flex-direction: column; /* Tumpuk langkah-langkah di layar kecil */
+    .info-container {
+        flex-direction: column; /* Tumpuk kolom di layar kecil */
+    }
+
+    .info-contact {
+        flex: 1; /* Biarkan mengambil lebar penuh */
+    }
+    
+    .social-links {
+        flex-wrap: wrap; /* Tombol media sosial akan turun jika terlalu banyak */
     }
 }
