@@ -24,6 +24,9 @@ class Router{
                 return;
             }
         }
-        echo "404 - Page Not Found";
+        http_response_code(404);
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Page Not Found','path'=>$path]);
+        exit;
     }
 }
