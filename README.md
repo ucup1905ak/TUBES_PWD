@@ -64,3 +64,6 @@ private $query = ["CREATE TABLE IF NOT EXISTS User (
 	)"];
 
 ![alt text](erd.png)
+
+
+

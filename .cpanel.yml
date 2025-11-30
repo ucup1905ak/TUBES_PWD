@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH="/home/username/public_html"
+    - export DB_HOST="localhost"
+    - export DB_USER="ucuq4438_root"
+    - export DB_PASS="tubesPWDsemangat"
+    - export DB_NAME="ucuq4438_pwd"
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp style.css $DEPLOYPATH
