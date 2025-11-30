@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+<?php //session router semacam itu :)
+include __DIR__ . '/validate.php';
 
-    <head>
-        <meta charset="UTF-8" />
-        <title>PawHaven - Login</title>
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
-    </head>
+  session_start();
 
-    <body>
 
-        <div class="login-background">
-            <div class="login-container">
+  if(isset($_POST['username'])){ //route ke dash
+    if(isValid($_POST['username'],$_POST['password'])){
+      $_SESSION['username'] = $_POST['username'];
+      $_SESSION['password'] = $_POST['password'];
+      exit;
+    }
+  }
 
-                <h2 class="title">Login Account</h2>
-                <p class="subtitle">Please login to PawHaven with your registered account</p>
+exit;
+/*
 
-                <form id="loginForm">
+                <form id="loginForm" action="login.php" method="post">
 
                     <div class="input-group">
                         <label>Username</label>
@@ -42,10 +41,4 @@
                     <button type="button" class="btn-login" onclick="login()">SIGN IN</button>
 
                 </form>
-
-            </div>
-        </div>
-
-        <script src="js/login.js"></script>
-    </body>
-</html>
+*/
