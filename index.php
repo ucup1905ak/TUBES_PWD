@@ -57,9 +57,10 @@ if (strpos($path, '/api') === 0) {
         (int)($env['DB_PORT'] ?? 3306),
         $env['DB_USER'] ?? 'root',
         $env['DB_PASSWORD'] ?? '123',
-        $env['DB_NAME'] ?? 'pwd'
+        $env['DB_NAME'] ?? 'pwd',
+        $env['DB_CERT'] ?? null
     );
-    $apiBackend->setupDatabase();
+    // $apiBackend->setupDatabase();
     $apiBackend->run($path);
     exit;
 }

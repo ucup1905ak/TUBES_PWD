@@ -8,17 +8,38 @@ class BACKEND{
                                     $DB_PORT,
                                     $DB_USER,
                                     $DB_PASSWORD,
-                                    $DB_NAME ) : void {
+                                    $DB_NAME,
+                                    $DB_CERT) : void {
                                         // echo 'connecting to db';
-        $this->DB_CONN = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
-        if ($this->DB_CONN->connect_error) {  
-            die("Connection failed: " . $this->DB_CONN->connect_error);
+
+        $con = mysqli_init();
+        // Set up SSL if needed (replace with actual CA cert path if required)
+        if($DB_CERT){
+            $caFile = sys_get_temp_dir() . '/azure-ca-cert.pem';
+            file_put_contents($caFile, $DB_CERT);
+            mysqli_ssl_set($con, NULL, NULL, $caFile, NULL, NULL);
+
         }
-    }
-    public function setupDatabase(): void{
-        // echo '<br>setting up database.';
-        $DB = new Database_setup($this->DB_CONN);
-        $DB->initializeTables();
+            
+
+        // Use provided DB credentials
+        mysqli_real_connect(
+            $con,
+            $DB_HOST,
+            $DB_USER,
+            $DB_PASSWORD,
+            $DB_NAME,
+            $DB_PORT,
+            MYSQLI_CLIENT_SSL
+        );
+
+        if (mysqli_connect_errno()) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+
+        $this->DB_CONN = $con;
+        $setup = new Database_setup($this->DB_CONN);
+        $setup->initializeTables();
     }
     public function __construct($router){
         $this->router = $router;
