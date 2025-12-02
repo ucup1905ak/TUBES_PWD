@@ -35,11 +35,10 @@ $router->add("/logout", function (): void {
     header('Location: /');
     exit;
 });
-$router->add("/udin", function (): void {
-
-    $WIDI = 10;
-    // Serve the Udin page
-    readfile(__DIR__ . '/public/pages/udin.xhtml');
+$router->add("/test/env", function (): void {
+    header('Content-Type: application/json');
+    $obj = loadEnvToArray('.env');
+    echo json_encode($obj);
     exit;
 });
 
@@ -47,12 +46,13 @@ $router->add("/udin", function (): void {
 // Forward all /api requests to the API router
 if (strpos($path, '/api') === 0) {
     $apiBackend = new BACKEND($router);
+    $env = loadEnvToArray('.env');
     $apiBackend->connectDB(
-        env('DB_HOST', 'localhost'),
-        (int)env('DB_PORT', 3306),
-        env('DB_USER', 'pwd'),
-        env('DB_PASSWORD', '123'),
-        env('DB_NAME', 'pwd')
+        $env['DB_HOST'] ?? 'localhost',
+        (int)($env['DB_PORT'] ?? 3306),
+        $env['DB_USER'] ?? 'root',
+        $env['DB_PASSWORD'] ?? '123',
+        $env['DB_NAME'] ?? 'pwd'
     );
     $apiBackend->setupDatabase();
     $apiBackend->run($path);
