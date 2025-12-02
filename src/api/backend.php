@@ -60,34 +60,25 @@ class BACKEND{
         });
 
              
+        // GET endpoints for hewan - specific routes BEFORE parameterized routes
         $this->router->add("/api/hewan", function() :void {
             $this->getHewan();
         });
-        $this->router->add("/api/hewan/{id}", function($id) :void {
-            $this->getHewanById($id);
-        });
+        
+        // GET endpoints for penitipan - specific routes BEFORE parameterized routes
         $this->router->add("/api/penitipan/jumlah", function(): void {
             $this->getJumlahPenitipan();
-        });
-        $this->router->add("/api/penitipan", function(): void {
-            $this->getPenitipan();
         });
         $this->router->add("/api/penitipan/aktif", function(): void {
             $this->getPenitipanAktif();
         });
-        $this->router->add("/api/penitipan/{id}", function($id): void {
-            $this->getPenitipanById($id);
-        });
-        $this->router->add("/api/user/{id}", function(): void {
-            $this->getUser();
+        $this->router->add("/api/penitipan", function(): void {
+            $this->getPenitipan();
         });
         $this->router->add("/api/auth/me", function(): void {
             $this->getMe();
         });
-        //POST endpoints
-        $this->router->add("/api/auth/register", function(): void {
-            $this->postRegister();
-        }); 
+        // Hewan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/hewan/tambah", function(): void {
             $this->postTambahHewan();
         });
@@ -97,6 +88,12 @@ class BACKEND{
         $this->router->add("/api/hewan/delete/{id}", function($id): void {
             $this->deleteHewan($id);
         });
+        // Parameterized hewan route MUST come after specific routes
+        $this->router->add("/api/hewan/{id}", function($id) :void {
+            $this->getHewanById($id);
+        });
+        
+        // Penitipan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/penitipan/tambah", function(): void {
             $this->postTambahPenitipan();
         });
@@ -106,13 +103,30 @@ class BACKEND{
         $this->router->add("/api/penitipan/delete/{id}", function($id): void {
             $this->deletePenitipan($id);
         });
+        // Parameterized penitipan route MUST come after specific routes
+        $this->router->add("/api/penitipan/{id}", function($id): void {
+            $this->getPenitipanById($id);
+        });
+        
+        //POST endpoints
+        $this->router->add("/api/auth/register", function(): void {
+            $this->postRegister();
+        });
 
         $this->router->add("/api/auth/login", function(): void {
             $this->postLogin();
         });
 
+        // User routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/user/update", function(): void {
             $this->postUpdateUser();
+        });
+        $this->router->add("/api/user/delete", function(): void {
+            $this->deleteUser();
+        });
+        // Parameterized user route MUST come after specific routes
+        $this->router->add("/api/user/{id}", function($id): void {
+            $this->getUser($id);
         });
 
     }
@@ -237,8 +251,41 @@ class BACKEND{
         exit;
     }
     
-    private function getUser() {
-        include __DIR__ . '/user/get_user.php';
+    private function getUser($id) {
+        include_once __DIR__ . '/user/get_user.php';
+        
+        $userId = (int)$id;
+        if ($userId <= 0) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid user ID']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('SELECT id_user, nama_lengkap, email, no_telp, alamat, foto_profil, role FROM `User` WHERE id_user = ? LIMIT 1');
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Database error']);
+            exit;
+        }
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        
+        if ($user && !empty($user['foto_profil'])) {
+            $user['foto_profil'] = base64_encode($user['foto_profil']);
+        }
+        
+        if (!$user) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => 'User not found']);
+            exit;
+        }
+        
+        http_response_code(200);
+        echo json_encode(['success' => true, 'user' => $user]);
+        exit;
     }
     private function getMe() {
         include_once __DIR__ . '/auth/get_me.php';
@@ -464,6 +511,51 @@ class BACKEND{
         http_response_code($response['status']);
         header('Content-Type: application/json');
         echo json_encode($response);
+        exit;
+    }
+
+    private function deleteUser() {
+        include_once __DIR__ . '/auth/get_me.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        // Get current user
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        $userId = $userResponse['user']['id_user'];
+        
+        // Delete the user (cascade will handle related records)
+        $stmt = $this->DB_CONN->prepare('DELETE FROM `User` WHERE id_user = ?');
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Database error']);
+            exit;
+        }
+        
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        
+        if ($stmt->affected_rows === 0) {
+            $stmt->close();
+            http_response_code(404);
+            echo json_encode(['status' => 404, 'success' => false, 'error' => 'User not found']);
+            exit;
+        }
+        
+        $stmt->close();
+        
+        http_response_code(200);
+        echo json_encode(['status' => 200, 'success' => true, 'message' => 'Account deleted successfully.']);
         exit;
     }
 

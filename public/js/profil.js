@@ -151,10 +151,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Delete account button
-    document.getElementById("deleteBtn").addEventListener("click", () => {
+    document.getElementById("deleteBtn").addEventListener("click", async () => {
         const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone.");
         if (confirmDelete) {
-            alert("Account deletion is not yet implemented.");
+            const doubleConfirm = confirm("This will permanently delete all your data including pets and bookings. Type OK to continue.");
+            if (doubleConfirm) {
+                try {
+                    const response = await fetch('/api/user/delete', {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + sessionToken,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('Your account has been deleted.');
+                        localStorage.removeItem('session_token');
+                        localStorage.removeItem('session_expires_at');
+                        window.location.href = '/';
+                    } else {
+                        alert('Failed to delete account: ' + (data.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error deleting account:', error);
+                    alert('An error occurred while deleting your account.');
+                }
+            }
         }
     });
 });
