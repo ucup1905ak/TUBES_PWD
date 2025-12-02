@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f4eed7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    background-color: #0b7a5a;
+    color: white;
+    text-align: center;
+    width: 100%;
+    padding: 15px 0 5px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header .title {
+    font-size: 26px;
+    font-weight: 900;
+    display: block;
+    margin-top: -4px;
+}
+
+.profile-wrapper {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+}
+
+.photo-area {
+    width: 250px;
+    height: 250px;
+    background-color: #cfcfcf;
+    border-radius: 50%;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.label {
+    font-weight: bold;
+    display: block;
+    margin-left: 10px;
+    margin-bottom: 4px;
+}
+
+.input-box {
+    background-color: white;
+    padding: 18px 20px;
+    width: 350px;
+    border-radius: 120px;
+    font-size: 14px;
+}
+
+.field.username { 
+    margin-left: -40px; 
+}
+.field.email { 
+    margin-left: 40px; 
+}
+
+.field.notelp { 
+    margin-left: 120px; 
+}
+
+.field.jenishewan { 
+    margin-left: 40px; 
+}
+
+.field.alamat { 
+    margin-left: -40px; 
+}
+
+.bottom-buttons {
+    margin-top: 40px;
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.logout-btn { 
+    background-color: white;
+    margin-left: -190px;
+}
+
+.delete-btn { 
+    background-color: #d62828; 
+    color: white;
+    margin-right: -190px; 
+}
