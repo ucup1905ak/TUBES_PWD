@@ -12,15 +12,15 @@ $router = new Router();
 
 $router->add("/", function (): void {
     // Landing page - let frontend handle session check
-    include 'public/pages/landing.xhtml';
+    readfile(__DIR__ . '/public/pages/landing.xhtml');
     exit;
 });
 $router->add("/login", function (): void {
-    include 'public/pages/login.xhtml';
+    readfile(__DIR__ . '/public/pages/login.xhtml');
     exit;
 });
 $router->add("/register", function (): void {
-    include 'public/pages/register.xhtml';
+    readfile(__DIR__ . '/public/pages/register.xhtml');
     exit;
 });
 $router->add("/my", function (): void {
@@ -32,7 +32,7 @@ $router->add("/logout", function (): void {
     // Destroy the session to log out the user.
     session_unset();
     session_destroy();
-    header('Location: /index.xhtml');
+    header('Location: /');
     exit;
 });
 
