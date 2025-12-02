@@ -113,8 +113,8 @@
           deleteBtn.addEventListener('click', function() {
             if (confirm('Yakin ingin menghapus data penitipan ini?')) {
               //hapus data penitipan di database
-              fetch('/api/penitipan/' + encodeURIComponent(p.id_penitipan), {
-                method: 'DELETE',
+              fetch('/api/penitipan/delete/' + encodeURIComponent(p.id_penitipan), {
+                method: 'POST',
                 headers: {
                   'Authorization': 'Bearer ' + sessionToken,
                   'Content-Type': 'application/json'
