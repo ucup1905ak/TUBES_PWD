@@ -14,6 +14,11 @@
     viewAllHistoryBtn: document.getElementById('view-all-history')
   };
 
+  // Fungsi untuk tombol lihat detail penitipan (untuk tabel statis)
+  window.lihatDetailPenitipan = function(id) {
+    window.location.href = 'detail_penitipan.xhtml?id=' + encodeURIComponent(id);
+  };
+
   // Default username (akan diganti oleh setUsernameFromServer jika tersedia)
   var state = {
     username: 'Teman PawHaven',
@@ -148,9 +153,38 @@
 
   // Jalankan init saat DOM siap (defer digunakan), tapi tetap guard
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("toggleSidebar");
+
+    toggleBtn.addEventListener("click", function () {
+        sidebar.classList.toggle("expanded");
+    });
+});
   } else {
     init();
   }
 
 })();
+
+function goToDetail() {
+    location.href = "detail-penitipan.xhtml"
+}
+
+function goToHistory() {
+    location.href = "riwayat.xhtml"
+}
+
+function goToAdd() {
+    location.href = "titip.xhtml"
+}
+
+// Opsional: kalau sidebar bisa expand
+const sidebar = document.getElementById("sidebar")
+const content = document.querySelector(".dashboard-container")
+
+document.getElementById("toggleSidebar").addEventListener("click", () => {
+    sidebar.classList.toggle("expanded")
+    content.classList.toggle("sidebar-expanded-margin")
+})
+
