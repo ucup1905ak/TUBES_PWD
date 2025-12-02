@@ -1,0 +1,109 @@
+:root {
+    --primary-color: #007756;
+    --secondary-color: #BAFFC2;
+    --accent-color: #FFF9E5;
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow-y: auto; /* Memastikan halaman bisa di-scroll */
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    text-align: center;
+    padding: 20px;
+}
+
+main {
+    padding: 40px;
+    max-width: 600px; /* Lebih sempit untuk memanjang ke bawah */
+    margin: 0 auto;
+}
+
+form {
+    background-color: var(--accent-color);
+    padding: 30px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Memanjang ke bawah */
+    gap: 20px;
+}
+
+.photo-section {
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+
+.photo-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    object-fit: cover;
+}
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+.photo-section:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-overlay::before {
+    content: "✏️";
+    font-size: 24px;
+    color: white;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: flex-start;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
