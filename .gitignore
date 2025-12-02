@@ -9,7 +9,7 @@ agent_task
 *.swp
 *.swo
 *~
-
+.env
 # OS files
 .DS_Store
 Thumbs.db

@@ -35,7 +35,13 @@ $router->add("/logout", function (): void {
     header('Location: /');
     exit;
 });
+$router->add("/udin", function (): void {
 
+    $WIDI = 10;
+    // Serve the Udin page
+    readfile(__DIR__ . '/public/pages/udin.xhtml');
+    exit;
+});
 
 
 // Forward all /api requests to the API router
@@ -44,7 +50,7 @@ if (strpos($path, '/api') === 0) {
     $apiBackend->connectDB(
         env('DB_HOST', 'localhost'),
         (int)env('DB_PORT', 3306),
-        env('DB_USER', 'root'),
+        env('DB_USER', 'pwd'),
         env('DB_PASSWORD', '123'),
         env('DB_NAME', 'pwd')
     );
