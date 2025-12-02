@@ -1,6 +1,21 @@
 # Azure Deployment Guide
 
-## Setting Environment Variables in Azure App Service
+## Azure Linux App Service Setup
+
+Your app is running on **Azure Linux App Service** with nginx + PHP.
+
+## 1. Configure Startup Command
+
+In Azure Portal:
+1. Go to your App Service: **tubes-pwd**
+2. **Settings** → **Configuration** → **General settings**
+3. Set **Startup Command** to:
+   ```bash
+   cp /home/site/wwwroot/nginx.conf /etc/nginx/sites-available/default && service nginx reload && php-fpm
+   ```
+4. Click **Save** and **Restart** the app
+
+## 2. Setting Environment Variables
 
 Azure App Service uses **Application Settings** instead of `.env` files. Follow these steps:
 
