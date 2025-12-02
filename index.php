@@ -51,7 +51,26 @@ $router->add("/test/env", function (): void {
 // Forward all /api requests to the API router
 if (strpos($path, '/api') === 0) {
     $apiBackend = new BACKEND($router);
-    $env = loadEnvToArray('.env');
+    
+    // Prefer $_ENV values if set, otherwise load from .env file
+    $env = [
+        'DB_HOST'     => $_ENV['DB_HOST']     ?? null,
+        'DB_PORT'     => $_ENV['DB_PORT']     ?? null,
+        'DB_USER'     => $_ENV['DB_USER']     ?? null,
+        'DB_PASSWORD' => $_ENV['DB_PASSWORD'] ?? null,
+        'DB_NAME'     => $_ENV['DB_NAME']     ?? null,
+    ];
+
+    // If any are missing, load from .env
+    if (in_array(null, $env, true)) {
+        $fileEnv = loadEnvToArray('.env');
+        foreach ($env as $key => $value) {
+            if ($value === null && isset($fileEnv[$key])) {
+                $env[$key] = $fileEnv[$key];
+            }
+        }
+    }
+
     $apiBackend->connectDB(
         $env['DB_HOST'] ?? 'localhost',
         (int)($env['DB_PORT'] ?? 3306),
