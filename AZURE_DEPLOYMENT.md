@@ -4,18 +4,33 @@
 
 Your app is running on **Azure Linux App Service** with nginx + PHP.
 
-## 1. Configure Startup Command
+## Option 1: Using .htaccess (Recommended)
 
-In Azure Portal:
-1. Go to your App Service: **tubes-pwd**
-2. **Settings** → **Configuration** → **General settings**
+Azure Linux with PHP supports `.htaccess` if mod_rewrite is enabled.
+
+The `.htaccess` file already exists in your repo:
+```apache
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+```
+
+**No additional Azure configuration needed** - just deploy and it should work.
+
+## Option 2: Custom Startup Script
+
+If `.htaccess` doesn't work, configure a startup command:
+
+1. Go to Azure Portal → Your App Service
+2. **Settings** → **Configuration** → **General settings**  
 3. Set **Startup Command** to:
    ```bash
-   cp /home/site/wwwroot/nginx.conf /etc/nginx/sites-available/default && service nginx reload && php-fpm
+   bash /home/site/wwwroot/startup.sh
    ```
-4. Click **Save** and **Restart** the app
+4. Save and Restart
 
-## 2. Setting Environment Variables
+## Option 3: Application Settings (URL Rewrite)
 
 Azure App Service uses **Application Settings** instead of `.env` files. Follow these steps:
 

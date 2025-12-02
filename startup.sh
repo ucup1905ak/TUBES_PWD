@@ -1,14 +1,16 @@
 #!/bin/bash
-# Azure App Service startup script for nginx + PHP
+# Azure App Service startup script for PHP
+# This runs before nginx starts
 
-# Copy custom nginx config
-if [ -f /home/site/wwwroot/nginx.conf ]; then
-    cp /home/site/wwwroot/nginx.conf /etc/nginx/sites-available/default
-    service nginx reload
+echo "Starting custom initialization..."
+
+# Azure managed nginx doesn't allow direct config replacement
+# Instead, we rely on .htaccess or application-level routing
+
+# Ensure PHP-FPM is running (usually already started by Azure)
+if ! pgrep -x "php-fpm" > /dev/null; then
+    echo "Starting PHP-FPM..."
+    php-fpm -D
 fi
 
-# Start PHP-FPM
-php-fpm -D
-
-# Keep container running
-nginx -g "daemon off;"
+echo "Initialization complete."
