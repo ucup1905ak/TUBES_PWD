@@ -206,7 +206,7 @@ body {
 
 /* Footer minimal */
 .footer-min {
-    margin-top: 150px;
+    margin-top: 180px;
     padding: 12px 0;
     border-top: 1px solid rgba(0,0,0,0.04);
 }
@@ -224,6 +224,10 @@ body {
 .footer-links a{
     color: #666666;
     text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
 }
 
 /* Responsive */

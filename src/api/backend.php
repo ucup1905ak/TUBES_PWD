@@ -8,7 +8,7 @@ class BACKEND{
                                     $DB_PORT,
                                     $DB_USER,
                                     $DB_PASSWORD,
-                                    $DB_NAME,) : void {
+                                    $DB_NAME ) : void {
 
         $this->DB_CONN = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
         if ($this->DB_CONN->connect_error) {  
