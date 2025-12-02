@@ -1,8 +1,28 @@
-# CakePHP 3
+# Environment files (CRITICAL - contains database passwords)
+.env
+.env.local
+.env.production
 
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+error_log
+
+# CakePHP 3 (legacy)
 /vendor/*
 /config/app.php
-
 /tmp/cache/models/*
 !/tmp/cache/models/empty
 /tmp/cache/persistent/*
@@ -13,12 +33,10 @@
 !/tmp/sessions/empty
 /tmp/tests/*
 !/tmp/tests/empty
-
 /logs/*
 !/logs/empty
 
-# CakePHP 2
-
+# CakePHP 2 (legacy)
 /app/tmp/*
 /app/Config/core.php
 /app/Config/database.php
