@@ -57,44 +57,103 @@
     .then(function(data) {
       var tbody = document.getElementById('penitipan-tbody');
       if (!tbody) return;
-      
+      // Cek jika ada data penitipan
       if (data.success && data.penitipan && data.penitipan.length > 0) {
         tbody.innerHTML = '';
-        
         data.penitipan.forEach(function(p) {
           var tr = document.createElement('tr');
-          
+          // Kolom Nama Pet
           var tdPet = document.createElement('td');
           tdPet.textContent = p.nama_pet || 'Unknown';
-          
+          // Kolom Tanggal Penitipan
           var tdCheckin = document.createElement('td');
           tdCheckin.textContent = formatDate(p.tgl_checkin);
-          
+          // Kolom Tanggal Pengambilan
           var tdCheckout = document.createElement('td');
           tdCheckout.textContent = formatDate(p.tgl_checkout);
-          
+          // Kolom Status
           var tdStatus = document.createElement('td');
           var statusBadge = document.createElement('span');
           statusBadge.className = 'status-badge status-' + (p.status_penitipan || 'aktif');
           statusBadge.textContent = p.status_penitipan || 'Aktif';
           tdStatus.appendChild(statusBadge);
-          
+
+          // Kolom Aksi (Edit & Hapus)
+          var tdAksi = document.createElement('td');
+          tdAksi.style.textAlign = 'center';
+
+          // Tombol Edit (biru)
+          var editBtn = document.createElement('button');
+          editBtn.textContent = 'Edit';
+          editBtn.className = 'edit-btn';
+          editBtn.style.background = '#2196f3'; // biru
+          editBtn.style.color = 'white';
+          editBtn.style.border = 'none';
+          editBtn.style.borderRadius = '5px';
+          editBtn.style.padding = '6px 12px';
+          editBtn.style.marginRight = '8px';
+          editBtn.style.cursor = 'pointer';
+          // Saat klik edit, arahkan ke halaman input penitipan dengan id penitipan
+          editBtn.addEventListener('click', function() {
+            // arahkan ke halaman edit penitipan dengan id
+            window.location.href = '/titip?id=' + encodeURIComponent(p.id_penitipan);
+          });
+
+          // Tombol Hapus (merah)
+          var deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Hapus';
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.style.background = '#f44336'; // merah
+          deleteBtn.style.color = 'white';
+          deleteBtn.style.border = 'none';
+          deleteBtn.style.borderRadius = '5px';
+          deleteBtn.style.padding = '6px 12px';
+          deleteBtn.style.cursor = 'pointer';
+          // Saat klik hapus, panggil API hapus penitipan
+          deleteBtn.addEventListener('click', function() {
+            if (confirm('Yakin ingin menghapus data penitipan ini?')) {
+              //hapus data penitipan di database
+              fetch('/api/penitipan/' + encodeURIComponent(p.id_penitipan), {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': 'Bearer ' + sessionToken,
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(function(response) { return response.json(); })
+              .then(function(res) {
+                if (res.success) {
+                  fetchPenitipan(); // refresh tabel
+                } else {
+                  alert('Gagal menghapus data penitipan.');
+                }
+              })
+              .catch(function(error) {
+                alert('Terjadi kesalahan saat menghapus data penitipan.');
+              });
+            }
+          });
+
+          tdAksi.appendChild(editBtn);
+          tdAksi.appendChild(deleteBtn);
+
           tr.appendChild(tdPet);
           tr.appendChild(tdCheckin);
           tr.appendChild(tdCheckout);
           tr.appendChild(tdStatus);
-          
+          tr.appendChild(tdAksi); // tambahkan kolom aksi
+
           tbody.appendChild(tr);
         });
       } else {
-        tbody.innerHTML = '<tr><td colspan="4" class="no-active">Tidak ada penitipan</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="no-active">Tidak ada penitipan</td></tr>';
       }
     })
     .catch(function(error) {
       console.error('Error fetching penitipan:', error);
       var tbody = document.getElementById('penitipan-tbody');
       if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="4" class="no-active">Gagal memuat data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="no-active">Gagal memuat data</td></tr>';
       }
     });
   }
