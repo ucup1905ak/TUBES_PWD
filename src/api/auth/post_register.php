@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Validates user registration input data and uploaded file.
+ *
+ * @param array $input The input data from the request containing:
+ *                      - username (string): User's full name (required, max 100 chars)
+ *                      - email (string): User's email address (required)
+ *                      - password (string): SHA-256 hashed password (required)
+ *                      - telepon (string): Phone number (required, max 15 chars)
+ *                      - alamat (string): Address (required)
+ *                      - role (string): User role, 'user' or 'admin' (optional, default: 'user')
+ * @param array $file The $_FILES array containing optional 'foto' profile photo upload
+ * 
+ * @return array Array of validation error messages. Empty array if validation passes.
+ */
 function validateRegisterInput(array $input, array $file): array {
     $errors = [];
 
@@ -71,6 +85,14 @@ function validateRegisterInput(array $input, array $file): array {
     return $errors;
 }
 
+/**
+ * Reads and returns the binary data from an uploaded profile photo.
+ *
+ * @param array $file The $_FILES array containing the 'foto' upload
+ * @param array &$errors Reference to errors array, will be modified if file read fails
+ * 
+ * @return string|null Binary image data on success, null if no file or on error
+ */
 function getProfilePhotoData(array $file, array &$errors): ?string {
     if (isset($file['foto']) && $file['foto']['error'] === UPLOAD_ERR_OK && empty($errors)) {
         $foto_profil_data = file_get_contents($file['foto']['tmp_name']);
@@ -83,6 +105,17 @@ function getProfilePhotoData(array $file, array &$errors): ?string {
     return null;
 }
 
+/**
+ * Checks if a user with the given email or username already exists in the database.
+ *
+ * @param mysqli $DB_CONN Active MySQL database connection
+ * @param string $email Email address to check
+ * @param string $username Username (nama_lengkap) to check
+ * 
+ * @return bool True if user exists, false otherwise
+ * 
+ * @throws Exception If database query fails
+ */
 function userExists(mysqli $DB_CONN, string $email, string $username): bool {
     $stmt = $DB_CONN->prepare('SELECT id_user FROM `User` WHERE email = ? OR nama_lengkap = ? LIMIT 1');
     if (!$stmt) {
@@ -100,6 +133,22 @@ function userExists(mysqli $DB_CONN, string $email, string $username): bool {
     return $exists;
 }
 
+/**
+ * Inserts a new user into the database.
+ *
+ * @param mysqli $DB_CONN Active MySQL database connection
+ * @param string $username User's full name (stored as nama_lengkap)
+ * @param string $email User's email address
+ * @param string $no_telp User's phone number
+ * @param string $alamat User's address
+ * @param string $password SHA-256 hashed password
+ * @param string|null $foto_profil_data Binary image data for profile photo, or null
+ * @param string $role User role: 'user' or 'admin' (default: 'user')
+ * 
+ * @return int The newly created user's ID
+ * 
+ * @throws Exception If database insert fails
+ */
 function insertUser(
     mysqli $DB_CONN,
     string $username,
@@ -130,6 +179,45 @@ function insertUser(
     }
 }
 
+/**
+ * Main handler for user registration API endpoint.
+ * 
+ * Validates input, checks for existing users, and creates new user account.
+ *
+ * @param mysqli $DB_CONN Active MySQL database connection
+ * @param array $input Request input data containing user registration fields:
+ *                     - username (string): Required, maps to nama_lengkap
+ *                     - email (string): Required, must be unique
+ *                     - password (string): Required, SHA-256 hashed
+ *                     - telepon (string): Required, maps to no_telp
+ *                     - alamat (string): Required
+ *                     - role (string): Optional, 'user' or 'admin'
+ * 
+ * @return array Response array with:
+ *               - status (int): HTTP status code (201, 400, 409, 500)
+ *               - success (bool): Whether registration succeeded
+ *               - message (string): Success message (on success)
+ *               - user_id (int): New user ID (on success)
+ *               - error (string): Error message (on failure)
+ *               - details (array): Validation errors (on validation failure)
+ * 
+ * @example
+ * // Success response (201):
+ * [
+ *     'status' => 201,
+ *     'success' => true,
+ *     'message' => 'User registered successfully.',
+ *     'user_id' => 1
+ * ]
+ * 
+ * // Validation error response (400):
+ * [
+ *     'status' => 400,
+ *     'success' => false,
+ *     'error' => 'Input validation failed',
+ *     'details' => ['Username is required.']
+ * ]
+ */
 function handleRegister(mysqli $DB_CONN, array $input): array {
     $errors = validateRegisterInput($input, $_FILES);
 
