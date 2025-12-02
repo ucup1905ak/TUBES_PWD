@@ -71,13 +71,7 @@ if (strpos($path, '/api') === 0) {
         }
     }
 
-    $apiBackend->connectDB(
-        $env['DB_HOST'] ?? 'localhost',
-        (int)($env['DB_PORT'] ?? 3306),
-        $env['DB_USER'] ?? 'root',
-        $env['DB_PASSWORD'] ?? '123',
-        $env['DB_NAME'] ?? 'pwd'
-    );
+    $apiBackend->connectDB();
     $apiBackend->setupDatabase();
     $apiBackend->run($path);
     exit;

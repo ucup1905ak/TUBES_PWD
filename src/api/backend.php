@@ -4,16 +4,13 @@ include __DIR__ . '/../config/database_setup.php';
 class BACKEND{
     private $router;
     private $DB_CONN;
-    public function connectDB($DB_HOST,
-                                    $DB_PORT,
-                                    $DB_USER,
-                                    $DB_PASSWORD,
-                                    $DB_NAME ) : void {
+    public function connectDB() : void {
                                         // echo 'connecting to db';
-        $this->DB_CONN = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
-        if ($this->DB_CONN->connect_error) {  
-            die("Connection failed: " . $this->DB_CONN->connect_error);
-        }
+        $con = mysqli_init();
+        mysqli_ssl_set($con,NULL,NULL, "DigiCertGlobalRootG2.crt.pem", NULL, NULL);
+        mysqli_real_connect($con, "tubes-pwd-server.mysql.database.azure.com", "jvcgurmasx", "{your_password}", "{your_database}", 3306, MYSQLI_CLIENT_SSL);
+        if(!$con) $this->DB_CONN = $con;
+                                        
     }
     public function setupDatabase(): void{
         // echo '<br>setting up database.';
