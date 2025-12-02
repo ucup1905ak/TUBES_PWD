@@ -4,101 +4,113 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-        <title>PawHaven — Dashboard</title>
-        <link rel="stylesheet" href="../css/dashboard_user.css" />
-        <script type="text/javascript" src="../js/dashboard_user.js" defer="defer"></script>
+        <title>PawHaven - Dashboard</title>
+        <link rel="stylesheet" href="css/dashboard_user.css" />
+        <script type="text/javascript" src="js/dashboard_user.js"></script>
     </head>
 
     <body>
-        <div id="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="brand">PawHaven</div>
+        <!-- HEADER -->
+        <div class="header">
+            <h1 class="logo" onclick="location.href='dashboard_user.xhtml'">PawHaven</h1>
 
-            <!-- Username (klik -> profil) -->
-            <div class="user-area">
-            <!-- username diisi lewat JS; href mengarah ke halaman profil -->
-            <a id="user-link" class="user-link" href="/profile.xhtml" title="Lihat profil">
-                <span id="user-display">Pengguna</span>
-            </a>
+            <div class="user-profile">
+                <!-- Foto profil nanti bisa ditambahkan di sini -->
+                <span id="user-name" onclick="location.href='profil.xhtml'">Akun Saya</span>
             </div>
-        </header>
-
-        <!-- Navigation cepat di bawah header -->
-        <nav class="quick-nav" role="navigation" aria-label="Menu utama">
-            <ul>
-            <li><a href="dashboard_user.xhtml" class="nav-item active">Home</a></li>
-            <li><a href="titip.xhtml" class="nav-item">Titip Hewan</a></li>
-            <li><a href="riwayat.xhtml" class="nav-item">Riwayat</a></li>
-            <li><a href="paket.xhtml" class="nav-item">Paket</a></li>
-            </ul>
-        </nav>
-
-        <!-- Konten utama -->
-        <main class="container" role="main">
-            <!-- Sambutan -->
-            <section class="welcome">
-            <h1 id="welcome-heading">Halo, <span id="welcome-username">Teman</span> 👋</h1>
-            <p id="welcome-sub" class="muted">
-                Selamat datang di dashboard PawHaven.
-            </p>
-            </section>
-
-            <!-- Kotak menu penting  -->
-            <section class="important-menus" aria-label="Menu penting">
-                <!-- Menu 1: Mulai Titip (link ke halaman penitipan) -->
-                <a href="titip.xhtml" class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                    <img src="../img/mulai_titip.png" />
-                    </div>
-                    <div class="menu-body">
-                    <h3>Mulai Penitipan</h3>
-                    <p class="small">Pesan tempat untuk sahabat berbulu Anda sekarang.</p>
-                    </div>
-                </a>
-
-                <!-- Menu 2: Lihat Paket & Promo -->
-                <a href="paket.xhtml" class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                    <img src="../img/paket_promo.png" />
-                    </div>
-                    <div class="menu-body">
-                    <h3>Paket &amp; Promo</h3>
-                    <p class="small">Cek paket menginap, diskon, dan promo khusus member.</p>
-                    </div>
-                </a>
-
-                <!-- Menu 3: Penitipan Aktif / Info -->
-                <div class="menu-card" id="active-stays-card" role="region" aria-labelledby="active-stays-title">
-                    <div class="menu-media" aria-hidden="true">
-                    <img src="../img/icon_active_stay.png" alt=""/>
-                    </div>
-
-                    <div class="menu-body">
-                    <h3 id="active-stays-title">Penitipan Aktif</h3>
-                    <div id="active-stays-content" class="active-content">
-                        <!-- Konten akan diisi oleh JavaScript.
-                            Jika ada penitipan aktif, tampilkan ringkasan.
-                            Kalau tidak, tampilkan teks "Belum ada penitipan aktif". -->
-                    </div>
-
-                    <div class="card-actions">
-                        <a href="riwayat.xhtml" class="btn-secondary" id="view-all-history">Lihat Semua</a>
-                    </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer minimal (opsional, ringkas) -->
-        <footer class="footer-min">
-            <div class="footer-inner">
-            <div>&copy; 2025 PawHaven</div>
-            <div class="footer-links">
-                <a href="help.xhtml">Pusat Bantuan</a>
-            </div>
-            </div>
-        </footer>
         </div>
+
+        <!-- LAYOUT WRAPPER -->
+        <div class="layout">
+
+            <!-- SIDEBAR -->
+            <div class="sidebar" id="sidebar">
+                <div class="toggle-btn" id="toggleSidebar">☰</div>
+
+                <ul class="menu-list">
+
+                    <li onclick="location.href='dashboard_user.xhtml'">
+                        <span class="icon">🏠</span>
+                        <span class="menu-text">Home Dashboard</span>
+                    </li>
+
+                    <li onclick="location.href='titip.xhtml'">
+                        <span class="icon">🐾</span>
+                        <span class="menu-text">Titip Hewan</span>
+                    </li>
+
+                    <li onclick="location.href='paket.xhtml'">
+                        <span class="icon">🎁</span>
+                        <span class="menu-text">Paket &amp; Promo</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- MAIN CONTENT -->
+        <div class="content">
+
+            <h1 class="welcome">
+                Halo
+                <!-- <?php echo $user_name ?? "User"; ?> 👋 -->
+            </h1>
+            <p class="muted">Semoga harimu menyenangkan.</p>
+
+            <!-- KOTAK PENITIPAN AKTIF -->
+            <div class="active-box">
+                <h2>Penitipan Aktif</h2>
+
+                <table class="active-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Pet</th>
+                            <th>Tanggal Penitipan</th>
+                            <th>Tanggal Pengambilan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- LOOP BACKEND PHP DI SINI -->
+                        <!-- <?php if (!empty($penitipan_aktif)) { ?>
+                            <?php foreach ($penitipan_aktif as $p) { ?> -->
+                                <tr>
+                                    <!-- <td><?php echo $p['nama_pet']; ?></td> -->
+                                    <!-- <td><?php echo $p['tgl_titip']; ?></td> -->
+                                    <!-- <td><?php echo $p['tgl_ambil']; ?></td> -->
+                                    <td>
+                                        <a href="detail_penitipan.php?id=<?php echo $p['id']; ?>" class="detail-btn">
+                                            Detail
+                                        </a>
+                                    </td>
+                                </tr>
+                            <!-- <?php } ?> -->
+                        <!-- <?php } else { ?> -->
+                            <tr>
+                                <td colspan="4" class="no-active">
+                                    Tidak ada penitipan aktif
+                                </td>
+                            </tr>
+                        <!-- <?php } ?> -->
+                    </tbody>
+                </table>
+
+                <!-- TOMBOL RIWAYAT -->
+                <div class="history-center">
+                    <a href="riwayat.xhtml" class="history-btn">Lihat Riwayat Penitipan</a>
+                </div>
+
+                <!-- TOMBOL TAMBAH PENITIPAN -->
+                <a href="titip.xhtml" class="add-btn">Tambah Penitipan</a>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="box-hehe"></div>
+            <p>&copy; 2025 PawHaven.</p>
+        </div>
+
     </body>
 </html>
