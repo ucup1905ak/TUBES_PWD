@@ -36,10 +36,27 @@ function validateRegisterInput(array $input, array $file): array {
             $errors[] = 'File is too large. Maximum size is 16MB.';
         }
 
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        $file_type = mime_content_type($file['foto']['tmp_name']);
-        if (!in_array($file_type, $allowed_types)) {
+        // Get file type from extension as fallback for mime_content_type
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif'];
+        
+        $file_extension = strtolower(pathinfo($file['foto']['name'], PATHINFO_EXTENSION));
+        
+        // Check extension first
+        if (!in_array($file_extension, $allowed_extensions)) {
             $errors[] = 'Invalid file type. Only JPG, PNG, and GIF are allowed.';
+        } else {
+            // Try to get MIME type using finfo if available
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $file_type = finfo_file($finfo, $file['foto']['tmp_name']);
+                finfo_close($finfo);
+                
+                if (!in_array($file_type, $allowed_mime_types)) {
+                    $errors[] = 'Invalid file type. Only JPG, PNG, and GIF are allowed.';
+                }
+            }
+            // If finfo is not available, rely on extension check only
         }
     } elseif (isset($file['foto']) && $file['foto']['error'] !== UPLOAD_ERR_NO_FILE) {
         $errors[] = 'An error occurred during file upload.';

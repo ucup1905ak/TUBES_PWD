@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>PawHaven - Sign Up</title>
-        <link rel="stylesheet" type="text/css" href="../css/register.css" />
+        <link rel="stylesheet" type="text/css" href="/public/css/register.css" />
     </head>
 
     <body>
@@ -17,15 +17,15 @@
 
             <div class="mainPhotoWrap">
                 <div class="decorPaws">&#128062;&#128062;&#128062;</div>
-                <img src="/img/1.jpg" alt="Pet Boarding" class="mainPhoto" />
+                <img src="/public/img/1.jpg" alt="Pet Boarding" class="mainPhoto" />
             </div>
 
             <div class="gallery">
                 <div class="galleryCard">
-                    <img src="/img/2.jpg" alt="Gallery 2" />
+                    <img src="/public/img/2.jpg" alt="Gallery 2" />
                 </div>
                 <div class="galleryCard">
-                    <img src="/img/3.jpg" alt="Gallery 3" />
+                    <img src="/public/img/3.jpg" alt="Gallery 3" />
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                 <div class="underline"></div>
             </div>
 
-            <form action="/api/auth/register" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
 
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username"
@@ -82,13 +82,13 @@
                 </div>
 
                 <input type="file" id="foto" name="foto"
-                    style="display:none;" required="required" />
+                    style="display:none;" accept="image/jpeg,image/png,image/gif" />
 
                 <button type="submit" class="submitBtn">Create Account</button>
 
                 <div class="loginLink">
                     Already have an account?
-                    <a href="login.xhtml">Log In</a>
+                    <a href="/login">Log In</a>
                 </div>
 
             </form>

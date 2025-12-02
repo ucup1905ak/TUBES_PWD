@@ -7,12 +7,26 @@
         <link rel="stylesheet" href="/public/css/stylesheet.css" />
 
         <script type="text/javascript" src="/public/js/script.js"></script>
+        <script type="text/javascript">
+            // Check if user is already logged in
+            if (localStorage.getItem('session_token')) {
+                const expiresAt = localStorage.getItem('session_expires_at');
+                if (expiresAt && new Date(expiresAt) > new Date()) {
+                    // Session is still valid, redirect to dashboard
+                    window.location.href = '/my';
+                } else {
+                    // Session expired, clear storage
+                    localStorage.removeItem('session_token');
+                    localStorage.removeItem('session_expires_at');
+                }
+            }
+        </script>
     </head>
     <body>
        <div class="header">
             <div class="brand">PawHaven</div>
             <!-- PErgi ke halaman login -->
-            <a class="sign-in" href="/public/pages/login.xhtml">Sign in</a>
+            <a class="sign-in" href="/login">Sign in</a>
         </div>
 
         <div class="hero">

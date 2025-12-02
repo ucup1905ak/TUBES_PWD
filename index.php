@@ -1,27 +1,30 @@
 <?php
 
+// Load environment variables
+require_once __DIR__ . '/src/config/env.php';
+
 include __DIR__ . '/src/routing/router.php';
 include __DIR__ . '/src/api/backend.php';
-// include __DIR__ . '/vendor/autoload.php';
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $router = new Router();
 
 $router->add("/", function (): void {
-    session_start();
-    // If the user is logged in, redirect to the dashboard.
-    if (isset($_SESSION['user_id'])) {
-        header('Location: /dashboard.php');
-        exit;
-    }
-
-    // Otherwise, redirect to the landing page.
+    // Landing page - let frontend handle session check
     include 'public/pages/landing.xhtml';
-    // include __DIR__ . '/public/pages/landing.xhtml';
     exit;
 });
 $router->add("/login", function (): void {
     include 'public/pages/login.xhtml';
+    exit;
+});
+$router->add("/register", function (): void {
+    include 'public/pages/register.xhtml';
+    exit;
+});
+$router->add("/my", function (): void {
+    include 'public/dashboard.php';
     exit;
 });
 $router->add("/logout", function (): void {
@@ -38,11 +41,13 @@ $router->add("/logout", function (): void {
 // Forward all /api requests to the API router
 if (strpos($path, '/api') === 0) {
     $apiBackend = new BACKEND($router);
-    $apiBackend->connectDB('localhost', 
-                                3306, 
-                                'root', 
-                                '123', 
-                                'pwd');
+    $apiBackend->connectDB(
+        env('DB_HOST', 'localhost'),
+        (int)env('DB_PORT', 3306),
+        env('DB_USER', 'root'),
+        env('DB_PASSWORD', '123'),
+        env('DB_NAME', 'pwd')
+    );
     $apiBackend->setupDatabase();
     $apiBackend->run($path);
     exit;

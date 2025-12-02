@@ -68,6 +68,9 @@ class BACKEND{
         $this->router->add("/api/user/{id}", function(): void {
             $this->getUser();
         });
+        $this->router->add("/api/auth/me", function(): void {
+            $this->getMe();
+        });
         //POST endpoints
         $this->router->add("/api/auth/register", function(): void {
             $this->postRegister();
@@ -98,6 +101,43 @@ class BACKEND{
     }
     private function getUser() {
         include __DIR__ . '/user/get_user.php';
+    }
+    private function getMe() {
+        include_once __DIR__ . '/auth/get_me.php';
+
+        // Get Authorization header
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        
+        // Extract token from "Bearer <token>" format
+        $sessionToken = '';
+        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            $sessionToken = $matches[1];
+        }
+        
+        // If no bearer token, check query parameter or body
+        if (empty($sessionToken)) {
+            $sessionToken = $_GET['session_token'] ?? $_POST['session_token'] ?? '';
+        }
+        
+        if (empty($sessionToken)) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 400,
+                'error' => 'Session token is required.'
+            ]);
+            exit;
+        }
+
+        // Call the getCurrentUser function
+        $response = getCurrentUser($this->DB_CONN, $sessionToken);
+
+        // Set HTTP status code and output JSON response
+        http_response_code($response['status']);
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
     }
     private function postRegister() {
         include_once __DIR__ . '/auth/post_register.php';
