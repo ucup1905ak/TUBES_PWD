@@ -2,7 +2,7 @@
 .env
 .env.local
 .env.production
-agent_task
+
 # IDE files
 .vscode/
 .idea/
