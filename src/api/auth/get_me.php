@@ -4,7 +4,7 @@
 function getCurrentUser(mysqli $DB_CONN, string $sessionToken): array {
     // Validate session token
     $stmt = $DB_CONN->prepare("
-        SELECT us.id_user, u.nama_lengkap, u.email, u.no_telp, u.alamat, u.foto_profil 
+        SELECT us.id_user, u.nama_lengkap, u.email, u.no_telp, u.alamat, u.foto_profil, u.role 
         FROM User_Session us
         JOIN User u ON us.id_user = u.id_user
         WHERE us.session_token = ? AND us.expires_at > NOW()

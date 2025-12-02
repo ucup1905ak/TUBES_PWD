@@ -154,7 +154,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
     width: 90%;
     margin-left: 5%;
     padding: 12px 14px;
@@ -174,8 +175,17 @@ textarea {
     overflow: hidden;
 }
 
+select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232F6F4F' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     border-color: #2F6F4F;
     box-shadow:
         inset -3px -3px 6px rgba(255,255,255,0.95),

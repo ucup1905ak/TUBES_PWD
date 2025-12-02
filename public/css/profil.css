@@ -72,7 +72,7 @@ body {
     margin-left: 120px; 
 }
 
-.field.jenishewan { 
+.field.role { 
     margin-left: 40px; 
 }
 
@@ -84,7 +84,9 @@ body {
     margin-top: 40px;
     width: 70%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .btn {
@@ -96,13 +98,44 @@ body {
     font-size: 14px;
 }
 
+.edit-btn {
+    background-color: #0b7a5a;
+    color: white;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
 .logout-btn { 
     background-color: white;
-    margin-left: -190px;
 }
 
 .delete-btn { 
     background-color: #d62828; 
     color: white;
-    margin-right: -190px; 
+}
+
+/* Edit mode input styles */
+input.input-box,
+textarea.input-box,
+select.input-box {
+    border: 2px solid #0b7a5a;
+    outline: none;
+    font-family: "Segoe UI", sans-serif;
+}
+
+textarea.input-box {
+    min-height: 60px;
+    resize: vertical;
+}
+
+select.input-box {
+    cursor: pointer;
 }

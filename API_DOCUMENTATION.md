@@ -240,3 +240,435 @@ async function login(identifier, password) {
   return await response.json();
 }
 ```
+
+---
+
+## User Endpoints
+
+### GET /api/auth/me
+Get the current authenticated user's data.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "user": {
+    "id_user": 1,
+    "nama_lengkap": "John Doe",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "telepon": "081234567890",
+    "alamat": "Jl. Example No. 123",
+    "role": "user"
+  }
+}
+```
+
+**Output (Unauthorized - 401):**
+```json
+{
+  "success": false,
+  "error": "Session token is required"
+}
+```
+
+---
+
+### PUT /api/user/update/{id}
+Update user profile by ID.
+
+**Request:**
+- **Method:** PUT
+- **Authorization:** `Bearer <session_token>`
+- **Content-Type:** `application/json`
+
+**Input:**
+```json
+{
+  "nama_lengkap": "string (optional)",
+  "username": "string (optional)",
+  "email": "string (optional)",
+  "telepon": "string (optional)",
+  "alamat": "string (optional)",
+  "role": "user|admin (optional)"
+}
+```
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "message": "User updated successfully"
+}
+```
+
+---
+
+## Pet (Hewan) Endpoints
+
+### GET /api/hewan
+Get all pets for the authenticated user.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "pets": [
+    {
+      "id_hewan": 1,
+      "nama_hewan": "Buddy",
+      "jenis_hewan": "Anjing",
+      "usia": "2 tahun",
+      "id_user": 1
+    }
+  ]
+}
+```
+
+---
+
+### GET /api/hewan/{id}
+Get a specific pet by ID.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "pet": {
+    "id_hewan": 1,
+    "nama_hewan": "Buddy",
+    "jenis_hewan": "Anjing",
+    "usia": "2 tahun",
+    "id_user": 1
+  }
+}
+```
+
+**Output (Not Found - 404):**
+```json
+{
+  "success": false,
+  "error": "Pet not found or does not belong to user"
+}
+```
+
+---
+
+### POST /api/hewan/tambah
+Add a new pet for the authenticated user.
+
+**Request:**
+- **Method:** POST
+- **Authorization:** `Bearer <session_token>`
+- **Content-Type:** `application/json`
+
+**Input:**
+```json
+{
+  "nama_hewan": "string (required)",
+  "jenis_hewan": "string (required)",
+  "usia": "string (required)"
+}
+```
+
+**Output (Success - 201):**
+```json
+{
+  "success": true,
+  "message": "Pet added successfully",
+  "id_hewan": 1
+}
+```
+
+**Output (Validation Error - 400):**
+```json
+{
+  "success": false,
+  "error": "Missing required fields: nama_hewan, jenis_hewan, usia"
+}
+```
+
+---
+
+### PUT /api/hewan/update/{id}
+Update an existing pet.
+
+**Request:**
+- **Method:** PUT
+- **Authorization:** `Bearer <session_token>`
+- **Content-Type:** `application/json`
+
+**Input:**
+```json
+{
+  "nama_hewan": "string (optional)",
+  "jenis_hewan": "string (optional)",
+  "usia": "string (optional)"
+}
+```
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "message": "Pet updated successfully"
+}
+```
+
+---
+
+### DELETE /api/hewan/delete/{id}
+Delete a pet.
+
+**Request:**
+- **Method:** DELETE
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "message": "Pet deleted successfully"
+}
+```
+
+**Output (Not Found - 404):**
+```json
+{
+  "success": false,
+  "error": "Pet not found or does not belong to user"
+}
+```
+
+---
+
+## Penitipan (Pet Boarding) Endpoints
+
+### GET /api/penitipan/jumlah
+Get the count of active penitipan for the authenticated user.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "jumlah": 3
+}
+```
+
+---
+
+### GET /api/penitipan
+Get all penitipan for the authenticated user.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "penitipan": [
+    {
+      "id_penitipan": 1,
+      "id_user": 1,
+      "id_hewan": 1,
+      "id_paket": 1,
+      "tanggal_mulai": "2025-01-15",
+      "tanggal_selesai": "2025-01-20",
+      "catatan": "Special diet required",
+      "status": "aktif",
+      "nama_hewan": "Buddy",
+      "jenis_hewan": "Anjing"
+    }
+  ]
+}
+```
+
+---
+
+### GET /api/penitipan/aktif
+Get only active penitipan for the authenticated user.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "penitipan": [
+    {
+      "id_penitipan": 1,
+      "id_user": 1,
+      "id_hewan": 1,
+      "id_paket": 1,
+      "tanggal_mulai": "2025-01-15",
+      "tanggal_selesai": "2025-01-20",
+      "catatan": "Special diet required",
+      "status": "aktif",
+      "nama_hewan": "Buddy",
+      "jenis_hewan": "Anjing"
+    }
+  ]
+}
+```
+
+---
+
+### GET /api/penitipan/{id}
+Get a specific penitipan by ID.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "penitipan": {
+    "id_penitipan": 1,
+    "id_user": 1,
+    "id_hewan": 1,
+    "id_paket": 1,
+    "tanggal_mulai": "2025-01-15",
+    "tanggal_selesai": "2025-01-20",
+    "catatan": "Special diet required",
+    "status": "aktif",
+    "nama_hewan": "Buddy",
+    "jenis_hewan": "Anjing"
+  }
+}
+```
+
+---
+
+### POST /api/penitipan/tambah
+Create a new penitipan (pet boarding request).
+
+**Request:**
+- **Method:** POST
+- **Authorization:** `Bearer <session_token>`
+- **Content-Type:** `application/json`
+
+**Input:**
+```json
+{
+  "id_hewan": "integer (required)",
+  "id_paket": "integer (optional, defaults to 1)",
+  "tanggal_mulai": "date string YYYY-MM-DD (required)",
+  "tanggal_selesai": "date string YYYY-MM-DD (required)",
+  "catatan": "string (optional)"
+}
+```
+
+**Output (Success - 201):**
+```json
+{
+  "success": true,
+  "message": "Penitipan created successfully",
+  "id_penitipan": 1
+}
+```
+
+**Output (Validation Error - 400):**
+```json
+{
+  "success": false,
+  "error": "Missing required fields: id_hewan, tanggal_mulai, tanggal_selesai"
+}
+```
+
+---
+
+### PUT /api/penitipan/update/{id}
+Update an existing penitipan.
+
+**Request:**
+- **Method:** PUT
+- **Authorization:** `Bearer <session_token>`
+- **Content-Type:** `application/json`
+
+**Input:**
+```json
+{
+  "id_hewan": "integer (optional)",
+  "id_paket": "integer (optional)",
+  "tanggal_mulai": "date string YYYY-MM-DD (optional)",
+  "tanggal_selesai": "date string YYYY-MM-DD (optional)",
+  "catatan": "string (optional)",
+  "status": "aktif|selesai|batal (optional)"
+}
+```
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "message": "Penitipan updated successfully"
+}
+```
+
+---
+
+### DELETE /api/penitipan/delete/{id}
+Delete a penitipan.
+
+**Request:**
+- **Method:** DELETE
+- **Authorization:** `Bearer <session_token>`
+
+**Output (Success - 200):**
+```json
+{
+  "success": true,
+  "message": "Penitipan deleted successfully"
+}
+```
+
+**Output (Not Found - 404):**
+```json
+{
+  "success": false,
+  "error": "Penitipan not found or does not belong to user"
+}
+```
+
+---
+
+## Admin Endpoints
+
+### GET /api/admin/dashboard
+Get admin dashboard statistics.
+
+**Request:**
+- **Method:** GET
+- **Authorization:** `Bearer <session_token>` (admin role required)
+
+**Output (Success - 200):**
+```json
+{
+  "totalUsers": 100,
+  "totalPet": 50,
+  "totalPenitipan": 200,
+  "totalIncome": 15000000
+}
+```

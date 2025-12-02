@@ -29,7 +29,10 @@ $router->add("/my", function (): void {
 });
 $router->add("/profile", function (): void {
     readfile(__DIR__ . '/public/pages/profil.xhtml');
-    // include 'public/pages';
+    exit;
+});
+$router->add("/titip", function (): void {
+    readfile(__DIR__ . '/public/pages/titip.xhtml');
     exit;
 });
 $router->add("/logout", function (): void {
@@ -40,6 +43,37 @@ $router->add("/logout", function (): void {
     header('Location: /');
     exit;
 });
+
+// Admin routes
+$router->add("/admin/users", function (): void {
+    readfile(__DIR__ . '/public/pages/users.xhtml');
+    exit;
+});
+$router->add("/admin/layanan", function (): void {
+    readfile(__DIR__ . '/public/pages/layanan.xhtml');
+    exit;
+});
+$router->add("/admin/paket", function (): void {
+    readfile(__DIR__ . '/public/pages/paket.xhtml');
+    exit;
+});
+$router->add("/admin/penitipan", function (): void {
+    readfile(__DIR__ . '/public/pages/penitipan_admin.xhtml');
+    exit;
+});
+$router->add("/help", function (): void {
+    readfile(__DIR__ . '/public/pages/help.xhtml');
+    exit;
+});
+$router->add("/features", function (): void {
+    readfile(__DIR__ . '/public/pages/feature.html');
+    exit;
+});
+$router->add("/packages", function (): void {
+    readfile(__DIR__ . '/public/pages/package.html');
+    exit;
+});
+
 $router->add("/test/env", function (): void {
     header('Content-Type: application/json');
     $obj = loadEnvToArray('.env');

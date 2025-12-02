@@ -63,8 +63,20 @@ class BACKEND{
         $this->router->add("/api/hewan", function() :void {
             $this->getHewan();
         });
+        $this->router->add("/api/hewan/{id}", function($id) :void {
+            $this->getHewanById($id);
+        });
         $this->router->add("/api/penitipan/jumlah", function(): void {
             $this->getJumlahPenitipan();
+        });
+        $this->router->add("/api/penitipan", function(): void {
+            $this->getPenitipan();
+        });
+        $this->router->add("/api/penitipan/aktif", function(): void {
+            $this->getPenitipanAktif();
+        });
+        $this->router->add("/api/penitipan/{id}", function($id): void {
+            $this->getPenitipanById($id);
         });
         $this->router->add("/api/user/{id}", function(): void {
             $this->getUser();
@@ -79,12 +91,28 @@ class BACKEND{
         $this->router->add("/api/hewan/tambah", function(): void {
             $this->postTambahHewan();
         });
+        $this->router->add("/api/hewan/update/{id}", function($id): void {
+            $this->postUpdateHewan($id);
+        });
+        $this->router->add("/api/hewan/delete/{id}", function($id): void {
+            $this->deleteHewan($id);
+        });
         $this->router->add("/api/penitipan/tambah", function(): void {
             $this->postTambahPenitipan();
+        });
+        $this->router->add("/api/penitipan/update/{id}", function($id): void {
+            $this->postUpdatePenitipan($id);
+        });
+        $this->router->add("/api/penitipan/delete/{id}", function($id): void {
+            $this->deletePenitipan($id);
         });
 
         $this->router->add("/api/auth/login", function(): void {
             $this->postLogin();
+        });
+
+        $this->router->add("/api/user/update", function(): void {
+            $this->postUpdateUser();
         });
 
     }
@@ -93,13 +121,122 @@ class BACKEND{
         header('Content-Type: application/json');
         $this->router->dispatch($path);
     }
+    
+    private function getSessionToken(): string {
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        
+        $sessionToken = '';
+        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            $sessionToken = $matches[1];
+        }
+        
+        if (empty($sessionToken)) {
+            $sessionToken = $_GET['session_token'] ?? $_POST['session_token'] ?? '';
+        }
+        
+        return $sessionToken;
+    }
+    
+    private function getInput(): array {
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (stripos($contentType, 'application/json') !== false) {
+            $raw = file_get_contents('php://input');
+            return json_decode($raw, true) ?? [];
+        }
+        return $_POST;
+    }
    
     private function getHewan() {
-        include __DIR__ . '/hewan/get_hewan.php';
+        include_once __DIR__ . '/hewan/get_hewan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleGetHewan($this->DB_CONN, $sessionToken);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
     }
+    
+    private function getHewanById($id) {
+        include_once __DIR__ . '/hewan/get_hewan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleGetHewan($this->DB_CONN, $sessionToken, (int)$id);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
     private function getJumlahPenitipan() {
-        include __DIR__ . '/penitipan/get_jumlah_penitipan.php';
+        include_once __DIR__ . '/penitipan/get_jumlah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        $response = handleGetJumlahPenitipan($this->DB_CONN, $sessionToken);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
     }
+    
+    private function getPenitipan() {
+        include_once __DIR__ . '/penitipan/get_jumlah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleGetPenitipan($this->DB_CONN, $sessionToken);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
+    private function getPenitipanAktif() {
+        include_once __DIR__ . '/penitipan/get_jumlah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleGetPenitipanAktif($this->DB_CONN, $sessionToken);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
+    private function getPenitipanById($id) {
+        include_once __DIR__ . '/penitipan/get_jumlah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleGetPenitipan($this->DB_CONN, $sessionToken, (int)$id);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
     private function getUser() {
         include __DIR__ . '/user/get_user.php';
     }
@@ -162,10 +299,103 @@ class BACKEND{
         echo json_encode($response);
     }
     private function postTambahHewan() {
-        include __DIR__ . '/hewan/post_tambah_hewan.php';
+        include_once __DIR__ . '/hewan/post_tambah_hewan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $response = handleTambahHewan($this->DB_CONN, $sessionToken, $input);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
     }
+    
+    private function postUpdateHewan($id) {
+        include_once __DIR__ . '/hewan/post_tambah_hewan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $response = handleUpdateHewan($this->DB_CONN, $sessionToken, (int)$id, $input);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
+    private function deleteHewan($id) {
+        include_once __DIR__ . '/hewan/post_tambah_hewan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleDeleteHewan($this->DB_CONN, $sessionToken, (int)$id);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
     private function postTambahPenitipan() {
-        include __DIR__ . '/penitipan/post_tambah_penitipan.php';
+        include_once __DIR__ . '/penitipan/post_tambah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $response = handleTambahPenitipan($this->DB_CONN, $sessionToken, $input);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
+    private function postUpdatePenitipan($id) {
+        include_once __DIR__ . '/penitipan/post_tambah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $response = handleUpdatePenitipan($this->DB_CONN, $sessionToken, (int)$id, $input);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
+    }
+    
+    private function deletePenitipan($id) {
+        include_once __DIR__ . '/penitipan/post_tambah_penitipan.php';
+        
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        $response = handleDeletePenitipan($this->DB_CONN, $sessionToken, (int)$id);
+        http_response_code($response['status']);
+        echo json_encode($response);
+        exit;
     }
     private function postLogin() {
         include __DIR__ . '/auth/post_login.php';
@@ -192,6 +422,48 @@ class BACKEND{
         // Send the JSON response
         echo json_encode($response);
 
+        exit;
+    }
+
+    private function postUpdateUser() {
+        include_once __DIR__ . '/user/post_update_user.php';
+
+        // Get Authorization header
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        
+        // Extract token from "Bearer <token>" format
+        $sessionToken = '';
+        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            $sessionToken = $matches[1];
+        }
+        
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 401,
+                'error' => 'Authorization required.'
+            ]);
+            exit;
+        }
+
+        // Accept JSON payload or standard form-encoded POST
+        $input = null;
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (stripos($contentType, 'application/json') !== false) {
+            $raw = file_get_contents('php://input');
+            $input = json_decode($raw, true);
+        } else {
+            $input = $_POST;
+        }
+
+        // Call the handleUpdateUser function
+        $response = handleUpdateUser($this->DB_CONN, $sessionToken, $input);
+
+        http_response_code($response['status']);
+        header('Content-Type: application/json');
+        echo json_encode($response);
         exit;
     }
 

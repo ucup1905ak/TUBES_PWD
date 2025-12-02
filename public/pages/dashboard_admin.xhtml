@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
         <title>PawHaven — Admin Dashboard</title>
-        <link rel="stylesheet" href="../css/dashboard_admin.css" />
+        <link rel="stylesheet" href="/public/css/dashboard_admin.css" />
     </head>
 
     <body>
@@ -13,23 +13,24 @@
 
         <!-- Header -->
         <header class="header">
-            <div class="brand">PawHaven Admin</div>
+            <a href="/my" class="brand">PawHaven Admin</a>
 
             <!-- username -->
             <div class="user-area">
-                <a id="user-link" class="user-link" href="profile.xhtml" title="Profil Admin">
+                <a id="user-link" class="user-link" href="/profile" title="Profil Admin">
                     <span id="user-display">Admin</span>
                 </a>
+                <button id="btn-logout" type="button" class="btn-logout">Logout</button>
             </div>
         </header>
 
         <!-- Navigation cepat admin -->
         <nav class="quick-nav" role="navigation" aria-label="Menu admin">
             <ul>
-                <li><a href="admin-dashboard.xhtml" class="nav-item active">Home</a></li>
-                <li><a href="users.xhtml" class="nav-item">Users</a></li>
-                <li><a href="layanan.xhtml" class="nav-item">Layanan</a></li>
-                <li><a href="paket.xhtml" class="nav-item">Paket</a></li>
+                <li><a href="/my" class="nav-item active">Home</a></li>
+                <li><a href="/admin/users" class="nav-item">Users</a></li>
+                <li><a href="/admin/layanan" class="nav-item">Layanan</a></li>
+                <li><a href="/admin/paket" class="nav-item">Paket</a></li>
             </ul>
         </nav>
 
@@ -45,7 +46,7 @@
             <section class="important-menus" aria-label="Statistik Admin">
 
                 <!-- Total User -->
-                <a href="users.xhtml" class="menu-card">
+                <a href="/admin/users" class="menu-card">
                     <div class="menu-media" aria-hidden="true">
                         <h1 class="stat-value" id="stat-users">0</h1>
                     </div>
@@ -56,7 +57,7 @@
                 </a>
 
                 <!-- Penitipan aktif -->
-                <a href="penitipan.xhtml" class="menu-card">
+                <a href="/admin/penitipan" class="menu-card">
                     <div class="menu-media" aria-hidden="true">
                         <h1 class="stat-value" id="stat-penitipan-aktif">0</h1>
                     </div>
@@ -67,7 +68,7 @@
                 </a>
 
                 <!-- Total Penitipan (semua penitipan) -->
-                <a href="penitipan.xhtml" class="menu-card">
+                <a href="/admin/penitipan" class="menu-card">
                     <div class="menu-media" aria-hidden="true">
                         <h1 class="stat-value" id="stat-penitipan">0</h1>
                     </div>
@@ -94,15 +95,15 @@
         <!-- Footer -->
         <footer class="footer-min">
             <div class="footer-inner">
-                <div>&copy; 2025 PawHaven</div>
+                <div>© 2025 PawHaven</div>
                 <div class="footer-links">
-                    <a href="/public/pages/help.xhtml">Pusat Bantuan</a>
+                    <a href="/help">Pusat Bantuan</a>
                 </div>
             </div>
         </footer>
 
         </div>
 
-        <script type="text/javascript" src="../js/dashboard_admin.js" defer="defer"></script>
+        <script type="text/javascript" src="/public/js/dashboard_admin.js"></script>
     </body>
 </html>

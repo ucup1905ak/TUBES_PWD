@@ -7,7 +7,8 @@ class Database_setup{
 		no_telp VARCHAR(15),
 		alamat TEXT,
 		password VARCHAR(255) NOT NULL,
-		foto_profil MEDIUMBLOB
+		foto_profil MEDIUMBLOB,
+		role ENUM('user', 'admin') DEFAULT 'user'
 	)","CREATE TABLE IF NOT EXISTS Pet (
 		id_pet INT AUTO_INCREMENT PRIMARY KEY,
 		id_user INT,

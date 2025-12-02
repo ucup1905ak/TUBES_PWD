@@ -5,18 +5,16 @@
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
         <title>PawHaven - Dashboard</title>
-        <link rel="stylesheet" href="css/dashboard_user.css" />
-        <script type="text/javascript" src="js/dashboard_user.js"></script>
+        <link rel="stylesheet" href="/public/css/dashboard_user.css" />
     </head>
 
     <body>
         <!-- HEADER -->
         <div class="header">
-            <h1 class="logo" onclick="location.href='dashboard_user.xhtml'">PawHaven</h1>
+            <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
 
             <div class="user-profile">
-                <!-- Foto profil nanti bisa ditambahkan di sini -->
-                <span id="user-name" onclick="location.href='profil.xhtml'">Akun Saya</span>
+                <span id="user-name" onclick="location.href='/profile'">Akun Saya</span>
             </div>
         </div>
 
@@ -29,88 +27,78 @@
 
                 <ul class="menu-list">
 
-                    <li onclick="location.href='dashboard_user.xhtml'">
+                    <li onclick="location.href='/my'">
                         <span class="icon">🏠</span>
                         <span class="menu-text">Home Dashboard</span>
                     </li>
 
-                    <li onclick="location.href='titip.xhtml'">
+                    <li onclick="location.href='/titip'">
                         <span class="icon">🐾</span>
                         <span class="menu-text">Titip Hewan</span>
                     </li>
 
-                    <li onclick="location.href='paket.xhtml'">
-                        <span class="icon">🎁</span>
-                        <span class="menu-text">Paket &amp; Promo</span>
+                    <li onclick="location.href='/profile'">
+                        <span class="icon">👤</span>
+                        <span class="menu-text">Profil Saya</span>
                     </li>
 
                 </ul>
+                
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+                </div>
             </div>
 
             <!-- MAIN CONTENT -->
-        <div class="content">
+            <div class="content">
 
-            <h1 class="welcome">
-                Halo
-                <!-- <?php echo $user_name ?? "User"; ?> 👋 -->
-            </h1>
-            <p class="muted">Semoga harimu menyenangkan.</p>
+                <h1 class="welcome" id="welcome-text">Halo 👋</h1>
+                <p class="muted">Semoga harimu menyenangkan.</p>
 
-            <!-- KOTAK PENITIPAN AKTIF -->
-            <div class="active-box">
-                <h2>Penitipan Aktif</h2>
+                <!-- KOTAK PENITIPAN AKTIF -->
+                <div class="active-box">
+                    <h2>Penitipan Aktif</h2>
 
-                <table class="active-table">
-                    <thead>
-                        <tr>
-                            <th>Nama Pet</th>
-                            <th>Tanggal Penitipan</th>
-                            <th>Tanggal Pengambilan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
+                    <table class="active-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Pet</th>
+                                <th>Tanggal Penitipan</th>
+                                <th>Tanggal Pengambilan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <!-- LOOP BACKEND PHP DI SINI -->
-                        <!-- <?php if (!empty($penitipan_aktif)) { ?>
-                            <?php foreach ($penitipan_aktif as $p) { ?> -->
-                                <tr>
-                                    <!-- <td><?php echo $p['nama_pet']; ?></td> -->
-                                    <!-- <td><?php echo $p['tgl_titip']; ?></td> -->
-                                    <!-- <td><?php echo $p['tgl_ambil']; ?></td> -->
-                                    <td>
-                                        <a href="detail_penitipan.php?id=<?php echo $p['id']; ?>" class="detail-btn">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
-                            <!-- <?php } ?> -->
-                        <!-- <?php } else { ?> -->
+                        <tbody id="penitipan-tbody">
                             <tr>
                                 <td colspan="4" class="no-active">
-                                    Tidak ada penitipan aktif
+                                    Memuat data...
                                 </td>
                             </tr>
-                        <!-- <?php } ?> -->
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                <!-- TOMBOL RIWAYAT -->
-                <div class="history-center">
-                    <a href="riwayat.xhtml" class="history-btn">Lihat Riwayat Penitipan</a>
+                    <!-- TOMBOL TAMBAH PENITIPAN -->
+                    <a href="/titip" class="add-btn">+ Tambah Penitipan</a>
                 </div>
 
-                <!-- TOMBOL TAMBAH PENITIPAN -->
-                <a href="titip.xhtml" class="add-btn">Tambah Penitipan</a>
-            </div>
+                <!-- DAFTAR PET -->
+                <div class="active-box" style="margin-top: 20px;">
+                    <h2>Pet Saya</h2>
+                    <div id="pets-container">
+                        <p class="muted">Memuat data...</p>
+                    </div>
+                </div>
 
+            </div>
         </div>
 
         <!-- FOOTER -->
         <div class="footer">
             <div class="box-hehe"></div>
-            <p>&copy; 2025 PawHaven.</p>
+            <p>© 2025 PawHaven.</p>
         </div>
 
+        <script type="text/javascript" src="/public/js/dashboard_user.js"></script>
     </body>
 </html>

@@ -8,6 +8,12 @@ function validateRegisterInput(array $input, array $file): array {
     $password = $input['password'] ?? '';
     $no_telp = trim($input['telepon'] ?? '');
     $alamat = trim($input['alamat'] ?? '');
+    $role = trim($input['role'] ?? 'user');
+
+    // Validate role
+    if (!in_array($role, ['user', 'admin'])) {
+        $errors[] = 'Invalid role. Must be "user" or "admin".';
+    }
 
     if (empty($username)) {
         $errors[] = 'Username is required.';
@@ -101,16 +107,17 @@ function insertUser(
     string $no_telp,
     string $alamat,
     string $password,
-    ?string $foto_profil_data
+    ?string $foto_profil_data,
+    string $role = 'user'
 ): int {
     $stmt_insert = $DB_CONN->prepare(
-        'INSERT INTO `User` (nama_lengkap, email, no_telp, alamat, password, foto_profil) VALUES (?, ?, ?, ?, ?, ?)'
+        'INSERT INTO `User` (nama_lengkap, email, no_telp, alamat, password, foto_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)'
     );
     if (!$stmt_insert) {
         throw new Exception('Database prepare statement failed on insert.');
     }
     $null = NULL;
-    $stmt_insert->bind_param('sssssb', $username, $email, $no_telp, $alamat, $password, $null);
+    $stmt_insert->bind_param('sssssbs', $username, $email, $no_telp, $alamat, $password, $null, $role);
     $stmt_insert->send_long_data(5, $foto_profil_data);
     if ($stmt_insert->execute()) {
         $new_user_id = $stmt_insert->insert_id;
@@ -131,6 +138,7 @@ function handleRegister(mysqli $DB_CONN, array $input): array {
     $hashed_password = $input['password'] ?? '';
     $no_telp = trim($input['telepon'] ?? '');
     $alamat = trim($input['alamat'] ?? '');
+    $role = trim($input['role'] ?? 'user');
 
     $foto_profil_data = getProfilePhotoData($_FILES, $errors);
 
@@ -160,7 +168,8 @@ function handleRegister(mysqli $DB_CONN, array $input): array {
             $no_telp,
             $alamat,
             $hashed_password,
-            $foto_profil_data
+            $foto_profil_data,
+            $role
         );
 
         return [
