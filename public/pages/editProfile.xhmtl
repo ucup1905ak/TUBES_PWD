@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Edit Profil</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Edit Profil</h1>
+    </header>
+    
+    <main>
+        <form action="#" method="post" onsubmit="return confirmSave();">
+            <div class="photo-section">
+                <img id="photo-preview" class="photo-preview" src="http://contoh.com/foto.jpg" alt="Foto Profil" />
+                <div class="photo-overlay" onclick="document.getElementById('foto').focus();"></div>
+            </div>
+            <label for="foto">Foto Profil (URL):</label>
+            <input type="url" id="foto" name="foto" value="http://contoh.com/foto.jpg" onchange="updatePreview()" />
+            
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" name="nama" value="Nama Anda" />
+            
+            <label for="umur">Umur:</label>
+            <input type="number" id="umur" name="umur" value="25" min="1" max="120" />
+            
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="laki-laki">Laki-laki</option>
+                <option value="perempuan">Perempuan</option>
+                <option value="lainnya">Lainnya</option>
+            </select>
+            
+            <label for="no_contact">No. Contact:</label>
+            <input type="tel" id="no_contact" name="no_contact" value="08123456789" />
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="email@contoh.com" />
+            
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    </main>
+    
+
+</body>
+</html>
