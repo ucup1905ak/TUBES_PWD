@@ -1,0 +1,170 @@
+/* ===== COLOR PALETTE (Figma) ===== */
+:root {
+    --green-dark: #004030;
+    --green-soft: #4A9782;
+    --beige: #DCD0A8;
+    --cream: #FFF9E5;
+}
+
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: var(--cream); /* #FFF9E5 */
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: var(--green-dark); /* #004030 */
+    padding: 20px 0;
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* ===== DECOR SHAPES (masih pakai warna palette) ===== */
+.decor {
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.decor-1 {
+    background: var(--green-soft); /* #4A9782 */
+    top: 140px;
+    left: 70px;
+    opacity: 0.18;
+}
+
+.decor-2 {
+    background: var(--beige); /* #DCD0A8 */
+    top: 420px;
+    right: 90px;
+    opacity: 0.35;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    margin: 60px auto;
+    width: 85%;
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== FORM CARD ===== */
+.form-card {
+    width: 55%;
+    background: #FFF9E5;
+    padding: 35px 45px;
+    border-radius: 22px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--green-dark);
+    margin-bottom: 25px;
+}
+
+/* ===== INPUT STYLING ===== */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    font-size: 15px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.input-group input,
+.input-group textarea {
+    padding: 12px 14px;
+
+    background: var(--cream);        /* #FFF9E5 — INI YANG KAMU MAU */
+    border: 2px solid var(--green-soft); /* #4A9782 */
+    color: var(--green-dark);        /* #004030 */
+
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.25s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--green-dark); /* #004030 */
+    box-shadow: 0 0 8px rgba(0, 64, 48, 0.25);
+}
+
+/* TEXTAREA */
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* HALF INPUTS */
+.row {
+    display: flex;
+    gap: 20px;
+}
+
+.half {
+    width: 50%;
+}
+
+/* ===== BUTTON ===== */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    background: var(--green-soft); /* #4A9782 */
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background: var(--green-dark); /* #004030 */
+}
+
+/* ===== PHOTO SECTION ===== */
+.photo-side {
+    width: 35%;
+}
+
+.photo-side img {
+    width: 100%;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== ANIMATION ===== */
+.fadeIn {
+    animation: fadeIn 0.7s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
