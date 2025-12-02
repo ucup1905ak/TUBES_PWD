@@ -1,5 +1,5 @@
 <?php
-// declare(strict_types=1);
+
 include __DIR__ . '/src/routing/router.php';
 include __DIR__ . '/src/api/backend.php';
 // include __DIR__ . '/vendor/autoload.php';
@@ -16,12 +16,12 @@ $router->add("/", function (): void {
     }
 
     // Otherwise, redirect to the landing page.
-    header('Location: /public/pages/landing.xhtml');
+    include 'public/pages/landing.xhtml';
     // include __DIR__ . '/public/pages/landing.xhtml';
     exit;
 });
 $router->add("/login", function (): void {
-    header('Location: /login.xhtml');
+    include 'public/pages/login.xhtml';
     exit;
 });
 $router->add("/logout", function (): void {

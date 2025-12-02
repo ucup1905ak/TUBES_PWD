@@ -50,15 +50,29 @@ class Database_setup{
 		PRIMARY KEY (id_penitipan, id_layanan),
 		FOREIGN KEY (id_penitipan) REFERENCES Penitipan(id_penitipan) ON DELETE CASCADE,
 		FOREIGN KEY (id_layanan) REFERENCES Layanan(id_layanan) ON DELETE CASCADE
-	)"];
+	)",
+	"CREATE TABLE IF NOT EXISTS User_Session (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		id_user INT NOT NULL,
+		session_token VARCHAR(255) UNIQUE NOT NULL,
+		ip_address VARCHAR(45),
+		expires_at TIMESTAMP NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
+		INDEX idx_session_token (session_token),
+		INDEX idx_expires (expires_at)
+	)",
+];
 
 
 	private $DB_CONN;
 	public function initializeTables(){
 		foreach($this->query as $q){
 			if ($this->DB_CONN->query($q) === FALSE) {
-				echo "Error creating table: " . $this->DB_CONN->error;
+				error_log("Error executing query: " . $q . " - " . $this->DB_CONN->error);
+				// Output to browser console
 			}
+			
 		}
 	}
 

@@ -1,65 +1,82 @@
 <?php
 // src/api/auth/post_login.php
-ob_start(); // Start output buffering
-
-// Accept JSON payload or standard form-encoded POST
-$input = null;
-$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-if (stripos($contentType, 'application/json') !== false) {
-    $raw = file_get_contents('php://input');
-    $input = json_decode($raw, true);
-} else {
-    $input = $_POST;
-}
 
 function handleLogin(mysqli $DB_CONN, array $input): array {
-    $email = trim($input['email'] ?? $input['username'] ?? '');
-    $password = $input['password'] ?? '';
-
-    if ($email === '' || $password === '') {
+    // Validate input - accept either email or username
+    $identifier = $input['email'] ?? $input['username'] ?? '';
+    if (empty($identifier) || empty($input['password'])) {
         return [
             'status' => 400,
-            'success' => false,
-            'error' => 'Missing credentials'
+            'error' => 'Email/username and password are required.'
         ];
     }
-
-    // Query the DB for user by email (or adapt to username)
-    $stmt = $DB_CONN->prepare('SELECT id_user, nama_lengkap, email, password FROM `User` WHERE email = ? LIMIT 1');
+    
+    // Fetch user by email or username (nama_lengkap)
+    $stmt = $DB_CONN->prepare("SELECT id_user, password FROM User WHERE email = ? OR nama_lengkap = ?");
     if (!$stmt) {
         return [
             'status' => 500,
-            'success' => false,
-            'error' => 'Server error'
+            'error' => 'Database error: ' . $DB_CONN->error
         ];
     }
-    $stmt->bind_param('s', $email);
+    $stmt->bind_param("ss", $identifier, $identifier);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
+    $stmt->store_result();
 
-    if (!$user || !password_verify($password, $user['password'])) {
+    if ($stmt->num_rows === 0) {
         return [
             'status' => 401,
-            'success' => false,
-            'error' => 'Invalid credentials'
+            'error' => 'Invalid email or password.'
         ];
     }
 
-    // Login success: create session
-    session_start();
-    $_SESSION['user_id'] = (int) $user['id_user'];
-    $_SESSION['user_name'] = $user['nama_lengkap'];
-    $_SESSION['email'] = $user['email'];
+    $stmt->bind_result($id_user, $hashed_password);
+    $stmt->fetch();
 
-    // Don't return password
-    unset($user['password']);
+    // Since the password is already hashed (SHA-256) on the client,
+    // compare the hashes directly (assuming the DB stores SHA-256 hashes as well)
+    if ($input['password'] !== $hashed_password) {
+        return [
+            'status' => 401,
+            'error' => 'Invalid email or password.'
+        ];
+    }
+
+    // Generate session token
+    $session_token = bin2hex(random_bytes(32));
+    $ip_address = $_SERVER['REMOTE_ADDR'] ?? null;
+    $expires_at = date('Y-m-d H:i:s', time() + 60 * 60 * 24); // 24 hours
+
+    // Store session in User_Session table
+    $insert = $DB_CONN->prepare("INSERT INTO User_Session (id_user, session_token, ip_address, expires_at) VALUES (?, ?, ?, ?)");
+    if (!$insert) {
+        return [
+            'status' => 500,
+            'error' => 'Database error: ' . $DB_CONN->error
+        ];
+    }
+    $insert->bind_param("isss", $id_user, $session_token, $ip_address, $expires_at);
+    if (!$insert->execute()) {
+        return [
+            'status' => 500,
+            'error' => 'Failed to create session.'
+        ];
+    }
 
     return [
         'status' => 200,
-        'success' => true,
-        'user' => $user
+        'session_token' => $session_token,
+        'expires_at' => $expires_at
     ];
 }
+
+
+// Architecture Overview
+// Frontend (Client Side)
+
+// HTML forms for login/registration
+// JavaScript for API calls and UI updates
+// Stores session token (usually in cookies or localStorage)
+?>
+
 

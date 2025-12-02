@@ -12,12 +12,16 @@ function clearErrors() {
 usernameInput.addEventListener("input", clearErrors);
 passwordInput.addEventListener("input", clearErrors);
 
-function login() {
+async function login() {
     const email = document.getElementById("username").value; // Assuming username field is for email
     const password = document.getElementById("password").value;
     const errorBox = document.getElementById("errorBox");
     const errorPassword = document.getElementById("errorPassword");
 
+    // Hash password using SHA-256 (compatible with PHP's hash('sha256', ...))
+    const hashedBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
+    const passwordArray = Array.from(new Uint8Array(hashedBuffer));
+    const hashedPassword = passwordArray.map(b => b.toString(16).padStart(2, '0')).join('');
     // Reset errors
     errorBox.textContent = "";
     errorPassword.textContent = "";
@@ -42,7 +46,7 @@ function login() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email: email, password: password })
+        body: JSON.stringify({ email: email, password: hashedPassword })
     })
     .then(response => {
         if (response.ok) {

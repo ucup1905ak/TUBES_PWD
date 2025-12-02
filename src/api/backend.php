@@ -9,19 +9,56 @@ class BACKEND{
                                     $DB_USER,
                                     $DB_PASSWORD,
                                     $DB_NAME ) : void {
-
+                                        // echo 'connecting to db';
         $this->DB_CONN = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
         if ($this->DB_CONN->connect_error) {  
             die("Connection failed: " . $this->DB_CONN->connect_error);
         }
     }
     public function setupDatabase(): void{
+        // echo '<br>setting up database.';
         $DB = new Database_setup($this->DB_CONN);
         $DB->initializeTables();
     }
     public function __construct($router){
         $this->router = $router;
         //GET endpoints
+        $this->router->add("/api", function() :void {
+            http_response_code(200);
+            $test = ["halo" => true, "status"=> true];
+            echo json_encode($test);
+        });
+        // Test endpoint for registering a new account with username and password from path
+        $this->router->add("/api/test/register", function(): void {
+            include_once __DIR__ . '/auth/post_register.php';
+
+            // Accept JSON payload or standard form-encoded POST
+            $input = null;
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            if (stripos($contentType, 'application/json') !== false) {
+            $raw = file_get_contents('php://input');
+            $input = json_decode($raw, true);
+            } else {
+            $input = $_POST;
+            }
+
+            // Provide default values if not set
+            $testUser = [
+            'username' => $input['username'] ?? '',
+            'email' => ($input['username'] ?? '') . '@example.com',
+            'password' => $input['password'] ?? '',
+            'confirmPassword' => $input['password'] ?? '',
+            'telepon' => $input['telepon'] ?? '081234567890',
+            'alamat' => $input['alamat'] ?? 'Jl. Uji Coba No. 123'
+            ];
+
+            $response = handleRegister($this->DB_CONN, $testUser);
+            http_response_code($response['status']);
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        });
+
+             
         $this->router->add("/api/hewan", function() :void {
             $this->getHewan();
         });
@@ -48,6 +85,8 @@ class BACKEND{
 
     }
     public function run($path): void{
+               
+        header('Content-Type: application/json');
         $this->router->dispatch($path);
     }
    
@@ -89,6 +128,17 @@ class BACKEND{
     }
     private function postLogin() {
         include __DIR__ . '/auth/post_login.php';
+
+        // Accept JSON payload or standard form-encoded POST
+        $input = null;
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (stripos($contentType, 'application/json') !== false) {
+            $raw = file_get_contents('php://input');
+            $input = json_decode($raw, true);
+        } else {
+            $input = $_POST;
+        }
+
         // Call the handleLogin function and get the response
         $response = handleLogin($this->DB_CONN, $input);
 
@@ -101,9 +151,10 @@ class BACKEND{
         // Send the JSON response
         echo json_encode($response);
 
-        // End output buffering
-        ob_end_flush();
         exit;
     }
 
 }
+
+
+?>
