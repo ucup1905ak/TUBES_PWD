@@ -24,7 +24,12 @@ $router->add("/register", function (): void {
     exit;
 });
 $router->add("/my", function (): void {
-    include 'public/dashboard.php';
+    readfile(__DIR__ . '/public/dashboard.php');
+    exit;
+});
+$router->add("/profile", function (): void {
+    readfile(__DIR__ . '/public/pages/profil.xhtml');
+    // include 'public/pages';
     exit;
 });
 $router->add("/logout", function (): void {
