@@ -1,8 +1,18 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-    "ghcr.io/devcontainers/features/php:1": {}
-    
+  "name": "PHP + MariaDB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [80, 3306],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "felixfbecker.php-debug",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
   },
-  "postCreateCommand": "sudo apt update && sudo apt install mariadb-server -y && sudo service mariadb start"
+  "postCreateCommand": "echo 'Devcontainer ready'",
+  "shutdownAction": "stopCompose"
 }

@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  workspace:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/var/www/html:cached
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      # useful defaults for development (override in Codespaces/Secrets)
+      - APP_ENV=development
+
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: pwd
+      MYSQL_USER: pwd
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
