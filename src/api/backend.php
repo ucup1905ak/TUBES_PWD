@@ -88,6 +88,9 @@ class BACKEND{
         $this->router->add("/api/auth/me", function(): void {
             $this->getMe();
         });
+        $this->router->add("/api/auth/me/photo", function(): void {
+            $this->getMePhoto();
+        });
         // Hewan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/hewan/tambah", function(): void {
             $this->postTambahHewan();
@@ -336,6 +339,37 @@ class BACKEND{
         http_response_code($response['status']);
         header('Content-Type: application/json');
         echo json_encode($response);
+        exit;
+    }
+    
+    private function getMePhoto() {
+        include_once __DIR__ . '/auth/get_me.php';
+
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required.']);
+            exit;
+        }
+
+        $response = getCurrentUser($this->DB_CONN, $sessionToken, true);
+        if ($response['status'] !== 200) {
+            http_response_code($response['status']);
+            echo json_encode($response);
+            exit;
+        }
+
+        $user = $response['user'] ?? [];
+        $hasPhoto = $user['has_foto_profil'] ?? false;
+        $photo = $user['foto_profil'] ?? null;
+
+        http_response_code(200);
+        echo json_encode([
+            'status' => 200,
+            'success' => true,
+            'has_foto_profil' => $hasPhoto,
+            'foto_profil' => $photo
+        ]);
         exit;
     }
     private function postRegister() {

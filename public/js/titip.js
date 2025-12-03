@@ -1,3 +1,67 @@
+// Install a simple card-based replacement for window.alert
+(function installAlertCard(){
+    if (window.__alertCardInstalled) return;
+    window.__alertCardInstalled = true;
+
+    function ensureStyles() {
+        if (document.getElementById('alert-card-styles')) return;
+        const style = document.createElement('style');
+        style.id = 'alert-card-styles';
+        style.textContent = `
+            .notice-container{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+            .notice-card{display:flex;align-items:flex-start;gap:8px;min-width:260px;max-width:380px;padding:12px 14px;border-radius:10px;background:#fff;color:#222;border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+            .notice-card.info{border-left:4px solid #3b82f6}
+            .notice-card.success{border-left:4px solid #10b981}
+            .notice-card.error{border-left:4px solid #ef4444}
+            .notice-message{line-height:1.35;font-size:14px;margin-right:8px;white-space:pre-line}
+            .notice-close{margin-left:auto;border:none;background:transparent;color:#444;cursor:pointer;font-size:16px;line-height:1;padding:0 4px}
+            .notice-close:hover{color:#000}
+        `;
+        document.head.appendChild(style);
+    }
+
+    function ensureContainer() {
+        let c = document.querySelector('.notice-container');
+        if (!c) {
+            c = document.createElement('div');
+            c.className = 'notice-container';
+            (document.body || document.documentElement).appendChild(c);
+        }
+        return c;
+    }
+
+    function pickType(message){
+        const m = (message || '').toLowerCase();
+        if (m.includes('gagal') || m.includes('error') || m.includes('kesalahan') || m.includes('invalid') ) return 'error';
+        if (m.includes('berhasil') || m.includes('success')) return 'success';
+        return 'info';
+    }
+
+    window.alert = function(message){
+        try{
+            ensureStyles();
+            const container = ensureContainer();
+            const type = pickType(String(message));
+            const card = document.createElement('div');
+            card.className = 'notice-card ' + type;
+            const msg = document.createElement('div');
+            msg.className = 'notice-message';
+            msg.textContent = String(message);
+            const close = document.createElement('button');
+            close.className = 'notice-close';
+            close.setAttribute('aria-label','Close');
+            close.textContent = '×';
+            close.onclick = () => card.remove();
+            card.appendChild(msg);
+            card.appendChild(close);
+            container.appendChild(card);
+            setTimeout(() => card.remove(), 4000);
+        }catch(e){
+            window.__alertFallback ? window.__alertFallback(message) : window.prompt && window.prompt(String(message));
+        }
+    };
+})();
+
 // /public/js/titip.js
 // Form Penitipan & Pet management (with auto total & durasi)
 

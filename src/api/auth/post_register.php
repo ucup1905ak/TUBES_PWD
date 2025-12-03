@@ -49,8 +49,13 @@ function validateRegisterInput(array $input, array $file): array {
         $errors[] = 'Address is required.';
     }
 
-    // File validation
+    // File validation (treat empty filename/size as "no file")
     if (isset($file['foto']) && $file['foto']['error'] === UPLOAD_ERR_OK) {
+        if (empty($file['foto']['name']) || (int)($file['foto']['size'] ?? 0) === 0) {
+            // Treat empty upload as no file provided
+            return $errors;
+        }
+
         $max_file_size = 16 * 1024 * 1024;
         if ($file['foto']['size'] > $max_file_size) {
             $errors[] = 'File is too large. Maximum size is 16MB.';
@@ -70,7 +75,7 @@ function validateRegisterInput(array $input, array $file): array {
             if (function_exists('finfo_open')) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $file_type = finfo_file($finfo, $file['foto']['tmp_name']);
-                finfo_close($finfo);
+                // finfo_close($finfo); // Deprecated in PHP 8.1+, no longer needed
                 
                 if (!in_array($file_type, $allowed_mime_types)) {
                     $errors[] = 'Invalid file type. Only JPG, PNG, and GIF are allowed.';
@@ -94,7 +99,12 @@ function validateRegisterInput(array $input, array $file): array {
  * @return string|null Binary image data on success, null if no file or on error
  */
 function getProfilePhotoData(array $file, array &$errors): ?string {
-    if (isset($file['foto']) && $file['foto']['error'] === UPLOAD_ERR_OK && empty($errors)) {
+    if (isset($file['foto'])
+        && $file['foto']['error'] === UPLOAD_ERR_OK
+        && !empty($file['foto']['name'])
+        && (int)($file['foto']['size'] ?? 0) > 0
+        && empty($errors)
+    ) {
         $foto_profil_data = file_get_contents($file['foto']['tmp_name']);
         if ($foto_profil_data === false) {
             $errors[] = 'Failed to read the uploaded file.';
@@ -167,7 +177,9 @@ function insertUser(
     }
     $null = NULL;
     $stmt_insert->bind_param('sssssbs', $username, $email, $no_telp, $alamat, $password, $null, $role);
-    $stmt_insert->send_long_data(5, $foto_profil_data);
+    if ($foto_profil_data !== null) {
+        $stmt_insert->send_long_data(5, $foto_profil_data);
+    }
     if ($stmt_insert->execute()) {
         $new_user_id = $stmt_insert->insert_id;
         $stmt_insert->close();
