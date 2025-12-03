@@ -4,7 +4,6 @@
     const token = localStorage.getItem("session_token");
     const expires = localStorage.getItem("session_expires_at");
 
-    // Redirect kalau session invalid
     if (!token || !expires || new Date(expires) <= new Date()) {
         window.location.href = "/login";
         return;
@@ -12,7 +11,6 @@
 
     async function loadRiwayat() {
         try {
-            // === FIX 1: Endpoint diperbaiki ===
             const response = await fetch("/api/penitipan", {
                 method: "GET",
                 headers: {
@@ -22,8 +20,7 @@
             });
 
             const data = await response.json();
-            
-            // === FIX 2: Key diperbaiki dari data.items → data.penitipan ===
+
             if (data.success && data.penitipan && data.penitipan.length > 0) {
                 renderRiwayat(data.penitipan);
             } else {
@@ -44,7 +41,6 @@
             const div = document.createElement("div");
             div.className = "nota-card fadeIn";
 
-            // layanan selalu array (backend decode JSON)
             const layanan = (item.layanan && item.layanan.length > 0)
                 ? item.layanan.join(", ")
                 : "Tidak ada";
@@ -67,7 +63,8 @@
                 </div>
             `;
 
-            container.appendChild(div);
+            // === INSERT FIRST ===
+            container.prepend(div);
         });
     }
 
