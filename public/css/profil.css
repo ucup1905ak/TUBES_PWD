@@ -81,7 +81,7 @@ body {
 }
 
 .bottom-buttons {
-    margin-top: 40px;
+    margin-top: 120px;
     width: 70%;
     display: flex;
     justify-content: center;
@@ -139,3 +139,4 @@ textarea.input-box {
 select.input-box {
     cursor: pointer;
 }
+
