@@ -21,90 +21,124 @@
 
     <div class="main-wrapper fadeIn">
 
-        <!-- FORM -->
-        <form class="form-card" id="titipForm">
+    <!-- FORM -->
+    <form class="form-card" id="titipForm">
 
-            <div class="title">Form Penitipan &amp; Data Pet</div>
+        <div class="title">Form Penitipan &amp; Data Pet</div>
 
-            <!-- Pet Selection or Add New -->
+        <!-- Pet Selection or Add New -->
+        <div class="input-group">
+            <label for="pet_select">Pilih Pet</label>
+            <select id="pet_select" name="pet_select">
+                <option value="">-- Pilih pet yang sudah ada --</option>
+                <option value="new">+ Tambah Pet Baru</option>
+            </select>
+        </div>
+
+        <!-- New Pet Fields -->
+        <div id="newPetFields" style="display: none;">
             <div class="input-group">
-                <label for="pet_select">Pilih Pet</label>
-                <select id="pet_select" name="pet_select">
-                    <option value="">-- Pilih pet yang sudah ada --</option>
-                    <option value="new">+ Tambah Pet Baru</option>
-                </select>
+                <label for="nama_pet">Nama Pet *</label>
+                <input type="text" id="nama_pet" name="nama_pet" />
             </div>
 
-            <!-- New Pet Fields (shown when adding new pet) -->
-            <div id="newPetFields" style="display: none;">
-                <div class="input-group">
-                    <label for="nama_pet">Nama Pet *</label>
-                    <input type="text" id="nama_pet" name="nama_pet" />
-                </div>
-
-                <div class="input-group">
-                    <label for="jenis_pet">Jenis Pet</label>
-                    <input type="text" id="jenis_pet" name="jenis_pet" placeholder="Kucing, Anjing, dll" />
-                </div>
-
-                <div class="row">
-                    <div class="input-group half">
-                        <label for="ras">Ras</label>
-                        <input type="text" id="ras" name="ras" />
-                    </div>
-
-                    <div class="input-group half">
-                        <label for="umur">Umur (tahun)</label>
-                        <input type="number" id="umur" name="umur" min="0" />
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-group half">
-                        <label for="jenis_kelamin">Jenis Kelamin</label>
-                        <select id="jenis_kelamin" name="jenis_kelamin">
-                            <option value="">-- Pilih --</option>
-                            <option value="Jantan">Jantan</option>
-                            <option value="Betina">Betina</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group half">
-                        <label for="warna">Warna</label>
-                        <input type="text" id="warna" name="warna" />
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="alergi">Alergi</label>
-                    <input type="text" id="alergi" name="alergi" placeholder="Jika ada" />
-                </div>
-
-                <div class="input-group">
-                    <label for="catatan_medis">Catatan Medis</label>
-                    <textarea id="catatan_medis" name="catatan_medis" placeholder="Informasi kesehatan penting"></textarea>
-                </div>
+            <div class="input-group">
+                <label for="jenis_pet">Jenis Pet</label>
+                <input type="text" id="jenis_pet" name="jenis_pet" placeholder="Kucing, Anjing, dll" />
             </div>
 
-            <!-- Penitipan Fields (always shown) -->
             <div class="row">
                 <div class="input-group half">
-                    <label for="tgl_checkin">Tanggal Check-in *</label>
-                    <input type="date" id="tgl_checkin" name="tgl_checkin" required="required" />
+                    <label for="ras">Ras</label>
+                    <input type="text" id="ras" name="ras" />
                 </div>
 
                 <div class="input-group half">
-                    <label for="tgl_checkout">Tanggal Check-out *</label>
-                    <input type="date" id="tgl_checkout" name="tgl_checkout" required="required" />
+                    <label for="umur">Umur (tahun)</label>
+                    <input type="number" id="umur" name="umur" min="0" />
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">Simpan Penitipan</button>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="/my" style="color: #666;">← Kembali ke Dashboard</a>
+            <div class="row">
+                <div class="input-group half">
+                    <label for="jenis_kelamin">Jenis Kelamin</label>
+                    <select id="jenis_kelamin" name="jenis_kelamin">
+                        <option value="">-- Pilih --</option>
+                        <option value="Jantan">Jantan</option>
+                        <option value="Betina">Betina</option>
+                    </select>
+                </div>
+
+                <div class="input-group half">
+                    <label for="warna">Warna</label>
+                    <input type="text" id="warna" name="warna" />
+                </div>
             </div>
-        </form>
+
+            <div class="input-group">
+                <label for="alergi">Alergi</label>
+                <input type="text" id="alergi" name="alergi" placeholder="Jika ada" />
+            </div>
+
+            <div class="input-group">
+                <label for="catatan_medis">Catatan Medis</label>
+                <textarea id="catatan_medis" name="catatan_medis"
+                    placeholder="Informasi kesehatan penting"></textarea>
+            </div>
+        </div>
+
+        <!-- Penitipan Fields -->
+        <div class="row">
+            <div class="input-group half">
+                <label for="tgl_checkin">Tanggal Check-in *</label>
+                <input type="date" id="tgl_checkin" name="tgl_checkin" required="required" />
+            </div>
+
+            <div class="input-group half">
+                <label for="tgl_checkout">Tanggal Check-out *</label>
+                <input type="date" id="tgl_checkout" name="tgl_checkout" required="required" />
+            </div>
+        </div>
+
+        <!-- Kamar -->
+        <div class="input-group">
+            <label for="kamar">Pilih Kamar *</label>
+            <select id="kamar" name="kamar" required="required">
+                <option value="">-- Pilih kamar --</option>
+                <option value="reguler">Reguler</option>
+                <option value="premium">Premium</option>
+                <option value="vip">VIP</option>
+            </select>
+        </div>
+
+        <!-- Layanan tambahan -->
+        <div class="input-group">
+            <label>Layanan Tambahan (opsional)</label>
+
+            <label><input type="checkbox" class="layanan" value="grooming" /> Grooming</label>
+            <label><input type="checkbox" class="layanan" value="kuku" /> Cukur Kuku</label>
+            <label><input type="checkbox" class="layanan" value="spa" /> Spa Treatment</label>
+        </div>
+
+        <!-- Durasi -->
+        <div class="input-group">
+            <label for="durasi">Durasi Penitipan</label>
+            <input type="text" id="durasi" name="durasi" readonly="readonly" />
+        </div>
+
+        <!-- Total Biaya -->
+        <div class="input-group">
+            <label for="total">Total Biaya</label>
+            <input type="text" id="total" name="total" readonly="readonly" />
+        </div>
+
+        <button type="submit" class="submit-btn">Simpan Penitipan</button>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="/my" style="color: #666;">← Kembali ke Dashboard</a>
+        </div>
+    </form>
+
 
         <!-- PHOTO SIDE -->
         <div class="photo-side">
