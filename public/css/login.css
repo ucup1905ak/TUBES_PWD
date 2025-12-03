@@ -86,7 +86,14 @@ html, body {
     gap: 5px;
 }
 
-.forgot {
+.options p{
+    color: #0D4635;
+    margin-top: 0px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.register {
     color: #0D4635;
     font-size: 13px;
     text-decoration: none;

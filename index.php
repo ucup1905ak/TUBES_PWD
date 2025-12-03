@@ -35,6 +35,10 @@ $router->add("/titip", function (): void {
     readfile(__DIR__ . '/public/pages/titip.xhtml');
     exit;
 });
+$router->add("/riwayat", function (): void {
+    readfile(__DIR__ . '/public/pages/riwayat.xhtml');
+    exit;
+});
 $router->add("/logout", function (): void {
     session_start();
     // Destroy the session to log out the user.

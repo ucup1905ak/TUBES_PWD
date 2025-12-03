@@ -1,0 +1,8 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/php:1": {}
+    
+  },
+  "postCreateCommand": "sudo apt update && sudo apt install mariadb-server -y && sudo service mariadb start"
+}

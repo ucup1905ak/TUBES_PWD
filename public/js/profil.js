@@ -12,31 +12,35 @@ let userProfile = null;
 let isEditMode = false;
 
 // Fetch user data from API
-async function fetchUserProfile() {
-    try {
-        const response = await fetch('/api/auth/me', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + sessionToken,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await response.json();
-
-        if (data.success && data.user) {
-            userProfile = data.user;
-            displayUserProfile();
-        } else {
-            console.error('Failed to load user data:', data.error);
-            alert('Failed to load profile. Please login again.');
-            localStorage.removeItem('session_token');
-            localStorage.removeItem('session_expires_at');
-            window.location.href = '/login';
+function fetchUserProfile() {
+    fetch('/api/auth/me', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + sessionToken,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      if (data.success && data.user) {
+        userProfile = data.user;
+        displayUserProfile();
+        // Komentar: Update nama user di header
+        var userName = document.getElementById('user-name');
+        if (userName) {
+          userName.textContent = userProfile.nama_lengkap || 'Akun Saya';
         }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-    }
+      } else {
+        console.error('Failed to load user data:', data.error);
+        alert('Failed to load profile. Please login again.');
+        localStorage.removeItem('session_token');
+        localStorage.removeItem('session_expires_at');
+        window.location.href = '/login';
+      }
+    })
+    .catch(function(error) {
+      console.error('Error fetching user data:', error);
+    });
 }
 
 function displayUserProfile() {
@@ -67,28 +71,28 @@ function toggleEditMode(enable) {
 
     if (enable) {
         // Switch to edit mode
-        viewElements.forEach(el => el.style.display = 'none');
-        editElements.forEach(el => el.style.display = 'block');
+        viewElements.forEach(function(el) { el.style.display = 'none'; });
+        editElements.forEach(function(el) { el.style.display = 'block'; });
         editBtn.style.display = 'none';
         saveBtn.style.display = 'inline-block';
         cancelBtn.style.display = 'inline-block';
 
-        // Populate input fields with current values
+        // Komentar: Populate input fields dengan nilai saat ini
         document.getElementById('username-input').value = userProfile.nama_lengkap || '';
         document.getElementById('notelp-input').value = userProfile.no_telp || '';
         document.getElementById('alamat-input').value = userProfile.alamat || '';
         document.getElementById('role-input').value = userProfile.role || 'user';
     } else {
         // Switch to view mode
-        viewElements.forEach(el => el.style.display = 'block');
-        editElements.forEach(el => el.style.display = 'none');
+        viewElements.forEach(function(el) { el.style.display = 'block'; });
+        editElements.forEach(function(el) { el.style.display = 'none'; });
         editBtn.style.display = 'inline-block';
         saveBtn.style.display = 'none';
         cancelBtn.style.display = 'none';
     }
 }
 
-async function saveProfile() {
+function saveProfile() {
     const updatedData = {
         nama_lengkap: document.getElementById('username-input').value.trim(),
         no_telp: document.getElementById('notelp-input').value.trim(),
@@ -96,54 +100,75 @@ async function saveProfile() {
         role: document.getElementById('role-input').value
     };
 
-    try {
-        const response = await fetch('/api/user/update', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + sessionToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedData)
-        });
+    fetch('/api/user/update', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + sessionToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedData)
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      if (data.success) {
+        userProfile = data.user;
+        displayUserProfile();
+        toggleEditMode(false);
+        alert('Profile updated successfully!');
+      } else {
+        alert('Failed to update profile: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(function(error) {
+      console.error('Error updating profile:', error);
+      alert('An error occurred while updating profile.');
+    });
+}
 
-        const data = await response.json();
+// Komentar: Inisialisasi sidebar toggle
+function initSidebar() {
+  var sidebar = document.getElementById('sidebar');
+  var toggleBtn = document.getElementById('toggleSidebar');
+  
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('expanded');
+    });
+  }
+}
 
-        if (data.success) {
-            userProfile = data.user;
-            displayUserProfile();
-            toggleEditMode(false);
-            alert('Profile updated successfully!');
-        } else {
-            alert('Failed to update profile: ' + (data.error || 'Unknown error'));
-        }
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        alert('An error occurred while updating profile.');
-    }
+// Komentar: Gelapkan background username saat di halaman profil
+function initProfileHeader() {
+  var userProfile = document.querySelector('.user-profile');
+  if (userProfile) {
+    userProfile.classList.add('active');
+  }
 }
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
     fetchUserProfile();
+    initSidebar();
+    initProfileHeader();
 
     // Edit button
-    document.getElementById("editBtn").addEventListener("click", () => {
+    document.getElementById("editBtn").addEventListener("click", function() {
         toggleEditMode(true);
     });
 
     // Save button
-    document.getElementById("saveBtn").addEventListener("click", () => {
+    document.getElementById("saveBtn").addEventListener("click", function() {
         saveProfile();
     });
 
     // Cancel button
-    document.getElementById("cancelBtn").addEventListener("click", () => {
+    document.getElementById("cancelBtn").addEventListener("click", function() {
         toggleEditMode(false);
     });
 
     // Logout button
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        if (confirm("Are you sure you want to logout?")) {
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+        if (confirm("Yakin ingin logout?")) {
             localStorage.removeItem('session_token');
             localStorage.removeItem('session_expires_at');
             window.location.href = '/';
@@ -151,34 +176,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Delete account button
-    document.getElementById("deleteBtn").addEventListener("click", async () => {
-        const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    document.getElementById("deleteBtn").addEventListener("click", function() {
+        const confirmDelete = confirm("Yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.");
         if (confirmDelete) {
-            const doubleConfirm = confirm("This will permanently delete all your data including pets and bookings. Type OK to continue.");
+            const doubleConfirm = confirm("Ini akan menghapus semua data Anda termasuk pet dan pemesanan. Lanjutkan?");
             if (doubleConfirm) {
-                try {
-                    const response = await fetch('/api/user/delete', {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': 'Bearer ' + sessionToken,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        alert('Your account has been deleted.');
-                        localStorage.removeItem('session_token');
-                        localStorage.removeItem('session_expires_at');
-                        window.location.href = '/';
-                    } else {
-                        alert('Failed to delete account: ' + (data.error || 'Unknown error'));
-                    }
-                } catch (error) {
-                    console.error('Error deleting account:', error);
-                    alert('An error occurred while deleting your account.');
-                }
+                fetch('/api/user/delete', {
+                  method: 'DELETE',
+                  headers: {
+                    'Authorization': 'Bearer ' + sessionToken,
+                    'Content-Type': 'application/json'
+                  }
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                  if (data.success) {
+                    alert('Akun Anda telah dihapus.');
+                    localStorage.removeItem('session_token');
+                    localStorage.removeItem('session_expires_at');
+                    window.location.href = '/';
+                  } else {
+                    alert('Gagal menghapus akun: ' + (data.error || 'Unknown error'));
+                  }
+                })
+                .catch(function(error) {
+                  console.error('Error deleting account:', error);
+                  alert('Terjadi kesalahan saat menghapus akun.');
+                });
             }
         }
     });

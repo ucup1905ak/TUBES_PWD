@@ -14,58 +14,101 @@
 
 <body>
 
+    <!-- HEADER -->
     <div class="header">
-        <a href="/my" style="color: white; text-decoration: none;">PawHaven</a>
-        <span class="title">Profil</span>
+        <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
+
+        <div class="user-profile">
+            <span id="user-name" onclick="location.href='/profile'">Akun Saya</span>
+        </div>
     </div>
 
-    <div class="profile-wrapper">
+    <!-- LAYOUT WRAPPER -->
+    <div class="layout">
 
-        <div class="photo-area" id="photo"></div>
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <div class="toggle-btn" id="toggleSidebar">☰</div>
 
-        <div class="fields">
+            <ul class="menu-list">
 
-            <div class="field username">
-                <span class="label">Username</span>
-                <div class="input-box view-mode" id="username"></div>
-                <input type="text" class="input-box edit-mode" id="username-input" style="display:none;" />
+                <li onclick="location.href='/my'">
+                    <span class="icon">🏠</span>
+                    <span class="menu-text">Home Dashboard</span>
+                </li>
+
+                <li onclick="location.href='/titip'">
+                    <span class="icon">🐾</span>
+                    <span class="menu-text">Titip Hewan</span>
+                </li>
+
+                <li onclick="location.href='/riwayat'">
+                    <span class="icon">⌛</span>
+                    <span class="menu-text">Riwayat</span>
+                </li>
+
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+
+            <div class="profile-wrapper">
+                <div class="photo-area" id="photo"></div>
+
+                <div class="fields">
+                    <div class="field username">
+                        <span class="label">Username</span>
+                        <div class="input-box view-mode" id="username"></div>
+                        <input type="text" class="input-box edit-mode" id="username-input" style="display:none;" />
+                    </div>
+
+                    <div class="field email">
+                        <span class="label">Email</span>
+                        <div class="input-box" id="email"></div>
+                    </div>
+
+                    <div class="field notelp">
+                        <span class="label">No Telp</span>
+                        <div class="input-box view-mode" id="notelp"></div>
+                        <input type="text" class="input-box edit-mode" id="notelp-input" style="display:none;" />
+                    </div>
+
+                    <div class="field role">
+                        <span class="label">Role</span>
+                        <div class="input-box view-mode" id="role"></div>
+                        <select class="input-box edit-mode" id="role-input" style="display:none;">
+                            <option value="user">User (Customer)</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="field alamat">
+                        <span class="label">Alamat</span>
+                        <div class="input-box view-mode" id="alamat"></div>
+                        <textarea class="input-box edit-mode" id="alamat-input" style="display:none;"></textarea>
+                    </div>
+                </div>
             </div>
 
-            <div class="field email">
-                <span class="label">Email</span>
-                <div class="input-box" id="email"></div>
-            </div>
-
-            <div class="field notelp">
-                <span class="label">No Telp</span>
-                <div class="input-box view-mode" id="notelp"></div>
-                <input type="text" class="input-box edit-mode" id="notelp-input" style="display:none;" />
-            </div>
-
-            <div class="field role">
-                <span class="label">Role</span>
-                <div class="input-box view-mode" id="role"></div>
-                <select class="input-box edit-mode" id="role-input" style="display:none;">
-                    <option value="user">User (Customer)</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-
-            <div class="field alamat">
-                <span class="label">Alamat</span>
-                <div class="input-box view-mode" id="alamat"></div>
-                <textarea class="input-box edit-mode" id="alamat-input" style="display:none;"></textarea>
+            <!-- Tombol Edit dan Delete di bawah profil -->
+            <div class="bottom-buttons">
+                <button class="btn edit-btn" id="editBtn">Edit Profile</button>
+                <button class="btn save-btn" id="saveBtn" style="display:none;">Save Changes</button>
+                <button class="btn cancel-btn" id="cancelBtn" style="display:none;">Cancel</button>
+                <button class="btn delete-btn" id="deleteBtn">Delete Account</button>
             </div>
 
         </div>
     </div>
 
-    <div class="bottom-buttons">
-        <button class="btn edit-btn" id="editBtn">Edit Profile</button>
-        <button class="btn save-btn" id="saveBtn" style="display:none;">Save Changes</button>
-        <button class="btn cancel-btn" id="cancelBtn" style="display:none;">Cancel</button>
-        <button class="btn logout-btn" id="logoutBtn">Log Out</button>
-        <button class="btn delete-btn" id="deleteBtn">Delete Account</button>
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>© 2025 PawHaven.</p>
     </div>
 
     <script type="text/javascript" src="/public/js/profil.js"></script>

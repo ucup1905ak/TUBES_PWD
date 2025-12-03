@@ -39,16 +39,16 @@ function validatePenitipanInput(array $input): array {
 
 function handleTambahPenitipan(mysqli $DB_CONN, string $sessionToken, array $input): array {
     include_once __DIR__ . '/../auth/get_me.php';
-    
+
     // Validate session
     $userResponse = getCurrentUser($DB_CONN, $sessionToken);
     if ($userResponse['status'] !== 200) {
         return $userResponse;
     }
-    
+
     $userId = $userResponse['user']['id_user'];
-    
-    // Validate input
+
+    // Validate required fields
     $errors = validatePenitipanInput($input);
     if (!empty($errors)) {
         return [
@@ -58,162 +58,187 @@ function handleTambahPenitipan(mysqli $DB_CONN, string $sessionToken, array $inp
             'details' => $errors
         ];
     }
-    
+
+    // === NEW FIELDS FROM FRONTEND ===
+    $kamar = $input['kamar'] ?? null;
+    $layanan = isset($input['layanan']) ? json_encode($input['layanan']) : json_encode([]);
+    $durasi = (int)($input['durasi'] ?? 0);
+    $total_biaya = (int)($input['total_biaya'] ?? 0);
+
     $id_pet = (int)$input['id_pet'];
     $tgl_checkin = $input['tgl_checkin'];
     $tgl_checkout = $input['tgl_checkout'];
-    $id_paket = isset($input['id_paket']) && $input['id_paket'] !== '' ? (int)$input['id_paket'] : null;
-    $status = $input['status_penitipan'] ?? 'aktif';
-    
-    // Verify pet belongs to user
-    $stmt = $DB_CONN->prepare('SELECT id_pet FROM Pet WHERE id_pet = ? AND id_user = ?');
+    $status = 'aktif';
+
+    // Insert penitipan + new fields
+    $stmt = $DB_CONN->prepare("
+        INSERT INTO Penitipan 
+        (id_user, id_pet, tgl_checkin, tgl_checkout, kamar, layanan, durasi, total_biaya, status_penitipan)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+
     if (!$stmt) {
-        return ['status' => 500, 'success' => false, 'error' => 'Database error'];
+        return ['status' => 500, 'success' => false, 'error' => $DB_CONN->error];
     }
-    $stmt->bind_param('ii', $id_pet, $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows === 0) {
-        $stmt->close();
-        return ['status' => 400, 'success' => false, 'error' => 'Pet not found or does not belong to you.'];
-    }
-    $stmt->close();
-    
-    // Insert penitipan
-    $stmt = $DB_CONN->prepare('
-        INSERT INTO Penitipan (id_user, id_pet, tgl_checkin, tgl_checkout, id_paket, status_penitipan)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ');
-    
-    if (!$stmt) {
-        return ['status' => 500, 'success' => false, 'error' => 'Database error: ' . $DB_CONN->error];
-    }
-    
-    $stmt->bind_param('iissis', $userId, $id_pet, $tgl_checkin, $tgl_checkout, $id_paket, $status);
-    
+
+    $stmt->bind_param(
+        "iissssiis",
+        $userId,       // i
+        $id_pet,       // i
+        $tgl_checkin,  // s
+        $tgl_checkout, // s
+        $kamar,        // s
+        $layanan,      // s
+        $durasi,       // i
+        $total_biaya,  // i
+        $status        // s
+    );
+
     if (!$stmt->execute()) {
-        $error = $stmt->error;
-        $stmt->close();
-        return ['status' => 500, 'success' => false, 'error' => 'Failed to add penitipan: ' . $error];
+        return ['status' => 500, 'success' => false, 'error' => $stmt->error];
     }
-    
-    $penitipanId = $stmt->insert_id;
+
+    $insertId = $stmt->insert_id;
     $stmt->close();
-    
+
     return [
         'status' => 201,
         'success' => true,
-        'message' => 'Penitipan created successfully.',
-        'penitipan_id' => $penitipanId
+        'message' => 'Penitipan created successfully',
+        'penitipan_id' => $insertId
     ];
 }
 
 function handleUpdatePenitipan(mysqli $DB_CONN, string $sessionToken, int $penitipanId, array $input): array {
     include_once __DIR__ . '/../auth/get_me.php';
-    
+
     // Validate session
     $userResponse = getCurrentUser($DB_CONN, $sessionToken);
     if ($userResponse['status'] !== 200) {
         return $userResponse;
     }
-    
+
     $userId = $userResponse['user']['id_user'];
-    
-    // Check penitipan ownership
-    $stmt = $DB_CONN->prepare('SELECT id_penitipan FROM Penitipan WHERE id_penitipan = ? AND id_user = ?');
-    $stmt->bind_param('ii', $penitipanId, $userId);
+
+    // Check ownership
+    $stmt = $DB_CONN->prepare("SELECT id_penitipan FROM Penitipan WHERE id_penitipan = ? AND id_user = ?");
+    $stmt->bind_param("ii", $penitipanId, $userId);
     $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows === 0) {
-        $stmt->close();
+    $res = $stmt->get_result();
+    if ($res->num_rows === 0) {
         return ['status' => 404, 'success' => false, 'error' => 'Penitipan not found'];
     }
     $stmt->close();
-    
-    // Build dynamic update query
+
+    // Build update query
     $updateFields = [];
     $params = [];
     $types = '';
-    
+
+    // id_pet
     if (isset($input['id_pet'])) {
-        $updateFields[] = 'id_pet = ?';
+        $updateFields[] = "id_pet = ?";
         $params[] = (int)$input['id_pet'];
-        $types .= 'i';
+        $types .= "i";
     }
-    
+
+    // tanggal
     if (isset($input['tgl_checkin'])) {
-        $updateFields[] = 'tgl_checkin = ?';
+        $updateFields[] = "tgl_checkin = ?";
         $params[] = $input['tgl_checkin'];
-        $types .= 's';
+        $types .= "s";
     }
-    
+
     if (isset($input['tgl_checkout'])) {
-        $updateFields[] = 'tgl_checkout = ?';
+        $updateFields[] = "tgl_checkout = ?";
         $params[] = $input['tgl_checkout'];
-        $types .= 's';
+        $types .= "s";
     }
-    
-    if (isset($input['id_paket'])) {
-        $updateFields[] = 'id_paket = ?';
-        $params[] = $input['id_paket'] !== '' ? (int)$input['id_paket'] : null;
-        $types .= 'i';
+
+    // kamar
+    if (isset($input['kamar'])) {
+        $updateFields[] = "kamar = ?";
+        $params[] = $input['kamar'];
+        $types .= "s";
     }
-    
+
+    // layanan → json
+    if (isset($input['layanan'])) {
+        $updateFields[] = "layanan = ?";
+        $params[] = json_encode($input['layanan']);
+        $types .= "s";
+    }
+
+    // durasi
+    if (isset($input['durasi'])) {
+        $updateFields[] = "durasi = ?";
+        $params[] = (int)$input['durasi'];
+        $types .= "i";
+    }
+
+    // total biaya
+    if (isset($input['total_biaya'])) {
+        $updateFields[] = "total_biaya = ?";
+        $params[] = (int)$input['total_biaya'];
+        $types .= "i";
+    }
+
+    // status
     if (isset($input['status_penitipan'])) {
-        $updateFields[] = 'status_penitipan = ?';
+        $updateFields[] = "status_penitipan = ?";
         $params[] = $input['status_penitipan'];
-        $types .= 's';
+        $types .= "s";
     }
-    
+
+    // Kalau kosong → error
     if (empty($updateFields)) {
-        return ['status' => 400, 'success' => false, 'error' => 'No fields to update.'];
+        return ['status' => 400, 'success' => false, 'error' => 'No fields to update'];
     }
-    
+
+    // Add WHERE id
     $params[] = $penitipanId;
-    $types .= 'i';
-    
-    $sql = 'UPDATE Penitipan SET ' . implode(', ', $updateFields) . ' WHERE id_penitipan = ?';
+    $types .= "i";
+
+    // Build SQL
+    $sql = "UPDATE Penitipan SET " . implode(", ", $updateFields) . " WHERE id_penitipan = ?";
+
     $stmt = $DB_CONN->prepare($sql);
     if (!$stmt) {
-        return ['status' => 500, 'success' => false, 'error' => 'Database error'];
+        return ['status' => 500, 'success' => false, 'error' => 'Database error: '.$DB_CONN->error];
     }
-    
+
     $stmt->bind_param($types, ...$params);
-    if (!$stmt->execute()) {
-        $error = $stmt->error;
-        $stmt->close();
-        return ['status' => 500, 'success' => false, 'error' => 'Failed to update penitipan: ' . $error];
-    }
+    $stmt->execute();
     $stmt->close();
-    
-    return ['status' => 200, 'success' => true, 'message' => 'Penitipan updated successfully.'];
+
+    return ['status' => 200, 'success' => true, 'message' => 'Penitipan updated successfully'];
 }
 
 function handleDeletePenitipan(mysqli $DB_CONN, string $sessionToken, int $penitipanId): array {
     include_once __DIR__ . '/../auth/get_me.php';
-    
+
     // Validate session
     $userResponse = getCurrentUser($DB_CONN, $sessionToken);
     if ($userResponse['status'] !== 200) {
         return $userResponse;
     }
-    
+
     $userId = $userResponse['user']['id_user'];
-    
-    // Delete penitipan (only if owned by user)
-    $stmt = $DB_CONN->prepare('DELETE FROM Penitipan WHERE id_penitipan = ? AND id_user = ?');
+
+    // Delete only if owned by user
+    $stmt = $DB_CONN->prepare("DELETE FROM Penitipan WHERE id_penitipan = ? AND id_user = ?");
     if (!$stmt) {
         return ['status' => 500, 'success' => false, 'error' => 'Database error'];
     }
-    
-    $stmt->bind_param('ii', $penitipanId, $userId);
+
+    $stmt->bind_param("ii", $penitipanId, $userId);
     $stmt->execute();
-    
+
     if ($stmt->affected_rows === 0) {
-        $stmt->close();
         return ['status' => 404, 'success' => false, 'error' => 'Penitipan not found'];
     }
-    
+
     $stmt->close();
-    return ['status' => 200, 'success' => true, 'message' => 'Penitipan deleted successfully.'];
+    return ['status' => 200, 'success' => true, 'message' => 'Penitipan deleted successfully'];
 }
+
