@@ -39,11 +39,13 @@ class Database_setup{
 		id_pet INT,
 		tgl_checkin DATE,
 		tgl_checkout DATE,
-		id_paket INT,
+		nama_paket VARCHAR(100),
+		layanan JSON,
+		durasi INT,
+		total_biaya INT,
 		status_penitipan VARCHAR(50),
 		FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-		FOREIGN KEY (id_pet) REFERENCES Pet(id_pet) ON DELETE CASCADE,
-		FOREIGN KEY (id_paket) REFERENCES Paket_Kamar(id_paket) ON DELETE SET NULL
+		FOREIGN KEY (id_pet) REFERENCES Pet(id_pet) ON DELETE CASCADE
 	)","CREATE TABLE IF NOT EXISTS Penitipan_Layanan (
 		id_penitipan INT,
 		id_layanan INT,

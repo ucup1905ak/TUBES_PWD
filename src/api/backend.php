@@ -1,4 +1,14 @@
 <?php
+// Set JSON header and error handling for API responses
+header('Content-Type: application/json; charset=utf-8');
+
+// Ensure errors are returned as JSON, not HTML
+if (php_sapi_name() !== 'cli') {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+}
+
 require_once __DIR__ . '/../routing/router.php';
 include __DIR__ . '/../config/database_setup.php';
 class BACKEND{
@@ -131,8 +141,6 @@ class BACKEND{
 
     }
     public function run($path): void{
-               
-        header('Content-Type: application/json');
         $this->router->dispatch($path);
     }
     

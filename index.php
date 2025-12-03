@@ -1,5 +1,39 @@
 <?php
 
+// Disable HTML error display and catch errors as JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
+// Set error handler for uncaught exceptions and errors
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'status' => 500,
+        'success' => false,
+        'error' => 'Internal server error',
+        'message' => $errstr,
+        'file' => $errfile,
+        'line' => $errline
+    ]);
+    exit;
+});
+
+set_exception_handler(function($exception) {
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'status' => 500,
+        'success' => false,
+        'error' => 'Internal server error',
+        'message' => $exception->getMessage(),
+        'file' => $exception->getFile(),
+        'line' => $exception->getLine()
+    ]);
+    exit;
+});
+
 // Load environment variables
 require_once __DIR__ . '/src/config/env.php';
 
