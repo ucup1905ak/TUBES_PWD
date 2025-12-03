@@ -155,8 +155,13 @@
         const penitipanData = {
             id_pet: petId,
             tgl_checkin: document.getElementById('tgl_checkin').value,
-            tgl_checkout: document.getElementById('tgl_checkout').value
+            tgl_checkout: document.getElementById('tgl_checkout').value,
+            kamar: document.getElementById('kamar').value,
+            layanan: getSelectedLayanan(),
+            durasi: getDurasi(),
+            total_biaya: getTotal()
         };
+
 
         const response = await fetch('/api/penitipan/tambah', {
             method: 'POST',
@@ -218,10 +223,11 @@
     // HARGA KAMAR + LAYANAN
     // ======================
     const hargaKamar = {
-        biasa: 25000,
+        reguler: 25000,
         premium: 35000,
         vip: 50000
     };
+
 
     const hargaLayanan = {
         grooming: 40000,
@@ -345,6 +351,7 @@
         });
 
         document.getElementById('titipForm').addEventListener('submit', handleSubmit);
+        updateUI();
     }
 
     if (document.readyState === 'loading')
