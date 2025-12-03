@@ -82,16 +82,16 @@ function handleTambahPenitipan(mysqli $DB_CONN, string $sessionToken, array $inp
     }
 
     $stmt->bind_param(
-        "iissssiss",
-        $userId,
-        $id_pet,
-        $tgl_checkin,
-        $tgl_checkout,
-        $kamar,
-        $layanan,
-        $durasi,
-        $total_biaya,
-        $status
+        "iissssiis",
+        $userId,       // i
+        $id_pet,       // i
+        $tgl_checkin,  // s
+        $tgl_checkout, // s
+        $kamar,        // s
+        $layanan,      // s
+        $durasi,       // i
+        $total_biaya,  // i
+        $status        // s
     );
 
     if (!$stmt->execute()) {
