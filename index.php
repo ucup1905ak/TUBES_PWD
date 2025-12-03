@@ -85,7 +85,7 @@ $router->add("/test/env", function (): void {
 // Forward all /api requests to the API router
 if (strpos($path, '/api') === 0) {
     $apiBackend = new BACKEND($router);
-    $env = loadEnvToArray('.env');
+    $env = loadEnvToArray('.env.dev');
     $apiBackend->connectDB(
         $env['DB_HOST'] ?? 'localhost',
         (int)($env['DB_PORT'] ?? 3306),
