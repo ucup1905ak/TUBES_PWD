@@ -87,11 +87,31 @@ $router->add("/riwayat", function (): void {
     exit;
 });
 $router->add("/logout", function (): void {
-    session_start();
-    // Destroy the session to log out the user.
-    session_unset();
+    // Start or resume the session to ensure we can clear it
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    // Clear all session variables
+    $_SESSION = [];
+
+    // Delete the session cookie if set
+    if (ini_get('session.use_cookies')) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+    }
+
+    // Also clear any app auth token cookies
+    if (isset($_COOKIE['session_token'])) {
+        setcookie('session_token', '', time() - 3600, '/');
+        unset($_COOKIE['session_token']);
+    }
+
+    // Finally destroy the session
     session_destroy();
-    header('Location: /');
+
+    // Serve a tiny page that clears localStorage then redirects home
+    readfile(__DIR__ . '/public/pages/logout.xhtml');
     exit;
 });
 

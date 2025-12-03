@@ -1,3 +1,16 @@
+// Defer image loading until content is ready
+document.addEventListener('DOMContentLoaded', function () {
+    var imgs = document.querySelectorAll('img[data-src]');
+    imgs.forEach(function (img) {
+        // Only set src after main content is parsed
+        var src = img.getAttribute('data-src');
+        if (src) {
+            img.setAttribute('src', src);
+            img.removeAttribute('data-src');
+        }
+    });
+});
+
 // Install a simple card-based replacement for window.alert
 (function installAlertCard(){
     if (window.__alertCardInstalled) return;

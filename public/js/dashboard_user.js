@@ -290,8 +290,11 @@
     
     if (toggleBtn && sidebar) {
       toggleBtn.addEventListener('click', function() {
+        console.log('Toggle clicked');
         sidebar.classList.toggle('expanded');
       });
+    } else {
+      console.warn('Sidebar elements not found:', { sidebar: !!sidebar, toggleBtn: !!toggleBtn });
     }
   }
 
@@ -300,12 +303,13 @@
     var logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
+        console.log('Logout clicked');
         if (confirm('Yakin ingin logout?')) {
-          localStorage.removeItem('session_token');
-          localStorage.removeItem('session_expires_at');
-          window.location.href = '/';
+          window.location.href = '/logout';
         }
       });
+    } else {
+      console.warn('Logout button not found');
     }
   }
 

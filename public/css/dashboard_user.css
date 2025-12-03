@@ -14,7 +14,7 @@ body {
 /* HEADER */
 .header {
     height: 60px;
-    background-color: #0F8A5F;
+    background-color: #2F6F4F;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,7 +47,7 @@ body {
 .sidebar {
     width: 70px;
     color: white;
-    background-color: #0F8A5F;
+    background-color: #2F6F4F;
     border-right: 1px solid white;
     padding-top: 20px;
     transition: width 0.25s;
@@ -55,8 +55,12 @@ body {
     top: 60px;
     overflow: hidden;
     height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
 }
-
+.sidebar:hover {
+    width: 220px;
+}
 .sidebar.expanded {
     width: 220px;
 }
@@ -82,7 +86,7 @@ body {
 }
 
 .menu-list li:hover {
-    background-color: #0C6B48;
+    background-color: #234e37;
 }
 
 .icon {
@@ -90,22 +94,49 @@ body {
 }
 
 .menu-text {
-    margin-left: 15px;
-    font-size: 16px;
-    display: none;
-    opacity: 0;
-    transform: translateX(-15px);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    white-space: nowrap;
     margin-left: 8px;
+    font-size: 16px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, max-width 0.3s ease;
+    white-space: nowrap;
     display: inline-block;
 }
 
-/* Show text when expanded */
-.sidebar.expanded .menu-text {
-    display: inline;
+/* Show text when expanded or hover */
+.sidebar.expanded .menu-text,
+.sidebar:hover .menu-text {
     opacity: 1;
+    max-width: 200px;
     transform: translateX(0);
+}
+
+/* SIDEBAR FOOTER & LOGOUT */
+.sidebar-footer {
+    margin-top: auto;
+    padding: 10px 15px;
+}
+
+.logout-btn {
+    width: 100%;
+    background-color: #d62828;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.logout-btn:hover {
+    background-color: #c11414;
 }
 
 /* CONTENT */

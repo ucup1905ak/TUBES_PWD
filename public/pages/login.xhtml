@@ -13,8 +13,12 @@
         <div class="login-background">
             <div class="login-container">
 
-                <h2 class="title">Login Account</h2>
-                <p class="subtitle">Please login to PawHaven with your registered account</p>
+                <div class="titleBox">
+                    <div class="paw">&#128062;</div>
+                    <h1>PawHaven</h1>
+                    <p>Create Your Account</p>
+                    <div class="underline"></div>
+                </div>
 
                 <form id="loginForm"  method="post">
 
@@ -36,11 +40,12 @@
                             <span>Stay logged in</span>
                         </div>
                         
-                        <a href="/register" class="register">Register</a>
+                        <!-- <a href="/register" class="register">Register</a> -->
                     </div>
 
                     <button type="button" class="btn-login" onclick="login()">SIGN IN</button>
-
+                    <p>Don't have an account? <a href="/register" class="register-link">Register here</a></p> 
+                    <!-- <button type="button" class="btn-register" onclick="window.location.href='/register'">REGISTER IN</button> -->
                 </form>
 
             </div>

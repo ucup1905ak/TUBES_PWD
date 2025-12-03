@@ -472,9 +472,7 @@
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
         if (confirm('Yakin ingin logout?')) {
-          localStorage.removeItem('session_token');
-          localStorage.removeItem('session_expires_at');
-          window.location.href = '/';
+          window.location.href = '/logout';
         }
       });
     }

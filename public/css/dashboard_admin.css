@@ -16,7 +16,7 @@ body {
 /* HEADER */
 .header {
   height: 60px;
-  background-color: #0F8A5F;
+  background-color: #2F6F4F;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,9 +47,9 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 70px;
+  width: 80px;
   color: white;
-  background-color: #0F8A5F;
+  background-color: #2F6F4F;
   border-right: 1px solid white;
   padding-top: 20px;
   transition: width 0.25s;
@@ -84,7 +84,7 @@ body {
 }
 
 .menu-list li:hover {
-  background-color: #0C6B48;
+  background-color: #234e37;
 }
 
 .icon {
@@ -178,7 +178,7 @@ body {
 
 .stat-value {
   font-size: 28px;
-  color: #0F8A5F;
+  color: #2F6F4F;
   font-weight: bold;
   margin-bottom: 4px;
 }
