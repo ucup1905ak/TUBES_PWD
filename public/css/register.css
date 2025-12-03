@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* BASE  */
-
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -21,7 +19,6 @@ body {
     gap: 40px;
 }
 
-/* LEFT SIDE (IMAGES) */
 
 .left {
     width: 50%;
@@ -35,7 +32,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Paw decoration trail */
 .decorPaws {
     position: absolute;
     top: -24px;
@@ -44,7 +40,6 @@ body {
     font-size: 22px;
 }
 
-/* Main image - neumorph style */
 .mainPhoto {
     width: 100%;
     max-width: 520px;
@@ -65,8 +60,6 @@ body {
         -14px -14px 26px rgba(255,255,255,0.95),
         14px 14px 26px rgba(0,0,0,0.22);
 }
-
-/* Gallery section */
 
 .gallery {
     display: flex;
@@ -100,8 +93,6 @@ body {
     border-radius: 14px;
 }
 
-/* RIGHT SIDE (FORM CARD)  */
-
 .right {
     width: 45%;
     background: #f6efd9;
@@ -111,8 +102,6 @@ body {
         -14px -14px 28px rgba(255,255,255,0.95),
         12px 12px 26px rgba(0,0,0,0.16);
 }
-
-/* Title area */
 
 .titleBox {
     text-align: center;
@@ -144,8 +133,6 @@ body {
     border-radius: 999px;
     margin: 12px auto 24px auto;
 }
-
-/*  FORM ELEMENTS */
 
 label {
     display: block;
@@ -193,8 +180,6 @@ select:focus {
     outline: none;
 }
 
-/* Upload file custom */
-
 .uploadBox {
     margin-left: 5%;
     margin-top: 8px;
@@ -227,8 +212,6 @@ select:focus {
     color: #555;
 }
 
-/* Submit button */
-
 .submitBtn {
     width: 90%;
     margin-left: 5%;
@@ -254,7 +237,6 @@ select:focus {
         8px 8px 18px rgba(0,0,0,0.25);
 }
 
-/* Login link under submit button */
 .loginLink {
     width: 100%;
     text-align: center;

@@ -1,4 +1,3 @@
-/* body */
 html, body {
     margin: 0;
     padding: 0;
@@ -6,7 +5,6 @@ html, body {
     overflow: hidden;
 }
 
-/* BACKGROUND FULL */
 .login-background {
     width: 100vw;
     height: 100vh;
@@ -17,7 +15,6 @@ html, body {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* CARD LOGIN */
 .login-container {
     width: 420px;
     padding: 35px;
@@ -27,7 +24,6 @@ html, body {
     text-align: center;
 }
 
-/* TITLE */
 .title {
     font-size: 28px;
     color: #0D4635;
@@ -41,7 +37,6 @@ html, body {
     color: #3f3f3f;
 }
 
-/* INPUTS */
 .input-group {
     text-align: left;
     margin-bottom: 12px;
@@ -61,27 +56,23 @@ html, body {
     background: white;
 }
 
-/* ERROR BUBBLE */
 .input-error {
     margin-top: 6px;
     background: #C25252;
     color: #fff;
     padding: 6px 14px;
-    border-radius: 40px;      /* pill shape */
+    border-radius: 40px;     
     font-size: 13px;
     width: fit-content;
     display: none;
     animation: fadeIn 0.3s ease;
 }
 
-/* smooth fade */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-
-/* OPTIONS */
 .options {
     display: flex;
     justify-content: space-between;
@@ -101,7 +92,6 @@ html, body {
     text-decoration: none;
 }
 
-/* BUTTON */
 .btn-login {
     width: 100%;
     background-color: #0D4635;
@@ -118,7 +108,6 @@ html, body {
     background-color: #083528;
 }
 
-/* Checkbox color */
 input[type="checkbox"] {
     accent-color: #0D4635;
 }
