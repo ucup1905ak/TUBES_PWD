@@ -445,7 +445,9 @@ class BACKEND{
         exit;
     }
     private function postLogin() {
-        include __DIR__ . '/auth/post_login.php';
+        // Prevent accidental output from included file breaking headers
+        ob_start();
+        include_once __DIR__ . '/auth/post_login.php';
 
         // Accept JSON payload or standard form-encoded POST
         $input = null;
@@ -459,6 +461,11 @@ class BACKEND{
 
         // Call the handleLogin function and get the response
         $response = handleLogin($this->DB_CONN, $input);
+
+        // Discard any buffered output from the included file so headers can be set safely
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
 
         // Set the HTTP response code
         http_response_code($response['status']);
