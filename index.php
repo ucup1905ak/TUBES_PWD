@@ -66,6 +66,14 @@ $router->add("/my", function (): void {
     readfile(__DIR__ . '/public/dashboard.php');
     exit;
 });
+$router->add("/pages/dashboard_user.xhtml", function (): void {
+    readfile(__DIR__ . '/public/pages/dashboard_user.xhtml');
+    exit;
+});
+$router->add("/pages/dashboard_admin.xhtml", function (): void {
+    readfile(__DIR__ . '/public/pages/dashboard_admin.xhtml');
+    exit;
+});
 $router->add("/profile", function (): void {
     readfile(__DIR__ . '/public/pages/profil.xhtml');
     exit;
@@ -127,6 +135,7 @@ $router->add("/test/env", function (): void {
 
 // Forward all /api requests to the API router
 if (strpos($path, '/api') === 0) {
+    header('Content-Type: application/json');
     $apiBackend = new BACKEND($router);
     $env = loadEnvToArray('.env.dev');
     $apiBackend->connectDB(

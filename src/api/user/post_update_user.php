@@ -22,7 +22,7 @@ function validateUpdateInput(array $input): array {
 function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): array {
     // Validate session token and get user
     include_once __DIR__ . '/../auth/get_me.php';
-    $userResponse = getCurrentUser($DB_CONN, $sessionToken);
+    $userResponse = getCurrentUser($DB_CONN, $sessionToken, false);
     
     if ($userResponse['status'] !== 200) {
         return $userResponse;
@@ -109,7 +109,7 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
     $stmt->close();
 
     // Fetch updated user data
-    $updatedUserResponse = getCurrentUser($DB_CONN, $sessionToken);
+    $updatedUserResponse = getCurrentUser($DB_CONN, $sessionToken, true);
 
     return [
         'status' => 200,

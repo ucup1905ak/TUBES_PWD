@@ -323,8 +323,14 @@ class BACKEND{
             exit;
         }
 
+        $includePhoto = false;
+        if (isset($_GET['include_photo'])) {
+            $includePhoto = filter_var($_GET['include_photo'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $includePhoto = $includePhoto ?? false;
+        }
+
         // Call the getCurrentUser function
-        $response = getCurrentUser($this->DB_CONN, $sessionToken);
+        $response = getCurrentUser($this->DB_CONN, $sessionToken, $includePhoto);
 
         // Set HTTP status code and output JSON response
         http_response_code($response['status']);

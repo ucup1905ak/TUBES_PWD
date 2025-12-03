@@ -260,10 +260,16 @@ function handleUpdatePenitipan(mysqli $DB_CONN, string $sessionToken, int $penit
         $types .= "s";
     }
 
-    // kamar
+    // kamar/nama_paket
     if (isset($input['kamar'])) {
-        $updateFields[] = "kamar = ?";
+        $updateFields[] = "nama_paket = ?";
         $params[] = $input['kamar'];
+        $types .= "s";
+    }
+
+    if (isset($input['nama_paket'])) {
+        $updateFields[] = "nama_paket = ?";
+        $params[] = $input['nama_paket'];
         $types .= "s";
     }
 

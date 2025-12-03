@@ -1,7 +1,7 @@
 <?php
 // Get current user from session token
 
-function getCurrentUser(mysqli $DB_CONN, string $sessionToken): array {
+function getCurrentUser(mysqli $DB_CONN, string $sessionToken, bool $includePhoto = false): array {
     // Validate session token
     $stmt = $DB_CONN->prepare("
         SELECT us.id_user, u.nama_lengkap, u.email, u.no_telp, u.alamat, u.foto_profil, u.role 
@@ -33,9 +33,15 @@ function getCurrentUser(mysqli $DB_CONN, string $sessionToken): array {
     $user = $result->fetch_assoc();
     $stmt->close();
     
-    // Base64 encode profile photo if exists
-    if ($user && !empty($user['foto_profil'])) {
-        $user['foto_profil'] = base64_encode($user['foto_profil']);
+    if ($user) {
+        $hasPhoto = !empty($user['foto_profil']);
+        $user['has_foto_profil'] = $hasPhoto;
+
+        if ($includePhoto && $hasPhoto) {
+            $user['foto_profil'] = base64_encode($user['foto_profil']);
+        } else {
+            unset($user['foto_profil']);
+        }
     }
     
     return [

@@ -13,7 +13,7 @@ let isEditMode = false;
 
 // Fetch user data from API
 function fetchUserProfile() {
-    fetch('/api/auth/me', {
+    fetch('/api/auth/me?include_photo=1', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + sessionToken,

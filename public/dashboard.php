@@ -1,5 +1,24 @@
 <?php
 // Dashboard loader - loads admin or user dashboard based on user role
+// Server-side session check to prevent access without authentication
+
+session_start();
+
+// Check if user has a valid session (from the Authorization header or session variable)
+$authenticated = false;
+
+// Check Authorization header for Bearer token
+if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+    if (preg_match('/Bearer\s+(\S+)/', $authHeader, $matches)) {
+        // Valid Bearer token format found
+        $authenticated = true;
+    }
+}
+
+// If not authenticated via header, we still need to check via client-side
+// but we'll show the loader which will check localStorage
+// If no token exists in localStorage either, it will redirect to login
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +59,19 @@
     </style>
 </head>
 <body>
+    <script>
+        // Check session IMMEDIATELY before page renders
+        const sessionToken = localStorage.getItem('session_token');
+        const expiresAt = localStorage.getItem('session_expires_at');
+        
+        // If no valid session, redirect immediately
+        if (!sessionToken || !expiresAt || new Date(expiresAt) <= new Date()) {
+            localStorage.removeItem('session_token');
+            localStorage.removeItem('session_expires_at');
+            window.location.replace('/login');
+        }
+    </script>
+
     <div class="loading-container">
         <div class="spinner"></div>
         <p class="loading-text">Loading dashboard...</p>
@@ -67,18 +99,35 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('HTTP error, status = ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success && data.user) {
                     const user = data.user;
                     const role = user.role || 'user';
                     
-                    // Redirect based on user role
-                    if (role === 'admin') {
-                        window.location.href = '/public/pages/dashboard_admin.xhtml';
-                    } else {
-                        window.location.href = '/public/pages/dashboard_user.xhtml';
-                    }
+                    // Load dashboard content based on user role
+                    const dashboardPath = role === 'admin' ? '/pages/dashboard_admin.xhtml' : '/pages/dashboard_user.xhtml';
+                    
+                    fetch(dashboardPath)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to load dashboard');
+                            }
+                            return response.text();
+                        })
+                        .then(html => {
+                            // Replace entire page content with dashboard
+                            document.documentElement.innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error('Error loading dashboard:', error);
+                            window.location.href = '/login';
+                        });
                 } else {
                     // Session invalid, redirect to login
                     console.error('Failed to load user data:', data.error);

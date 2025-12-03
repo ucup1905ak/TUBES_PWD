@@ -18,7 +18,7 @@ class Router{
                 
                 
                 array_shift($matches);
-
+                header('Content-Type: text/html');
                 call_user_func_array($handler, $matches);
 
                 return;
