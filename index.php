@@ -8,10 +8,10 @@ include __DIR__ . '/src/api/backend.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-//ini buat ak bisa akses tanpa trailing slash
-if ($path !== "/" && substr($path, -1) === "/") {
-    $path = rtrim($path, "/");
-}
+// //ini buat ak bisa akses tanpa trailing slash
+// if ($path !== "/" && substr($path, -1) === "/") {
+//     $path = rtrim($path, "/");
+// }
 
 $router = new Router();
 
