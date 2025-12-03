@@ -1,436 +1,341 @@
 // /public/js/kelola.js
 // Admin - Kelola Layanan & Paket Page script
 
-(function () {
-  'use strict';
+import { createLayananRow } from './components/layanan-row.js';
+import { createPaketRow } from './components/paket-row.js';
 
-  // Komentar: Check if user is logged in
-  const sessionToken = localStorage.getItem('session_token');
-  const expiresAt = localStorage.getItem('session_expires_at');
+// /public/js/kelola.js
+// Admin - Kelola Layanan & Paket Page script (ES module)
 
-  if (!sessionToken || !expiresAt || new Date(expiresAt) <= new Date()) {
-    localStorage.removeItem('session_token');
-    localStorage.removeItem('session_expires_at');
-    window.location.href = '/login';
-    return;
-  }
+ 'use strict';
 
-  // Komentar: State untuk track edit mode
-  var editLayananId = null;
-  var editPaketId = null;
+// Komentar: Check if user is logged in
+const sessionToken = localStorage.getItem('session_token');
+const expiresAt = localStorage.getItem('session_expires_at');
 
-  // Komentar: Fetch user data dan verify admin role
-  function fetchUserData() {
-    fetch('/api/auth/me', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + sessionToken,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-      if (data.success && data.user) {
-        var user = data.user;
-        
-        // Komentar: Verify user is admin
-        if (user.role !== 'admin') {
-          window.location.href = '/my';
-          return;
-        }
-        
-        var userName = document.getElementById('user-name');
-        if (userName) {
-          userName.textContent = user.nama_lengkap || 'Admin';
-        }
-      }
-    })
-    .catch(function(error) {
-      console.error('Error fetching user data:', error);
-    });
-  }
+if (!sessionToken || !expiresAt || new Date(expiresAt) <= new Date()) {
+  localStorage.removeItem('session_token');
+  localStorage.removeItem('session_expires_at');
+  window.location.href = '/login';
+}
 
-  // ==================== LAYANAN ====================
+// Komentar: State untuk track edit mode
+let editLayananId = null;
+let editPaketId = null;
 
-  // Komentar: Fetch dan display semua layanan
-  function fetchLayanan() {
-    fetch('/api/admin/layanan', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + sessionToken,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-      var tbody = document.getElementById('layanan-tbody');
-      if (!tbody) return;
-
-      if (data.success && data.layanan && data.layanan.length > 0) {
-        tbody.innerHTML = '';
-        
-        data.layanan.forEach(function(layanan) {
-          var tr = document.createElement('tr');
-          
-          var tdId = document.createElement('td');
-          tdId.textContent = layanan.id_layanan || '-';
-          
-          var tdNama = document.createElement('td');
-          tdNama.textContent = layanan.nama_layanan || '-';
-          
-          var tdDeskripsi = document.createElement('td');
-          tdDeskripsi.textContent = (layanan.deskripsi || '-').substring(0, 50) + (layanan.deskripsi && layanan.deskripsi.length > 50 ? '...' : '');
-          
-          var tdHarga = document.createElement('td');
-          tdHarga.textContent = 'Rp' + (layanan.harga || 0).toLocaleString();
-          
-          // Komentar: Kolom aksi - tombol edit dan hapus
-          var tdAksi = document.createElement('td');
-          
-          var editBtn = document.createElement('button');
-          editBtn.textContent = 'Edit';
-          editBtn.className = 'edit-btn';
-          editBtn.addEventListener('click', function() {
-            editLayananId = layanan.id_layanan;
-            document.getElementById('formLayananTitle').textContent = 'Edit Layanan';
-            document.getElementById('inputNamaLayanan').value = layanan.nama_layanan || '';
-            document.getElementById('inputDeskripsiLayanan').value = layanan.deskripsi || '';
-            document.getElementById('inputHargaLayanan').value = layanan.harga || '';
-            document.getElementById('formLayanan').style.display = 'block';
-          });
-          
-          var deleteBtn = document.createElement('button');
-          deleteBtn.textContent = 'Hapus';
-          deleteBtn.className = 'delete-btn';
-          deleteBtn.addEventListener('click', function() {
-            if (confirm('Yakin ingin menghapus layanan ini?')) {
-              // Komentar: Hapus layanan dari database
-              fetch('/api/admin/layanan/' + encodeURIComponent(layanan.id_layanan), {
-                method: 'DELETE',
-                headers: {
-                  'Authorization': 'Bearer ' + sessionToken,
-                  'Content-Type': 'application/json'
-                }
-              })
-              .then(function(response) { return response.json(); })
-              .then(function(res) {
-                if (res.success) {
-                  fetchLayanan(); // refresh tabel
-                } else {
-                  alert('Gagal menghapus layanan');
-                }
-              })
-              .catch(function(error) {
-                alert('Terjadi kesalahan saat menghapus');
-              });
-            }
-          });
-          
-          tdAksi.appendChild(editBtn);
-          tdAksi.appendChild(deleteBtn);
-          
-          tr.appendChild(tdId);
-          tr.appendChild(tdNama);
-          tr.appendChild(tdDeskripsi);
-          tr.appendChild(tdHarga);
-          tr.appendChild(tdAksi);
-          
-          tbody.appendChild(tr);
-        });
-      } else {
-        tbody.innerHTML = '<tr><td colspan="5" class="no-data">Tidak ada data layanan</td></tr>';
-      }
-    })
-    .catch(function(error) {
-      console.error('Error fetching layanan:', error);
-    });
-  }
-
-  // ==================== PAKET ====================
-
-  // Komentar: Fetch dan display semua paket
-  function fetchPaket() {
-    fetch('/api/admin/paket', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + sessionToken,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-      var tbody = document.getElementById('paket-tbody');
-      if (!tbody) return;
-
-      if (data.success && data.paket && data.paket.length > 0) {
-        tbody.innerHTML = '';
-        
-        data.paket.forEach(function(paket) {
-          var tr = document.createElement('tr');
-          
-          var tdId = document.createElement('td');
-          tdId.textContent = paket.id_paket || '-';
-          
-          var tdNama = document.createElement('td');
-          tdNama.textContent = paket.nama_paket || '-';
-          
-          var tdDeskripsi = document.createElement('td');
-          tdDeskripsi.textContent = (paket.deskripsi || '-').substring(0, 50) + (paket.deskripsi && paket.deskripsi.length > 50 ? '...' : '');
-          
-          var tdHarga = document.createElement('td');
-          tdHarga.textContent = 'Rp' + (paket.harga || 0).toLocaleString();
-          
-          // Komentar: Kolom aksi - tombol edit dan hapus
-          var tdAksi = document.createElement('td');
-          
-          var editBtn = document.createElement('button');
-          editBtn.textContent = 'Edit';
-          editBtn.className = 'edit-btn';
-          editBtn.addEventListener('click', function() {
-            editPaketId = paket.id_paket;
-            document.getElementById('formPaketTitle').textContent = 'Edit Paket';
-            document.getElementById('inputNamaPaket').value = paket.nama_paket || '';
-            document.getElementById('inputDeskripsiPaket').value = paket.deskripsi || '';
-            document.getElementById('inputHargaPaket').value = paket.harga || '';
-            document.getElementById('formPaket').style.display = 'block';
-          });
-          
-          var deleteBtn = document.createElement('button');
-          deleteBtn.textContent = 'Hapus';
-          deleteBtn.className = 'delete-btn';
-          deleteBtn.addEventListener('click', function() {
-            if (confirm('Yakin ingin menghapus paket ini?')) {
-              // Komentar: Hapus paket dari database
-              fetch('/api/admin/paket/' + encodeURIComponent(paket.id_paket), {
-                method: 'DELETE',
-                headers: {
-                  'Authorization': 'Bearer ' + sessionToken,
-                  'Content-Type': 'application/json'
-                }
-              })
-              .then(function(response) { return response.json(); })
-              .then(function(res) {
-                if (res.success) {
-                  fetchPaket(); // refresh tabel
-                } else {
-                  alert('Gagal menghapus paket');
-                }
-              })
-              .catch(function(error) {
-                alert('Terjadi kesalahan saat menghapus');
-              });
-            }
-          });
-          
-          tdAksi.appendChild(editBtn);
-          tdAksi.appendChild(deleteBtn);
-          
-          tr.appendChild(tdId);
-          tr.appendChild(tdNama);
-          tr.appendChild(tdDeskripsi);
-          tr.appendChild(tdHarga);
-          tr.appendChild(tdAksi);
-          
-          tbody.appendChild(tr);
-        });
-      } else {
-        tbody.innerHTML = '<tr><td colspan="5" class="no-data">Tidak ada data paket</td></tr>';
-      }
-    })
-    .catch(function(error) {
-      console.error('Error fetching paket:', error);
-    });
-  }
-
-  // ==================== FORM HANDLERS ====================
-
-  // Komentar: Inisialisasi button handlers untuk layanan
-  function initLayananHandlers() {
-    var btnAdd = document.getElementById('btnAddLayanan');
-    var btnSave = document.getElementById('btnSaveLayanan');
-    var btnCancel = document.getElementById('btnCancelLayanan');
-
-    if (btnAdd) {
-      btnAdd.addEventListener('click', function() {
-        editLayananId = null;
-        document.getElementById('formLayananTitle').textContent = 'Tambah Layanan Baru';
-        document.getElementById('inputNamaLayanan').value = '';
-        document.getElementById('inputDeskripsiLayanan').value = '';
-        document.getElementById('inputHargaLayanan').value = '';
-        document.getElementById('formLayanan').style.display = 'block';
-      });
+// Komentar: Fetch user data dan verify admin role
+function fetchUserData() {
+  fetch('/api/auth/me', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + sessionToken,
+      'Content-Type': 'application/json'
     }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success && data.user) {
+      const user = data.user;
+      if (user.role !== 'admin') {
+        window.location.href = '/my';
+        return;
+      }
+      const userName = document.getElementById('user-name');
+      if (userName) userName.textContent = user.nama_lengkap || 'Admin';
+    }
+  })
+  .catch(error => console.error('Error fetching user data:', error));
+}
 
-    if (btnSave) {
-      btnSave.addEventListener('click', function() {
-        var nama = document.getElementById('inputNamaLayanan').value.trim();
-        var deskripsi = document.getElementById('inputDeskripsiLayanan').value.trim();
-        var harga = document.getElementById('inputHargaLayanan').value.trim();
+// ==================== LAYANAN ====================
 
-        if (!nama || !deskripsi || !harga) {
-          alert('Semua field harus diisi');
-          return;
-        }
+function fetchLayanan() {
+  fetch('/api/admin/layanan', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + sessionToken,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.getElementById('layanan-tbody');
+    if (!tbody) return;
 
-        var payload = {
-          nama_layanan: nama,
-          deskripsi: deskripsi,
-          harga: parseFloat(harga)
-        };
+    if (data.success && data.layanan && data.layanan.length > 0) {
+      tbody.innerHTML = '';
+      data.layanan.forEach(layanan => {
+        const row = createLayananRow(layanan);
 
-        var url = '/api/admin/layanan';
-        var method = 'POST';
-        
-        if (editLayananId) {
-          url = '/api/admin/layanan/' + encodeURIComponent(editLayananId);
-          method = 'PUT';
-        }
+        row.addEventListener('layanan-edit', function(e) {
+          const item = e.detail;
+          editLayananId = item.id_layanan;
+          document.getElementById('formLayananTitle').textContent = 'Edit Layanan';
+          document.getElementById('inputNamaLayanan').value = item.nama_layanan || '';
+          document.getElementById('inputDeskripsiLayanan').value = item.deskripsi || '';
+          document.getElementById('inputHargaLayanan').value = item.harga || '';
+          document.getElementById('formLayanan').style.display = 'block';
+        });
 
-        // Komentar: Save layanan (tambah atau edit)
-        fetch(url, {
-          method: method,
-          headers: {
-            'Authorization': 'Bearer ' + sessionToken,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-          if (data.success) {
-            document.getElementById('formLayanan').style.display = 'none';
-            fetchLayanan();
-          } else {
-            alert('Gagal menyimpan layanan');
+        row.addEventListener('layanan-delete', function(e) {
+          const item = e.detail;
+          if (confirm('Yakin ingin menghapus layanan ini?')) {
+            fetch('/api/admin/layanan/' + encodeURIComponent(item.id_layanan), {
+              method: 'DELETE',
+              headers: {
+                'Authorization': 'Bearer ' + sessionToken,
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(res => res.json())
+            .then(res => {
+              if (res.success) fetchLayanan();
+              else alert('Gagal menghapus layanan');
+            })
+            .catch(() => alert('Terjadi kesalahan saat menghapus'));
           }
-        })
-        .catch(function(error) {
-          alert('Terjadi kesalahan');
         });
+
+        tbody.appendChild(row);
       });
+    } else {
+      tbody.innerHTML = '<tr><td colspan="5" class="no-data">Tidak ada data layanan</td></tr>';
     }
+  })
+  .catch(error => console.error('Error fetching layanan:', error));
+}
 
-    if (btnCancel) {
-      btnCancel.addEventListener('click', function() {
-        document.getElementById('formLayanan').style.display = 'none';
-      });
+// ==================== PAKET ====================
+
+function fetchPaket() {
+  fetch('/api/admin/paket', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + sessionToken,
+      'Content-Type': 'application/json'
     }
-  }
+  })
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.getElementById('paket-tbody');
+    if (!tbody) return;
 
-  // Komentar: Inisialisasi button handlers untuk paket
-  function initPaketHandlers() {
-    var btnAdd = document.getElementById('btnAddPaket');
-    var btnSave = document.getElementById('btnSavePaket');
-    var btnCancel = document.getElementById('btnCancelPaket');
+    if (data.success && data.paket && data.paket.length > 0) {
+      tbody.innerHTML = '';
+      data.paket.forEach(paket => {
+        const row = createPaketRow(paket);
 
-    if (btnAdd) {
-      btnAdd.addEventListener('click', function() {
-        editPaketId = null;
-        document.getElementById('formPaketTitle').textContent = 'Tambah Paket Baru';
-        document.getElementById('inputNamaPaket').value = '';
-        document.getElementById('inputDeskripsiPaket').value = '';
-        document.getElementById('inputHargaPaket').value = '';
-        document.getElementById('formPaket').style.display = 'block';
-      });
-    }
+        row.addEventListener('paket-edit', function(e) {
+          const item = e.detail;
+          editPaketId = item.id_paket;
+          document.getElementById('formPaketTitle').textContent = 'Edit Paket';
+          document.getElementById('inputNamaPaket').value = item.nama_paket || '';
+          document.getElementById('inputDeskripsiPaket').value = item.deskripsi || '';
+          document.getElementById('inputHargaPaket').value = item.harga || '';
+          document.getElementById('formPaket').style.display = 'block';
+        });
 
-    if (btnSave) {
-      btnSave.addEventListener('click', function() {
-        var nama = document.getElementById('inputNamaPaket').value.trim();
-        var deskripsi = document.getElementById('inputDeskripsiPaket').value.trim();
-        var harga = document.getElementById('inputHargaPaket').value.trim();
-
-        if (!nama || !deskripsi || !harga) {
-          alert('Semua field harus diisi');
-          return;
-        }
-
-        var payload = {
-          nama_paket: nama,
-          deskripsi: deskripsi,
-          harga: parseFloat(harga)
-        };
-
-        var url = '/api/admin/paket';
-        var method = 'POST';
-        
-        if (editPaketId) {
-          url = '/api/admin/paket/' + encodeURIComponent(editPaketId);
-          method = 'PUT';
-        }
-
-        // Komentar: Save paket (tambah atau edit)
-        fetch(url, {
-          method: method,
-          headers: {
-            'Authorization': 'Bearer ' + sessionToken,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-          if (data.success) {
-            document.getElementById('formPaket').style.display = 'none';
-            fetchPaket();
-          } else {
-            alert('Gagal menyimpan paket');
+        row.addEventListener('paket-delete', function(e) {
+          const item = e.detail;
+          if (confirm('Yakin ingin menghapus paket ini?')) {
+            fetch('/api/admin/paket/' + encodeURIComponent(item.id_paket), {
+              method: 'DELETE',
+              headers: {
+                'Authorization': 'Bearer ' + sessionToken,
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(res => res.json())
+            .then(res => {
+              if (res.success) fetchPaket();
+              else alert('Gagal menghapus paket');
+            })
+            .catch(() => alert('Terjadi kesalahan saat menghapus'));
           }
-        })
-        .catch(function(error) {
-          alert('Terjadi kesalahan');
         });
-      });
-    }
 
-    if (btnCancel) {
-      btnCancel.addEventListener('click', function() {
-        document.getElementById('formPaket').style.display = 'none';
+        tbody.appendChild(row);
       });
+    } else {
+      tbody.innerHTML = '<tr><td colspan="5" class="no-data">Tidak ada data paket</td></tr>';
     }
+  })
+  .catch(error => console.error('Error fetching paket:', error));
+}
+
+// ==================== FORM HANDLERS ====================
+
+function initLayananHandlers() {
+  const btnAdd = document.getElementById('btnAddLayanan');
+  const btnSave = document.getElementById('btnSaveLayanan');
+  const btnCancel = document.getElementById('btnCancelLayanan');
+
+  if (btnAdd) {
+    btnAdd.addEventListener('click', function() {
+      editLayananId = null;
+      document.getElementById('formLayananTitle').textContent = 'Tambah Layanan Baru';
+      document.getElementById('inputNamaLayanan').value = '';
+      document.getElementById('inputDeskripsiLayanan').value = '';
+      document.getElementById('inputHargaLayanan').value = '';
+      document.getElementById('formLayanan').style.display = 'block';
+    });
   }
 
-  // Komentar: Inisialisasi sidebar toggle
-  function initSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    var toggleBtn = document.getElementById('toggleSidebar');
-    
-    if (toggleBtn && sidebar) {
-      toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('expanded');
-      });
-    }
-  }
+  if (btnSave) {
+    btnSave.addEventListener('click', function() {
+      const nama = document.getElementById('inputNamaLayanan').value.trim();
+      const deskripsi = document.getElementById('inputDeskripsiLayanan').value.trim();
+      const harga = document.getElementById('inputHargaLayanan').value.trim();
 
-  // Logout function
-  function initLogout() {
-    var logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function() {
-        if (confirm('Yakin ingin logout?')) {
-          localStorage.removeItem('session_token');
-          localStorage.removeItem('session_expires_at');
-          window.location.href = '/';
+      if (!nama || !deskripsi || !harga) {
+        alert('Semua field harus diisi');
+        return;
+      }
+
+      const payload = {
+        nama_layanan: nama,
+        deskripsi: deskripsi,
+        harga: parseFloat(harga)
+      };
+
+      let url = '/api/admin/layanan';
+      let method = 'POST';
+      if (editLayananId) {
+        url = '/api/admin/layanan/' + encodeURIComponent(editLayananId);
+        method = 'PUT';
+      }
+
+      fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': 'Bearer ' + sessionToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('formLayanan').style.display = 'none';
+          fetchLayanan();
+        } else {
+          alert('Gagal menyimpan layanan');
         }
-      });
-    }
+      })
+      .catch(() => alert('Terjadi kesalahan'));
+    });
   }
 
-  // Initialize when DOM is ready
-  function init() {
-    fetchUserData();
-    fetchLayanan();
-    fetchPaket();
-    initLayananHandlers();
-    initPaketHandlers();
-    initSidebar();
-    initLogout();
+  if (btnCancel) {
+    btnCancel.addEventListener('click', function() {
+      document.getElementById('formLayanan').style.display = 'none';
+    });
+  }
+}
+
+function initPaketHandlers() {
+  const btnAdd = document.getElementById('btnAddPaket');
+  const btnSave = document.getElementById('btnSavePaket');
+  const btnCancel = document.getElementById('btnCancelPaket');
+
+  if (btnAdd) {
+    btnAdd.addEventListener('click', function() {
+      editPaketId = null;
+      document.getElementById('formPaketTitle').textContent = 'Tambah Paket Baru';
+      document.getElementById('inputNamaPaket').value = '';
+      document.getElementById('inputDeskripsiPaket').value = '';
+      document.getElementById('inputHargaPaket').value = '';
+      document.getElementById('formPaket').style.display = 'block';
+    });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  if (btnSave) {
+    btnSave.addEventListener('click', function() {
+      const nama = document.getElementById('inputNamaPaket').value.trim();
+      const deskripsi = document.getElementById('inputDeskripsiPaket').value.trim();
+      const harga = document.getElementById('inputHargaPaket').value.trim();
+
+      if (!nama || !deskripsi || !harga) {
+        alert('Semua field harus diisi');
+        return;
+      }
+
+      const payload = {
+        nama_paket: nama,
+        deskripsi: deskripsi,
+        harga: parseFloat(harga)
+      };
+
+      let url = '/api/admin/paket';
+      let method = 'POST';
+      if (editPaketId) {
+        url = '/api/admin/paket/' + encodeURIComponent(editPaketId);
+        method = 'PUT';
+      }
+
+      fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': 'Bearer ' + sessionToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('formPaket').style.display = 'none';
+          fetchPaket();
+        } else {
+          alert('Gagal menyimpan paket');
+        }
+      })
+      .catch(() => alert('Terjadi kesalahan'));
+    });
   }
 
-})();
+  if (btnCancel) {
+    btnCancel.addEventListener('click', function() {
+      document.getElementById('formPaket').style.display = 'none';
+    });
+  }
+}
+
+function initSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggleSidebar');
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('expanded');
+    });
+  }
+}
+
+function initLogout() {
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (confirm('Yakin ingin logout?')) {
+        localStorage.removeItem('session_token');
+        localStorage.removeItem('session_expires_at');
+        window.location.href = '/';
+      }
+    });
+  }
+}
+
+function init() {
+  fetchUserData();
+  fetchLayanan();
+  fetchPaket();
+  initLayananHandlers();
+  initPaketHandlers();
+  initSidebar();
+  initLogout();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
