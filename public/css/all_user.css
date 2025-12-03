@@ -1,0 +1,259 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFFAEA;
+    color: #333;
+}
+
+/* HEADER */
+.header {
+    height: 60px;
+    background-color: #0F8A5F;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    border-bottom: 1px solid white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header .logo {
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-profile {
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 70px;
+    color: white;
+    background-color: #0F8A5F;
+    border-right: 1px solid white;
+    padding-top: 20px;
+    transition: width 0.25s;
+    position: sticky;
+    top: 60px;
+    overflow: hidden;
+    height: calc(100vh - 60px);
+}
+
+.sidebar.expanded {
+    width: 220px;
+}
+
+.toggle-btn {
+    margin-left: 5px;
+    font-size: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.menu-list {
+    list-style: none;
+    margin-top: 25px;
+}
+
+.menu-list li {
+    display: flex;
+    align-items: center;
+    padding: 14px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.menu-list li:hover {
+    background-color: #0C6B48;
+}
+
+/* Komentar: Styling untuk menu item yang aktif */
+.menu-list li.active-menu {
+    background-color: #0A5C47;
+}
+
+.icon {
+    font-size: 22px;
+}
+
+.menu-text {
+    margin-left: 15px;
+    font-size: 16px;
+    display: none;
+    opacity: 0;
+    transform: translateX(-15px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    white-space: nowrap;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+/* Show text when expanded */
+.sidebar.expanded .menu-text {
+    display: inline;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* CONTENT */
+.content {
+    padding: 30px;
+    margin-left: 80px;
+    transition: margin-left 0.25s ease;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 60px);
+}
+
+.sidebar.expanded ~ .content {
+    margin-left: 230px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.muted {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* TABLE */
+.table-box {
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 13px;
+}
+
+.data-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    padding: 10px;
+}
+
+/* Komentar: Tombol view detail */
+.data-table .detail-btn {
+    padding: 6px 12px;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.data-table .detail-btn:hover {
+    background: #1976d2;
+}
+
+.no-data {
+    text-align: center;
+    padding: 16px 12px;
+    color: #999;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.logout-btn {
+    width: 100%;
+    background-color: #d62828;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* FOOTER */
+.footer {
+    border-top: 1px solid rgb(219, 219, 219);
+    background-color: #FFFAEA;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    color: #666;
+    margin-top: auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .content {
+        padding: 16px 4px;
+        margin-left: 0 !important;
+    }
+    .sidebar {
+        width: 56px;
+    }
+    .sidebar.expanded {
+        width: 160px;
+    }
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 8px 2px;
+    }
+    .sidebar {
+        width: 44px;
+    }
+    .sidebar.expanded {
+        width: 120px;
+    }
+    .header {
+        padding: 0 8px;
+    }
+    .page-title {
+        font-size: 18px;
+    }
+    .data-table th,
+    .data-table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+}

@@ -29,20 +29,20 @@
       if (data.success && data.user) {
         var user = data.user;
         
-        // Verify user is admin
+        // Komentar: Verify user is admin
         if (user.role !== 'admin') {
           window.location.href = '/my';
           return;
         }
         
-        var userDisplay = document.getElementById('user-display');
-        var welcomeHeading = document.getElementById('welcome-heading');
+        var userName = document.getElementById('user-name');
+        var welcomeText = document.getElementById('welcome-text');
         
-        if (userDisplay) {
-          userDisplay.textContent = user.nama_lengkap || 'Admin';
+        if (userName) {
+          userName.textContent = user.nama_lengkap || 'Admin';
         }
-        if (welcomeHeading) {
-          welcomeHeading.textContent = 'Halo ' + (user.nama_lengkap || 'Admin') + ' 👋';
+        if (welcomeText) {
+          welcomeText.textContent = 'Halo ' + (user.nama_lengkap || 'Admin') + ' 👋';
         }
       }
     })
@@ -62,17 +62,23 @@
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
-      if (data.totalUsers !== undefined) {
-        document.getElementById('stat-users').textContent = data.totalUsers;
-      }
-      if (data.totalPet !== undefined) {
-        document.getElementById('stat-penitipan-aktif').textContent = data.totalPet;
-      }
-      if (data.totalPenitipan !== undefined) {
-        document.getElementById('stat-penitipan').textContent = data.totalPenitipan;
-      }
-      if (data.totalIncome !== undefined) {
-        document.getElementById('stat-income').textContent = 'Rp' + data.totalIncome.toLocaleString();
+      // Komentar: Update statistik dengan data dari backend
+      if (data.success) {
+        if (data.totalUsers !== undefined) {
+          document.getElementById('stat-users').textContent = data.totalUsers;
+        }
+        if (data.totalPet !== undefined) {
+          document.getElementById('stat-pet').textContent = data.totalPet;
+        }
+        if (data.totalPenitipan !== undefined) {
+          document.getElementById('stat-penitipan').textContent = data.totalPenitipan;
+        }
+        if (data.totalIncome !== undefined) {
+          var incomeEl = document.getElementById('stat-income');
+          if (incomeEl) {
+            incomeEl.textContent = 'Rp' + (data.totalIncome || 0).toLocaleString();
+          }
+        }
       }
     })
     .catch(function(err) {
@@ -80,14 +86,28 @@
     });
   }
 
+  // Komentar: Inisialisasi sidebar toggle
+  function initSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var toggleBtn = document.getElementById('toggleSidebar');
+    
+    if (toggleBtn && sidebar) {
+      toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('expanded');
+      });
+    }
+  }
+
   // Logout function
   function initLogout() {
-    var logoutBtn = document.getElementById('btn-logout');
+    var logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
-        localStorage.removeItem('session_token');
-        localStorage.removeItem('session_expires_at');
-        window.location.href = '/logout';
+        if (confirm('Yakin ingin logout?')) {
+          localStorage.removeItem('session_token');
+          localStorage.removeItem('session_expires_at');
+          window.location.href = '/';
+        }
       });
     }
   }
@@ -96,6 +116,7 @@
   function init() {
     fetchUserData();
     fetchDashboardStats();
+    initSidebar();
     initLogout();
   }
 

@@ -4,104 +4,109 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-        <title>PawHaven — Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PawHaven - Admin Dashboard</title>
         <link rel="stylesheet" href="/public/css/dashboard_admin.css" />
     </head>
 
     <body>
-        <div id="app">
+        <!-- HEADER -->
+        <div class="header">
+            <h1 class="logo" onclick="location.href='/my'">PawHaven Admin</h1>
 
-        <!-- Header -->
-        <header class="header">
-            <a href="/my" class="brand">PawHaven Admin</a>
-
-            <!-- username -->
-            <div class="user-area">
-                <a id="user-link" class="user-link" href="/profile" title="Profil Admin">
-                    <span id="user-display">Admin</span>
-                </a>
-                <button id="btn-logout" type="button" class="btn-logout">Logout</button>
+            <div class="user-profile">
+                <span id="user-name" onclick="location.href='/profile'">Admin</span>
             </div>
-        </header>
+        </div>
 
-        <!-- Navigation cepat admin -->
-        <nav class="quick-nav" role="navigation" aria-label="Menu admin">
-            <ul>
-                <li><a href="/my" class="nav-item active">Home</a></li>
-                <li><a href="/admin/users" class="nav-item">Users</a></li>
-                <li><a href="/admin/layanan" class="nav-item">Layanan</a></li>
-                <li><a href="/admin/paket" class="nav-item">Paket</a></li>
-            </ul>
-        </nav>
+        <!-- LAYOUT WRAPPER -->
+        <div class="layout">
 
-        <main class="container">
+            <!-- SIDEBAR -->
+            <div class="sidebar" id="sidebar">
+                <div class="toggle-btn" id="toggleSidebar">☰</div>
 
-            <!-- Sambutan -->
-            <section class="welcome">
-                <h1 id="welcome-heading">Halo Admin 👋</h1>
+                <ul class="menu-list">
+
+                    <li onclick="location.href='/my'">
+                        <span class="icon">🏠</span>
+                        <span class="menu-text">Home</span>
+                    </li>
+
+                    <li onclick="location.href='/admin/users'">
+                        <span class="icon">👥</span>
+                        <span class="menu-text">All User List</span>
+                    </li>
+
+                    <li onclick="location.href='/admin/kelola'">
+                        <span class="icon">⚙️</span>
+                        <span class="menu-text">Kelola Layanan & Paket</span>
+                    </li>
+
+                </ul>
+                
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="content">
+
+                <h1 class="welcome" id="welcome-text">Halo Admin 👋</h1>
                 <p class="muted">Selamat datang di pusat kendali PawHaven.</p>
-            </section>
 
-            <!-- Menu statistik admin -->
-            <section class="important-menus" aria-label="Statistik Admin">
+                <!-- STATISTIK DASHBOARD -->
+                <div class="stats-container">
 
-                <!-- Total User -->
-                <a href="/admin/users" class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                        <h1 class="stat-value" id="stat-users">0</h1>
+                    <!-- Total User -->
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3>Total Users</h3>
+                            <p class="stat-value" id="stat-users">0</p>
+                            <p class="stat-desc">Jumlah pengguna terdaftar</p>
+                        </div>
                     </div>
-                    <div class="menu-body">
-                        <h3>Total Users</h3>
-                        <p class="small">Jumlah pengguna terdaftar.</p>
-                    </div>
-                </a>
 
-                <!-- Penitipan aktif -->
-                <a href="/admin/penitipan" class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                        <h1 class="stat-value" id="stat-penitipan-aktif">0</h1>
+                    <!-- Total Pet -->
+                    <div class="stat-card">
+                        <div class="stat-icon">🐾</div>
+                        <div class="stat-content">
+                            <h3>Total Pet</h3>
+                            <p class="stat-value" id="stat-pet">0</p>
+                            <p class="stat-desc">Jumlah pet terdaftar</p>
+                        </div>
                     </div>
-                    <div class="menu-body">
-                        <h3>Penitipan Aktif</h3>
-                        <p class="small">Jumlah penitipan aktif.</p>
-                    </div>
-                </a>
 
-                <!-- Total Penitipan (semua penitipan) -->
-                <a href="/admin/penitipan" class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                        <h1 class="stat-value" id="stat-penitipan">0</h1>
+                    <!-- Total Penitipan -->
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-content">
+                            <h3>Total Penitipan</h3>
+                            <p class="stat-value" id="stat-penitipan">0</p>
+                            <p class="stat-desc">Total transaksi penitipan</p>
+                        </div>
                     </div>
-                    <div class="menu-body">
-                        <h3>Total Penitipan</h3>
-                        <p class="small">Total transaksi penitipan.</p>
-                    </div>
-                </a>
 
-                <!-- Total Pemasukkan -->
-                <div class="menu-card">
-                    <div class="menu-media" aria-hidden="true">
-                        <h1 class="stat-value" id="stat-income">Rp0</h1>
+                    <!-- Total Pemasukkan -->
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <h3>Total Pemasukkan</h3>
+                            <p class="stat-value" id="stat-income">Rp0</p>
+                            <p class="stat-desc">Rekap pendapatan PawHaven</p>
+                        </div>
                     </div>
-                    <div class="menu-body">
-                        <h3>Total Pendapatan</h3>
-                        <p class="small">Rekap pendapatan PawHaven.</p>
-                    </div>
+
                 </div>
 
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer-min">
-            <div class="footer-inner">
-                <div>© 2025 PawHaven</div>
-                <div class="footer-links">
-                    <a href="/help">Pusat Bantuan</a>
-                </div>
             </div>
-        </footer>
+        </div>
 
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>© 2025 PawHaven.</p>
         </div>
 
         <script type="text/javascript" src="/public/js/dashboard_admin.js"></script>
