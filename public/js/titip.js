@@ -16,6 +16,14 @@
     }
     
     let userPets = [];
+    let editMode = false;
+    let editPenitipanId = null;
+    
+    // Check if we are in edit mode (URL has id parameter)
+    function getEditId() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
+    }
     
     // Load user's pets
     async function loadPets() {
@@ -55,6 +63,68 @@
             option.textContent = pet.nama_pet + (pet.jenis_pet ? ' (' + pet.jenis_pet + ')' : '');
             select.appendChild(option);
         });
+    }
+    
+    // Load penitipan data for edit mode
+    async function loadPenitipanData(penitipanId) {
+        try {
+            const response = await fetch('/api/penitipan/' + penitipanId, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + sessionToken,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.penitipan) {
+                const penitipan = data.penitipan;
+                
+                // Pre-fill the form with existing data
+                const petSelect = document.getElementById('pet_select');
+                if (petSelect) {
+                    petSelect.value = penitipan.id_pet;
+                }
+                
+                const checkinInput = document.getElementById('tgl_checkin');
+                if (checkinInput && penitipan.tgl_checkin) {
+                    checkinInput.value = penitipan.tgl_checkin;
+                }
+                
+                const checkoutInput = document.getElementById('tgl_checkout');
+                if (checkoutInput && penitipan.tgl_checkout) {
+                    checkoutInput.value = penitipan.tgl_checkout;
+                }
+                
+                // Update form title and button text for edit mode
+                const titleEl = document.querySelector('.title');
+                if (titleEl) {
+                    titleEl.textContent = 'Edit Penitipan';
+                }
+                
+                const submitBtn = document.querySelector('.submit-btn');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Simpan Perubahan';
+                }
+                
+                // Hide the "add new pet" option in edit mode
+                const newOption = petSelect.querySelector('option[value="new"]');
+                if (newOption) {
+                    newOption.style.display = 'none';
+                }
+                
+                editMode = true;
+                editPenitipanId = penitipanId;
+            } else {
+                alert('Penitipan tidak ditemukan.');
+                window.location.href = '/my';
+            }
+        } catch (error) {
+            console.error('Error loading penitipan:', error);
+            alert('Gagal memuat data penitipan.');
+            window.location.href = '/my';
+        }
     }
     
     function toggleNewPetFields(show) {
@@ -121,6 +191,32 @@
         }
     }
     
+    // Update penitipan
+    async function updatePenitipan(penitipanId, petId) {
+        const penitipanData = {
+            id_pet: petId,
+            tgl_checkin: document.getElementById('tgl_checkin').value,
+            tgl_checkout: document.getElementById('tgl_checkout').value
+        };
+        
+        const response = await fetch('/api/penitipan/update/' + penitipanId, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + sessionToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(penitipanData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            return true;
+        } else {
+            throw new Error(data.error || 'Failed to update penitipan');
+        }
+    }
+    
     // Handle form submit
     async function handleSubmit(e) {
         e.preventDefault();
@@ -158,10 +254,16 @@
                 petId = parseInt(selectedValue);
             }
             
-            // Add penitipan
-            await addPenitipan(petId);
+            if (editMode && editPenitipanId) {
+                // Update existing penitipan
+                await updatePenitipan(editPenitipanId, petId);
+                alert('Penitipan berhasil diperbarui!');
+            } else {
+                // Add new penitipan
+                await addPenitipan(petId);
+                alert('Penitipan berhasil disimpan!');
+            }
             
-            alert('Penitipan berhasil disimpan!');
             window.location.href = '/my';
             
         } catch (error) {
@@ -171,7 +273,13 @@
     
     // Initialize
     function init() {
-        loadPets();
+        loadPets().then(function() {
+            // After pets are loaded, check if we're in edit mode
+            const penitipanId = getEditId();
+            if (penitipanId) {
+                loadPenitipanData(penitipanId);
+            }
+        });
         
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
