@@ -2,7 +2,7 @@
   "name": "PHP + MariaDB",
   "dockerComposeFile": "docker-compose.yml",
   "service": "workspace",
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/workspaces/TUBES_PWD",
   "forwardPorts": [80, 3306],
   "customizations": {
     "vscode": {
