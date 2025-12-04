@@ -65,6 +65,7 @@ body {
     background-color: #2F6F4F;
     border-right: 1px solid white;
     padding-top: 20px;
+    padding-left: 0; /* prevent default indent */
     transition: width 0.25s;
     position: sticky;
     top: 60px;
@@ -80,13 +81,14 @@ body {
 
 .menu-list {
     list-style: none;
-    margin-top: 25px;
+    margin: 25px 0 0 0;
+    padding: 0; /* remove browser default left padding */
 }
 
 .menu-list li {
     display: flex;
     align-items: center;
-    padding: 10px 0 10px 12px; /* padding kiri hanya 12px */
+    padding: 10px 12px;
     cursor: pointer;
     transition: background-color 0.2s;
     gap: 12px;
