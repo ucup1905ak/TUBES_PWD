@@ -79,7 +79,7 @@
                 <div class='nota-row'><b>Jenis:</b> ${item.jenis_pet || '-'}</div>
                 <div class='nota-row'><b>Ras:</b> ${item.ras || '-'}</div>
 
-                <div class='nota-row'><b>Kamar:</b> ${item.kamar}</div>
+                <div class='nota-row'><b>Kamar:</b> ${item.nama_paket || '-'}</div>
                 <div class='nota-row'><b>Layanan:</b> ${layanan}</div>
 
                 <div class='nota-row'><b>Check-in:</b> ${item.tgl_checkin}</div>
