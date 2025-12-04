@@ -165,6 +165,13 @@ body::before {
     flex-shrink: 0;
 }
 
+/* Atur supaya tombol upload berada di bawah foto */
+.profile-photo + #uploadPhotoBtn {
+    display: block;
+    margin-left: 4px;
+}
+
+
 .profile-userinfo {
     display: flex;
     flex-direction: column;
@@ -400,5 +407,66 @@ body::before {
         min-width: 90px;
         order: initial !important;
     }
+}
+
+#uploadPhotoBtn {
+    padding: 8px 16px;
+    background-color: #0F8A5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-top: 6px;
+}
+
+#uploadPhotoBtn:hover {
+    background-color: #0d6a47;
+}
+
+#deletePhotoBtn {
+    background-color: #d62828;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+#deletePhotoBtn:hover {
+    background-color: #b81f1f;
+}
+
+.profile-photo-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.profile-photo-group .btn {
+    width: 120px;
+    text-align: center;
+}
+
+.green-btn {
+    background-color: #0F8A5F;
+    color: white;
+}
+
+.green-btn:hover {
+    background-color: #0d6a47;
+}
+
+.red-btn {
+    background-color: #d62828;
+    color: white;
+}
+
+.red-btn:hover {
+    background-color: #b81f1f;
 }
 
