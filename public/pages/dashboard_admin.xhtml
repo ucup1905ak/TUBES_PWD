@@ -2,111 +2,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
-    <head>
-        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PawHaven - Admin Dashboard</title>
-        <link rel="stylesheet" href="/public/css/dashboard_admin.css" />
-    </head>
+<head>
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawHaven - Admin Dashboard</title>
+  <link rel="stylesheet" href="/public/css/dashboard_admin.css" />
+</head>
 
-    <body>
-        <!-- HEADER -->
-        <div class="header">
-            <h1 class="logo" onclick="location.href='/my'">PawHaven Admin</h1>
+<body>
+  <div class="header">
+    <h1 class="logo" onclick="location.href='/my'">PawHaven Admin</h1>
+    <div class="user-profile" onclick="location.href='/profile'">
+      <img id="user-avatar" src="/public/img/profile.png" alt="Profile" class="profile-img" />
+      <span id="user-name">Admin</span>
+    </div>
+  </div>
 
-            <div class="user-profile" onclick="location.href='/profile'">
-                <img id="user-avatar" src="/public/img/profile.png" alt="Profile" class="profile-img" />
-                <span id="user-name">Admin</span>
-            </div>
+  <div class="layout">
+    <div class="sidebar" id="sidebar">
+      <ul class="menu-list">
+        <li class="active" onclick="location.href='/my'">
+          <img src="/public/img/home.png" alt="Home" class="icon-img" />
+          <span class="menu-text">Home</span>
+        </li>
+        <li onclick="location.href='/admin/users'">
+          <img src="/public/img/peoples.png" alt="All Users" class="icon-img" />
+          <span class="menu-text">All User List</span>
+        </li>
+        <li onclick="location.href='/admin/kelola'">
+          <img src="/public/img/settings.png" alt="Kelola" class="icon-img" />
+          <span class="menu-text">Kelola Layanan & Paket</span>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
+          <img src="/public/img/log_out.png" alt="Logout" class="icon-img" />
+          <span class="menu-text">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 class="welcome" id="welcome-text">Halo Admin 👋</h1>
+      <p class="muted">Selamat datang di pusat kendali PawHaven.</p>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h3>Total Users</h3>
+            <p class="stat-value" id="stat-users">0</p>
+            <p class="stat-desc">Jumlah pengguna terdaftar</p>
+          </div>
         </div>
-
-        <!-- LAYOUT WRAPPER -->
-        <div class="layout">
-
-            <!-- SIDEBAR -->
-            <div class="sidebar" id="sidebar">
-
-                <ul class="menu-list">
-
-                    <li class="active" onclick="location.href='/my'">
-                        <img src="/public/img/home.png" alt="Home" class="icon-img" />
-                        <span class="menu-text">Home</span>
-                    </li>
-
-                    <li onclick="location.href='/admin/users'">
-                        <img src="/public/img/peoples.png" alt="All Users" class="icon-img" />
-                        <span class="menu-text">All User List</span>
-                    </li>
-
-                    <li onclick="location.href='/admin/kelola'">
-                        <img src="/public/img/settings.png" alt="Kelola" class="icon-img" />
-                        <span class="menu-text">Kelola Layanan & Paket</span>
-                    </li>
-
-                </ul>
-                
-                <div class="sidebar-footer">
-                    <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
-                        <img src="/public/img/log_out.png" alt="Logout" class="icon-img" />
-                        <span class="menu-text">Logout</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- MAIN CONTENT -->
-            <div class="content">
-
-                <h1 class="welcome" id="welcome-text">Halo Admin 👋</h1>
-                <p class="muted">Selamat datang di pusat kendali PawHaven.</p>
-
-                <!-- STATISTIK DASHBOARD -->
-                <div class="stats-container">
-
-                    <!-- Total User -->
-                    <div class="stat-card">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-content">
-                            <h3>Total Users</h3>
-                            <p class="stat-value" id="stat-users">0</p>
-                            <p class="stat-desc">Jumlah pengguna terdaftar</p>
-                        </div>
-                    </div>
-
-                    <!-- Total Pet -->
-                    <div class="stat-card">
-                        <div class="stat-icon">🐾</div>
-                        <div class="stat-content">
-                            <h3>Total Pet</h3>
-                            <p class="stat-value" id="stat-pet">0</p>
-                            <p class="stat-desc">Jumlah pet terdaftar</p>
-                        </div>
-                    </div>
-
-                    <!-- Total Penitipan -->
-                    <div class="stat-card">
-                        <div class="stat-icon">📋</div>
-                        <div class="stat-content">
-                            <h3>Total Penitipan</h3>
-                            <p class="stat-value" id="stat-penitipan">0</p>
-                            <p class="stat-desc">Total transaksi penitipan</p>
-                        </div>
-                    </div>
-
-                    <!-- Total Pemasukkan -->
-                    <div class="stat-card">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-content">
-                            <h3>Total Pemasukkan</h3>
-                            <p class="stat-value" id="stat-income">Rp0</p>
-                            <p class="stat-desc">Rekap pendapatan PawHaven</p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
+        <div class="stat-card">
+          <div class="stat-icon">🐾</div>
+          <div class="stat-content">
+            <h3>Total Pet</h3>
+            <p class="stat-value" id="stat-pet">0</p>
+            <p class="stat-desc">Jumlah pet terdaftar</p>
+          </div>
         </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-content">
+            <h3>Penitipan</h3>
+            <p class="stat-value" id="stat-penitipan">0</p>
+            <p class="stat-desc">Total transaksi penitipan</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-content">
+            <h3>Pemasukkan</h3>
+            <p class="stat-value" id="stat-income">Rp0</p>
+            <p class="stat-desc">Rekap pendapatan PawHaven</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <script type="text/javascript" src="/public/js/dashboard_admin.js"></script>
-    </body>
+  <script type="text/javascript" src="/public/js/dashboard_admin.js"></script>
+</body>
 </html>
