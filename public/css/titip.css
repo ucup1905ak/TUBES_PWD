@@ -131,7 +131,7 @@ body {
 }
 
 .sidebar-footer {
-    margin-top: auto;
+    margin-top: auto; /* match dashboard_user */
     padding: 8px 12px;
 }
 
@@ -210,7 +210,8 @@ body {
 }
 
 .input-group input,
-.input-group textarea {
+.input-group textarea,
+.input-group select {
     padding: 12px 14px;
 
     background: var(--cream);        /* #FFF9E5 — INI YANG KAMU MAU */
@@ -224,15 +225,49 @@ body {
 }
 
 .input-group input:focus,
-.input-group textarea:focus {
+.input-group textarea:focus,
+.input-group select:focus {
     border-color: var(--green-dark); /* #004030 */
     box-shadow: 0 0 8px rgba(0, 64, 48, 0.25);
+}
+
+/* SELECT nice arrow */
+.input-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='12' viewBox='0 0 20 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 2L10 10L18 2' stroke='%23004030' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px 12px;
+    padding-right: 42px; /* space for arrow */
 }
 
 /* TEXTAREA */
 textarea {
     height: 100px;
     resize: none;
+}
+
+/* THEMED CHECKBOX OPTIONS */
+.checkbox-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 2px solid var(--green-soft);
+    color: var(--green-dark);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+.checkbox-option input.layanan {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--green-soft);
 }
 
 /* HALF INPUTS */
@@ -261,6 +296,22 @@ textarea {
 
 .submit-btn:hover {
     background: var(--green-dark); /* #004030 */
+}
+
+/* BACK TO DASHBOARD BUTTON */
+.back-dashboard-btn {
+    display: inline-block;
+    background: #6c757d;
+    color: #fff !important;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.back-dashboard-btn:hover {
+    background: #5a6268;
 }
 
 /* ===== PHOTO SECTION ===== */
@@ -295,6 +346,7 @@ textarea {
     padding: 10px;
     color: #666;
     margin-top: auto;
+    width: 100%;
 }
 
 .box-hehe {

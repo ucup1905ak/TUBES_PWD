@@ -128,7 +128,7 @@ body {
 }
 
 .sidebar-footer {
-    margin-top: auto;
+    margin-top: auto; /* match dashboard_user */
     padding: 8px 12px;
 }
 
