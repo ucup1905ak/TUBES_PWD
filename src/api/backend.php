@@ -69,27 +69,36 @@ class BACKEND{
             echo json_encode($response);
         });
 
-             
-        // GET endpoints for hewan - specific routes BEFORE parameterized routes
-        $this->router->add("/api/hewan", function() :void {
-            $this->getHewan();
-        });
-        
-        // GET endpoints for penitipan - specific routes BEFORE parameterized routes
-        $this->router->add("/api/penitipan/jumlah", function(): void {
-            $this->getJumlahPenitipan();
-        });
-        $this->router->add("/api/penitipan/aktif", function(): void {
-            $this->getPenitipanAktif();
-        });
-        $this->router->add("/api/penitipan", function(): void {
-            $this->getPenitipan();
-        });
+        // GET endpoint for current user info
         $this->router->add("/api/auth/me", function(): void {
             $this->getMe();
         });
         $this->router->add("/api/auth/me/photo", function(): void {
             $this->getMePhoto();
+        });
+        //POST endpoints
+        $this->router->add("/api/auth/register", function(): void {
+            $this->postRegister();
+        });
+        $this->router->add("/api/auth/login", function(): void {
+            $this->postLogin();
+        });
+
+        // User routes - specific paths BEFORE parameterized {id}
+        $this->router->add("/api/user/update", function(): void {
+            $this->postUpdateUser();
+        });
+        $this->router->add("/api/user/delete", function(): void {
+            $this->deleteUser();
+        });
+        // Parameterized user route MUST come after specific routes
+        $this->router->add("/api/user/{id}", function($id): void {
+            $this->getUser($id);
+        });
+
+        // GET endpoints for hewan - specific routes BEFORE parameterized routes
+        $this->router->add("/api/hewan", function() :void {
+            $this->getHewan();
         });
         // Hewan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/hewan/tambah", function(): void {
@@ -106,6 +115,13 @@ class BACKEND{
             $this->getHewanById($id);
         });
         
+        // GET endpoints for penitipan - specific routes BEFORE parameterized routes
+        $this->router->add("/api/penitipan/jumlah", function(): void {
+            $this->getJumlahPenitipan();
+        });
+        $this->router->add("/api/penitipan/aktif", function(): void {
+            $this->getPenitipanAktif();
+        });
         // Penitipan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/penitipan/tambah", function(): void {
             $this->postTambahPenitipan();
@@ -120,26 +136,8 @@ class BACKEND{
         $this->router->add("/api/penitipan/{id}", function($id): void {
             $this->getPenitipanById($id);
         });
-        
-        //POST endpoints
-        $this->router->add("/api/auth/register", function(): void {
-            $this->postRegister();
-        });
-
-        $this->router->add("/api/auth/login", function(): void {
-            $this->postLogin();
-        });
-
-        // User routes - specific paths BEFORE parameterized {id}
-        $this->router->add("/api/user/update", function(): void {
-            $this->postUpdateUser();
-        });
-        $this->router->add("/api/user/delete", function(): void {
-            $this->deleteUser();
-        });
-        // Parameterized user route MUST come after specific routes
-        $this->router->add("/api/user/{id}", function($id): void {
-            $this->getUser($id);
+        $this->router->add("/api/penitipan", function(): void {
+            $this->getPenitipan();
         });
 
     }
