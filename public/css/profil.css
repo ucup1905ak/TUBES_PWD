@@ -165,6 +165,13 @@ body::before {
     flex-shrink: 0;
 }
 
+/* Atur supaya tombol upload berada di bawah foto */
+.profile-photo + #uploadPhotoBtn {
+    display: block;
+    margin-left: 4px;
+}
+
+
 .profile-userinfo {
     display: flex;
     flex-direction: column;
@@ -400,5 +407,22 @@ body::before {
         min-width: 90px;
         order: initial !important;
     }
+}
+
+#uploadPhotoBtn {
+    padding: 8px 16px;
+    background-color: #0F8A5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-top: 6px;
+}
+
+#uploadPhotoBtn:hover {
+    background-color: #0d6a47;
 }
 

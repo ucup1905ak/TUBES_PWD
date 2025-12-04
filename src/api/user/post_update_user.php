@@ -3,7 +3,6 @@
 function validateUpdateInput(array $input): array {
     $errors = [];
 
-    // All fields are optional for update, but if provided, validate them
     if (isset($input['nama_lengkap']) && strlen(trim($input['nama_lengkap'])) > 100) {
         $errors[] = 'Username must not exceed 100 characters.';
     }
@@ -20,10 +19,10 @@ function validateUpdateInput(array $input): array {
 }
 
 function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): array {
-    // Validate session token and get user
+
     include_once __DIR__ . '/../auth/get_me.php';
     $userResponse = getCurrentUser($DB_CONN, $sessionToken, false);
-    
+
     if ($userResponse['status'] !== 200) {
         return $userResponse;
     }
@@ -42,7 +41,7 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
         ];
     }
 
-    // Build dynamic update query based on provided fields
+    // Build dynamic update query
     $updateFields = [];
     $params = [];
     $types = '';
@@ -71,6 +70,29 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
         $types .= 's';
     }
 
+    // ===============================
+    // 🔥 Tambahan baru: Update Foto Profil
+    // ===============================
+    if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
+
+        // Validasi MIME
+        $allowed = ['image/jpeg', 'image/png'];
+        if (!in_array($_FILES['foto_profil']['type'], $allowed)) {
+            return [
+                'status' => 400,
+                'success' => false,
+                'error' => 'Invalid image format'
+            ];
+        }
+
+        // Ambil binary file
+        $imgData = file_get_contents($_FILES['foto_profil']['tmp_name']);
+
+        $updateFields[] = "foto_profil = ?";
+        $params[] = $imgData;
+        $types .= "b"; // blob
+    }
+
     if (empty($updateFields)) {
         return [
             'status' => 400,
@@ -79,13 +101,14 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
         ];
     }
 
-    // Add user ID to params
+    // Tambahkan ID user
     $params[] = $userId;
-    $types .= 'i';
+    $types .= "i";
 
+    // Query akhir
     $sql = 'UPDATE `User` SET ' . implode(', ', $updateFields) . ' WHERE id_user = ?';
-    
     $stmt = $DB_CONN->prepare($sql);
+
     if (!$stmt) {
         return [
             'status' => 500,
@@ -94,21 +117,30 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
         ];
     }
 
+    // Bind param
     $stmt->bind_param($types, ...$params);
-    
+
+    // Jika ada BLOB, kirim long_data
+    if (strpos($types, 'b') !== false) {
+        foreach ($params as $i => $param) {
+            if ($types[$i] === 'b') {
+                $stmt->send_long_data($i, $param);
+            }
+        }
+    }
+
     if (!$stmt->execute()) {
-        $error = $stmt->error;
         $stmt->close();
         return [
             'status' => 500,
             'success' => false,
-            'error' => 'Failed to update user: ' . $error
+            'error' => 'Failed to update user: ' . $stmt->error
         ];
     }
 
     $stmt->close();
 
-    // Fetch updated user data
+    // Fetch ulang user
     $updatedUserResponse = getCurrentUser($DB_CONN, $sessionToken, true);
 
     return [

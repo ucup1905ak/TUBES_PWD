@@ -319,4 +319,45 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+        // Upload Photo: buka file explorer
+    document.getElementById("uploadPhotoBtn").addEventListener("click", function () {
+        document.getElementById("photo-input").click();
+    });
+
+    // Upload Photo: ketika file dipilih
+    document.getElementById("photo-input").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("foto_profil", file);
+
+        // Agar backend tidak error, ikut kirim data lain (tetap nilai lama)
+        formData.append("nama_lengkap", userProfile.nama_lengkap || "");
+        formData.append("no_telp", userProfile.no_telp || "");
+        formData.append("alamat", userProfile.alamat || "");
+        formData.append("role", userProfile.role || "user");
+
+        fetch('/api/user/update', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + sessionToken
+                // ❗ JANGAN tambahkan Content-Type, FormData akan mengatur sendiri
+            },
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert('Foto profil berhasil diperbarui!');
+                fetchUserPhoto(true); // reload foto
+            } else {
+                alert('Gagal update foto: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(err => {
+            console.error("Upload error:", err);
+            alert("Terjadi kesalahan saat upload foto.");
+        });
+    });
 });
