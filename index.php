@@ -117,7 +117,7 @@ $router->add("/logout", function (): void {
 
 // Admin routes
 $router->add("/admin/users", function (): void {
-    readfile(__DIR__ . '/public/pages/users.xhtml');
+    readfile(__DIR__ . '/public/pages/all_user.xhtml');
     exit;
 });
 $router->add("/admin/layanan", function (): void {
@@ -128,8 +128,8 @@ $router->add("/admin/paket", function (): void {
     readfile(__DIR__ . '/public/pages/paket.xhtml');
     exit;
 });
-$router->add("/admin/penitipan", function (): void {
-    readfile(__DIR__ . '/public/pages/penitipan_admin.xhtml');
+$router->add("/admin/kelola", function (): void {
+    readfile(__DIR__ . '/public/pages/kelola.xhtml');
     exit;
 });
 $router->add("/help", function (): void {
