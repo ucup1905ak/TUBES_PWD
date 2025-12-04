@@ -36,8 +36,13 @@
         }
         
         var userName = document.getElementById('user-name');
+        var userAvatar = document.getElementById('user-avatar');
+        
         if (userName) {
           userName.textContent = user.nama_lengkap || 'Admin';
+        }
+        if (userAvatar && user.foto_profil) {
+          userAvatar.src = user.foto_profil;
         }
       }
     })
@@ -116,18 +121,6 @@
     });
   }
 
-  // Komentar: Inisialisasi sidebar toggle
-  function initSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    var toggleBtn = document.getElementById('toggleSidebar');
-    
-    if (toggleBtn && sidebar) {
-      toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('expanded');
-      });
-    }
-  }
-
   // Logout function
   function initLogout() {
     var logoutBtn = document.getElementById('logoutBtn');
@@ -144,7 +137,6 @@
   function init() {
     fetchUserData();
     fetchAllUsers();
-    initSidebar();
     initLogout();
   }
 

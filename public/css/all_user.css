@@ -34,8 +34,19 @@ body {
 
 .user-profile {
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
 }
 
 /* LAYOUT */
@@ -55,17 +66,12 @@ body {
     top: 60px;
     overflow: hidden;
     height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
 }
 
-.sidebar.expanded {
+.sidebar:hover {
     width: 220px;
-}
-
-.toggle-btn {
-    margin-left: 5px;
-    font-size: 20px;
-    padding: 10px 15px;
-    cursor: pointer;
 }
 
 .menu-list {
@@ -76,56 +82,53 @@ body {
 .menu-list li {
     display: flex;
     align-items: center;
-    padding: 14px 15px;
+    padding: 10px 12px;
     cursor: pointer;
     transition: background-color 0.2s;
+    gap: 12px;
 }
 
 .menu-list li:hover {
     background-color: #0C6B48;
 }
 
-/* Komentar: Styling untuk menu item yang aktif */
-.menu-list li.active-menu {
+.menu-list li.active {
     background-color: #0A5C47;
 }
 
-.icon {
-    font-size: 22px;
+.icon-img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .menu-text {
-    margin-left: 15px;
-    font-size: 16px;
-    display: none;
+    margin-left: 0px;
+    font-size: 14px;
     opacity: 0;
-    transform: translateX(-15px);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    max-width: 0;
+    overflow: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, max-width 0.3s ease;
     white-space: nowrap;
-    margin-left: 8px;
     display: inline-block;
 }
 
-/* Show text when expanded */
-.sidebar.expanded .menu-text {
-    display: inline;
+/* Show text when hover */
+.sidebar:hover .menu-text {
     opacity: 1;
+    max-width: 200px;
     transform: translateX(0);
 }
 
 /* CONTENT */
 .content {
     padding: 30px;
-    margin-left: 80px;
-    transition: margin-left 0.25s ease;
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 60px);
-}
-
-.sidebar.expanded ~ .content {
-    margin-left: 230px;
 }
 
 .page-title {
@@ -195,7 +198,7 @@ body {
 
 .sidebar-footer {
     margin-top: auto;
-    padding-top: 20px;
+    padding: 8px 12px;
 }
 
 .logout-btn {
@@ -203,11 +206,19 @@ body {
     background-color: #d62828;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 8px 6px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
     font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background-color: #c11414;
 }
 
 /* FOOTER */

@@ -14,8 +14,9 @@
         <div class="header">
             <h1 class="logo" onclick="location.href='/my'">PawHaven Admin</h1>
 
-            <div class="user-profile">
-                <span id="user-name" onclick="location.href='/profile'">Admin</span>
+            <div class="user-profile" onclick="location.href='/profile'">
+                <img id="user-avatar" src="/public/img/profile.png" alt="Profile" class="profile-img" />
+                <span id="user-name">Admin</span>
             </div>
         </div>
 
@@ -24,29 +25,31 @@
 
             <!-- SIDEBAR -->
             <div class="sidebar" id="sidebar">
-                <div class="toggle-btn" id="toggleSidebar">☰</div>
 
                 <ul class="menu-list">
 
                     <li onclick="location.href='/my'">
-                        <span class="icon">🏠</span>
+                        <img src="/public/img/home.png" alt="Home" class="icon-img" />
                         <span class="menu-text">Home</span>
                     </li>
 
                     <li onclick="location.href='/admin/users'">
-                        <span class="icon">👥</span>
+                        <img src="/public/img/peoples.png" alt="All Users" class="icon-img" />
                         <span class="menu-text">All User List</span>
                     </li>
 
-                    <li class="active-menu" onclick="location.href='/admin/kelola'">
-                        <span class="icon">⚙️</span>
+                    <li class="active" onclick="location.href='/admin/kelola'">
+                        <img src="/public/img/settings.png" alt="Kelola" class="icon-img" />
                         <span class="menu-text">Kelola Layanan & Paket</span>
                     </li>
 
                 </ul>
                 
                 <div class="sidebar-footer">
-                    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+                    <button class="logout-btn" id="logoutBtn">
+                        <img src="/public/img/log_out.png" alt="Logout" class="icon-img" />
+                        <span class="menu-text">Logout</span>
+                    </button>
                 </div>
             </div>
 

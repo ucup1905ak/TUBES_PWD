@@ -9,6 +9,34 @@
         return;
     }
 
+    // Fetch user data and display username
+    function fetchUserData() {
+        fetch('/api/auth/me', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.success && data.user) {
+                var user = data.user;
+                var userName = document.getElementById('user-name');
+                var userAvatar = document.getElementById('user-avatar');
+                
+                if (userName) {
+                    userName.textContent = user.nama_lengkap || 'Akun Saya';
+                }
+                if (userAvatar && user.foto_profil) {
+                    userAvatar.src = user.foto_profil;
+                }
+            }
+        })
+        .catch(function(error) {
+            console.error('Error fetching user data:', error);
+        });
+    }
+
     async function loadRiwayat() {
         try {
             const response = await fetch("/api/penitipan", {
@@ -68,6 +96,8 @@
         });
     }
 
+    // Initialize on page load
+    fetchUserData();
     loadRiwayat();
 
 })();

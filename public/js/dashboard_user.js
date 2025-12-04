@@ -94,12 +94,16 @@
         var user = data.user;
         var welcomeText = document.getElementById('welcome-text');
         var userName = document.getElementById('user-name');
+        var userAvatar = document.getElementById('user-avatar');
         
         if (welcomeText) {
           welcomeText.textContent = 'Halo ' + (user.nama_lengkap || 'User') + ' 👋';
         }
         if (userName) {
           userName.textContent = user.nama_lengkap || 'Akun Saya';
+        }
+        if (userAvatar && user.foto_profil) {
+          userAvatar.src = user.foto_profil;
         }
       }
     })
@@ -283,21 +287,6 @@
     });
   }
 
-  // Initialize sidebar toggle
-  function initSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    var toggleBtn = document.getElementById('toggleSidebar');
-    
-    if (toggleBtn && sidebar) {
-      toggleBtn.addEventListener('click', function() {
-        console.log('Toggle clicked');
-        sidebar.classList.toggle('expanded');
-      });
-    } else {
-      console.warn('Sidebar elements not found:', { sidebar: !!sidebar, toggleBtn: !!toggleBtn });
-    }
-  }
-
   // Initialize logout button
   function initLogout() {
     var logoutBtn = document.getElementById('logoutBtn');
@@ -318,7 +307,6 @@
     fetchUserData();
     fetchPenitipan();
     fetchPets();
-    initSidebar();
     initLogout();
   }
 
