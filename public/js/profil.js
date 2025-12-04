@@ -360,4 +360,35 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Terjadi kesalahan saat upload foto.");
         });
     });
+    // Delete Photo
+    document.getElementById("deletePhotoBtn").addEventListener("click", function () {
+      const yakin = confirm("Hapus foto profil?");
+      if (!yakin) return;
+
+      fetch('/api/user/update', {
+          method: 'POST',
+          headers: {
+              "Authorization": "Bearer " + sessionToken,
+              "Content-Type": "application/json"   // ❗ WAJIB, ini yang hilang sebelumnya
+          },
+          body: JSON.stringify({ hapus_foto: 1 })
+      })
+      .then(res => res.json())
+      .then(data => {
+          if (data.success) {
+              alert("Foto profil berhasil dihapus!");
+
+              // Reset foto di UI
+              profilePhotoDataUrl = null;
+              userProfile.has_foto_profil = false;
+              updateProfilePhoto();
+          } else {
+              alert("Gagal menghapus foto: " + (data.error || "Unknown error"));
+          }
+      })
+      .catch(err => {
+          console.error("Delete error:", err);
+          alert("Terjadi kesalahan saat menghapus foto.");
+      });
+  });
 });

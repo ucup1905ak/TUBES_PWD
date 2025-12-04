@@ -426,3 +426,47 @@ body::before {
     background-color: #0d6a47;
 }
 
+#deletePhotoBtn {
+    background-color: #d62828;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+#deletePhotoBtn:hover {
+    background-color: #b81f1f;
+}
+
+.profile-photo-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.profile-photo-group .btn {
+    width: 120px;
+    text-align: center;
+}
+
+.green-btn {
+    background-color: #0F8A5F;
+    color: white;
+}
+
+.green-btn:hover {
+    background-color: #0d6a47;
+}
+
+.red-btn {
+    background-color: #d62828;
+    color: white;
+}
+
+.red-btn:hover {
+    background-color: #b81f1f;
+}
+

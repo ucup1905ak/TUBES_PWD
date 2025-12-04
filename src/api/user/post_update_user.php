@@ -20,6 +20,14 @@ function validateUpdateInput(array $input): array {
 
 function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): array {
 
+    $raw = file_get_contents("php://input");
+    if (!empty($raw)) {
+        $json = json_decode($raw, true);
+        if (is_array($json)) {
+            $input = array_merge($input, $json);
+        }
+    }
+
     include_once __DIR__ . '/../auth/get_me.php';
     $userResponse = getCurrentUser($DB_CONN, $sessionToken, false);
 
@@ -70,9 +78,10 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
         $types .= 's';
     }
 
-    // ===============================
-    // 🔥 Tambahan baru: Update Foto Profil
-    // ===============================
+    if (isset($input['hapus_foto']) && $input['hapus_foto'] == 1) {
+        $updateFields[] = "foto_profil = NULL";
+    }
+
     if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
 
         // Validasi MIME
