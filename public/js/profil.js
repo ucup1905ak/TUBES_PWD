@@ -199,7 +199,7 @@ function toggleEditMode(enable) {
         saveBtn.style.display = 'inline-block';
         cancelBtn.style.display = 'inline-block';
 
-        // Komentar: Populate input fields dengan nilai saat ini
+        // Populate input fields dengan nilai saat ini
         document.getElementById('username-input').value = userProfile.nama_lengkap || '';
         document.getElementById('notelp-input').value = userProfile.no_telp || '';
         document.getElementById('alamat-input').value = userProfile.alamat || '';
@@ -260,31 +260,18 @@ function saveProfile() {
     });
 }
 
-// Komentar: Inisialisasi sidebar toggle
-function initSidebar() {
-  var sidebar = document.getElementById('sidebar');
-  var toggleBtn = document.getElementById('toggleSidebar');
-  
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', function() {
-      sidebar.classList.toggle('expanded');
-    });
-  }
-}
-
-// Komentar: Gelapkan background username saat di halaman profil
-function initProfileHeader() {
-  var userProfile = document.querySelector('.user-profile');
-  if (userProfile) {
-    userProfile.classList.add('active');
+// Komentar: Inisialisasi profile page
+function initProfilePage() {
+  var userProfileHeader = document.querySelector('.user-profile');
+  if (userProfileHeader) {
+    userProfileHeader.classList.add('active');
   }
 }
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
     fetchUserProfile();
-    initSidebar();
-    initProfileHeader();
+    initProfilePage();
 
     // Edit button
     document.getElementById("editBtn").addEventListener("click", function() {
@@ -299,13 +286,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cancel button
     document.getElementById("cancelBtn").addEventListener("click", function() {
         toggleEditMode(false);
-    });
-
-    // Logout button
-    document.getElementById("logoutBtn").addEventListener("click", function() {
-        if (confirm("Yakin ingin logout?")) {
-            window.location.href = '/logout';
-        }
     });
 
     // Delete account button
