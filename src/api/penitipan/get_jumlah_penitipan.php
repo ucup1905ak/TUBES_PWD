@@ -64,9 +64,9 @@ function handleGetPenitipan(mysqli $DB_CONN, string $sessionToken, ?int $penitip
                 p.total_biaya,
                 p.durasi,
                 p.status_penitipan,
-                pet.nama_pet,
-                pet.jenis_pet,
-                pet.ras
+                pet.nama_pet AS nama_pet,
+                pet.jenis_pet AS jenis_pet,
+                pet.ras AS ras
             FROM Penitipan p
             LEFT JOIN Pet pet ON pet.id_pet = p.id_pet
             WHERE p.id_penitipan = ? AND p.id_user = ?
@@ -105,9 +105,9 @@ function handleGetPenitipan(mysqli $DB_CONN, string $sessionToken, ?int $penitip
             p.total_biaya,
             p.durasi,
             p.status_penitipan,
-            pet.nama_pet,
-            pet.jenis_pet,
-            pet.ras
+            pet.nama_pet AS nama_pet,
+            pet.jenis_pet AS jenis_pet,
+            pet.ras AS ras
         FROM Penitipan p
         LEFT JOIN Pet pet ON pet.id_pet = p.id_pet
         WHERE p.id_user = ?

@@ -114,7 +114,7 @@
 
   // Fetch and display penitipan
   function fetchPenitipan() {
-    fetch('/api/penitipan', {
+    fetch('/api/penitipan/aktif', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + sessionToken,
