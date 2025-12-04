@@ -56,12 +56,14 @@ function handleGetPenitipan(mysqli $DB_CONN, string $sessionToken, ?int $penitip
         $stmt = $DB_CONN->prepare('
             SELECT 
                 p.id_penitipan,
+                p.id_pet,
                 p.tgl_checkin,
                 p.tgl_checkout,
                 p.nama_paket,
                 p.layanan,
                 p.total_biaya,
                 p.durasi,
+                p.status_penitipan,
                 pet.nama_pet,
                 pet.jenis_pet,
                 pet.ras
@@ -95,12 +97,14 @@ function handleGetPenitipan(mysqli $DB_CONN, string $sessionToken, ?int $penitip
     $sql = '
         SELECT 
             p.id_penitipan,
+            p.id_pet,
             p.tgl_checkin,
             p.tgl_checkout,
             p.nama_paket,
             p.layanan,
             p.total_biaya,
             p.durasi,
+            p.status_penitipan,
             pet.nama_pet,
             pet.jenis_pet,
             pet.ras
