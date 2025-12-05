@@ -291,6 +291,10 @@ body::before {
 .delete-btn:hover {
     background-color: #b81f1f;
 }
+.delete-btn.hidden,
+.edit-mode ~ .delete-btn {
+    display: none;
+}
 
 .btn {
     padding: 10px 22px;
@@ -314,6 +318,7 @@ body::before {
     background-color: #28a745;
     color: white;
     order: 3;
+    margin-right: auto;
 }
 .save-btn:hover {
     background-color: #218838;

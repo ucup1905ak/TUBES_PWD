@@ -202,6 +202,7 @@ function toggleEditMode(enable) {
     const editBtn = document.getElementById('editBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
 
     if (enable) {
         // Switch to edit mode
@@ -210,6 +211,7 @@ function toggleEditMode(enable) {
         editBtn.style.display = 'none';
         saveBtn.style.display = 'inline-block';
         cancelBtn.style.display = 'inline-block';
+        if (deleteBtn) deleteBtn.style.display = 'none';
 
         // Populate input fields dengan nilai saat ini
         document.getElementById('username-input').value = userProfile.nama_lengkap || '';
@@ -223,6 +225,7 @@ function toggleEditMode(enable) {
         editBtn.style.display = 'inline-block';
         saveBtn.style.display = 'none';
         cancelBtn.style.display = 'none';
+        if (deleteBtn) deleteBtn.style.display = 'flex';
     }
 }
 
