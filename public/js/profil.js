@@ -183,6 +183,7 @@ function fetchUserPhoto(forceReload) {
           }
         }
         updateProfilePhoto();
+        updatePhotoButtonLabel();
       }
     })
     .catch(function(error) {
