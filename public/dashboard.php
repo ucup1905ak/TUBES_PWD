@@ -110,24 +110,16 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
                     const user = data.user;
                     const role = user.role || 'user';
                     
-                    // Load dashboard content based on user role
-                    const dashboardPath = role === 'admin' ? '/pages/dashboard_admin.xhtml' : '/pages/dashboard_user.xhtml';
+                    // Store token in cookie for server-side access
+                    const expiresAt = localStorage.getItem('session_expires_at');
+                    if (expiresAt) {
+                        const expires = new Date(expiresAt);
+                        document.cookie = `session_token=${sessionToken}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+                    }
                     
-                    fetch(dashboardPath)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Failed to load dashboard');
-                            }
-                            return response.text();
-                        })
-                        .then(html => {
-                            // Replace entire page content with dashboard
-                            document.documentElement.innerHTML = html;
-                        })
-                        .catch(error => {
-                            console.error('Error loading dashboard:', error);
-                            window.location.href = '/login';
-                        });
+                    // Redirect to appropriate dashboard based on user role
+                    const dashboardPath = role === 'admin' ? '/admin' : '/my';
+                    window.location.href = dashboardPath;
                 } else {
                     // Session invalid, redirect to login
                     console.error('Failed to load user data:', data.error);

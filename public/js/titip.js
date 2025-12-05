@@ -316,18 +316,104 @@
     // ======================
     // HARGA KAMAR + LAYANAN
     // ======================
-    const hargaKamar = {
+    let hargaKamar = {
         reguler: 25000,
         premium: 35000,
         vip: 50000
     };
 
-
-    const hargaLayanan = {
+    let hargaLayanan = {
         grooming: 40000,
         spa: 75000,
         kuku: 15000
     };
+    
+    // Fetch packages and services from API
+    function loadPaketAndLayanan() {
+        // Fetch packages
+        fetch('/api/paket', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.paket && data.paket.length > 0) {
+                const kamarSelect = document.getElementById('kamar');
+                if (kamarSelect) {
+                    // Clear existing options except the first (placeholder)
+                    kamarSelect.innerHTML = '<option value="">-- Pilih kamar --</option>';
+                    
+                    // Reset price map
+                    hargaKamar = {};
+                    
+                    // Add options from database
+                    data.paket.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.nama_paket.toLowerCase();
+                        opt.textContent = p.nama_paket + ' - Rp ' + p.harga_per_hari.toLocaleString('id-ID') + '/hari';
+                        kamarSelect.appendChild(opt);
+                        
+                        // Store price
+                        hargaKamar[p.nama_paket.toLowerCase()] = p.harga_per_hari;
+                    });
+                }
+            }
+        })
+        .catch(err => console.warn('Could not load packages:', err));
+        
+        // Fetch services
+        fetch('/api/layanan', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.layanan && data.layanan.length > 0) {
+                const layananContainer = document.querySelector('.input-group label:contains("Layanan Tambahan")');
+                let targetDiv = layananContainer ? layananContainer.parentElement : null;
+                
+                // Find the div containing checkboxes
+                if (!targetDiv) {
+                    const labels = Array.from(document.querySelectorAll('.input-group label'));
+                    for (let lbl of labels) {
+                        if (lbl.textContent.includes('Layanan Tambahan')) {
+                            targetDiv = lbl.parentElement;
+                            break;
+                        }
+                    }
+                }
+                
+                if (targetDiv) {
+                    // Remove existing checkbox options
+                    targetDiv.querySelectorAll('.checkbox-option').forEach(el => el.remove());
+                    
+                    // Reset price map
+                    hargaLayanan = {};
+                    
+                    // Add checkboxes from database
+                    data.layanan.forEach(l => {
+                        const label = document.createElement('label');
+                        label.className = 'checkbox-option';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'layanan';
+                        checkbox.value = l.nama_layanan.toLowerCase().replace(/\s+/g, '_');
+                        checkbox.addEventListener('change', updateUI);
+                        
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(' ' + l.nama_layanan + ' - Rp ' + l.harga.toLocaleString('id-ID')));
+                        
+                        targetDiv.appendChild(label);
+                        
+                        // Store price
+                        hargaLayanan[checkbox.value] = l.harga;
+                    });
+                }
+            }
+        })
+        .catch(err => console.warn('Could not load services:', err));
+    }
 
     function getSelectedLayanan() {
         const layananList = [];
@@ -437,13 +523,16 @@
             toggleNewPetFields(this.value === 'new');
         });
 
+        // Load packages and services from database
+        loadPaketAndLayanan();
+
         // EVENT REALTIME HITUNG
         document.getElementById('tgl_checkin').addEventListener('change', updateUI);
         document.getElementById('tgl_checkout').addEventListener('change', updateUI);
         document.getElementById('kamar')?.addEventListener('change', updateUI);
-        document.querySelectorAll('.layanan').forEach(l => {
-            l.addEventListener('change', updateUI);
-        });
+        
+        // Note: layanan checkboxes will be dynamically added by loadPaketAndLayanan
+        // so we don't need to add listeners here
 
         document.getElementById('titipForm').addEventListener('submit', handleSubmit);
         updateUI();

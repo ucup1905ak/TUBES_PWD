@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PawHaven - Admin Dashboard</title>
-  <link rel="stylesheet" href="/public/css/dashboard_admin.css" />
+  <link rel="stylesheet" href="/static/css/dashboard_admin.css" />
 </head>
 
 <body>
@@ -22,21 +22,21 @@
     <div class="sidebar" id="sidebar">
       <ul class="menu-list">
         <li class="active" onclick="location.href='/my'">
-          <img src="/public/img/home.png" alt="Home" class="icon-img" />
+          <img src="/static/img/home.png" alt="Home" class="icon-img" />
           <span class="menu-text">Home</span>
         </li>
         <li onclick="location.href='/admin/users'">
-          <img src="/public/img/peoples.png" alt="All Users" class="icon-img" />
-          <span class="menu-text">All User List</span>
+          <img src="/static/img/peoples.png" alt="All Users" class="icon-img" />
+          <span class="menu-text">All Users</span>
         </li>
         <li onclick="location.href='/admin/kelola'">
-          <img src="/public/img/settings.png" alt="Kelola" class="icon-img" />
+          <img src="/static/img/settings.png" alt="Kelola" class="icon-img" />
           <span class="menu-text">Kelola Layanan & Paket</span>
         </li>
       </ul>
       <div class="sidebar-footer">
         <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
-          <img src="/public/img/log_out.png" alt="Logout" class="icon-img" />
+          <img src="/static/img/log_out.png" alt="Logout" class="icon-img" />
           <span class="menu-text">Logout</span>
         </button>
       </div>
@@ -83,6 +83,6 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="/public/js/dashboard_admin.js"></script>
+  <script type="text/javascript" src="/static/js/dashboard_admin.js"></script>
 </body>
 </html>

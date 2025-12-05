@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
         <title>PawHaven - Dashboard</title>
-        <link rel="stylesheet" href="/public/css/dashboard_user.css" />
+        <link rel="stylesheet" href="/static/css/dashboard_user.css" />
     </head>
 
     <body>
@@ -14,8 +14,8 @@
             <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
 
             <div class="user-profile" onclick="location.href='/profile'">
-                <img id="user-avatar" src="/public/img/profile.png" alt="Profile" class="profile-img" />
-                <span id="user-name"></span>
+                <img id="user-avatar" src="/static/img/profile.png" alt="Profile" class="profile-img" />
+                <span id="user-name">User</span>
             </div>
         </div>
 
@@ -28,24 +28,24 @@
                 <ul class="menu-list">
 
                     <li class="active" onclick="location.href='/my'">
-                        <img src="/public/img/home.png" alt="Home" class="icon-img" />
+                        <img src="/static/img/home.png" alt="Home" class="icon-img" />
                         <span class="menu-text">Home Dashboard</span>
                     </li>
 
                     <li onclick="location.href='/titip'">
-                        <img src="/public/img/paw.png" alt="Titip Hewan" class="icon-img" />
+                        <img src="/static/img/paw.png" alt="Titip Hewan" class="icon-img" />
                         <span class="menu-text">Titip Hewan</span>
                     </li>
 
                     <li onclick="location.href='/riwayat'">
-                        <img src="/public/img/history.png" alt="Riwayat" class="icon-img" />
+                        <img src="/static/img/history.png" alt="Riwayat" class="icon-img" />
                         <span class="menu-text">Riwayat</span>
                     </li>
                 </ul>
                 
                 <div class="sidebar-footer">
                     <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
-                        <img src="/public/img/log_out.png" alt="Logout" class="icon-img" />
+                        <img src="/static/img/log_out.png" alt="Logout" class="icon-img" />
                         <span class="menu-text">Logout</span>
                     </button>
                 </div>
@@ -96,6 +96,6 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="/public/js/dashboard_user.js"></script>
+        <script type="text/javascript" src="/static/js/dashboard_user.js"></script>
     </body>
 </html>

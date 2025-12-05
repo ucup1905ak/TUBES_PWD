@@ -122,6 +122,38 @@ class BACKEND{
         $this->router->add("/api/penitipan/aktif", function(): void {
             $this->getPenitipanAktif();
         });
+        
+        // Admin endpoints
+        $this->router->add("/api/admin/dashboard", function(): void {
+            $this->getAdminDashboardStats();
+        });
+        
+        $this->router->add("/api/admin/users", function(): void {
+            $this->getAdminUsers();
+        });
+        
+        $this->router->add("/api/admin/layanan", function(): void {
+            $this->getAdminLayanan();
+        });
+        
+        $this->router->add("/api/admin/paket", function(): void {
+            $this->getAdminPaket();
+        });
+        
+        // Paket and Layanan endpoints (public, no auth required)
+        $this->router->add("/api/paket", function(): void {
+            $this->getPaket();
+        });
+        $this->router->add("/api/paket/tambah", function(): void {
+            $this->postTambahPaket();
+        });
+        $this->router->add("/api/layanan", function(): void {
+            $this->getLayanan();
+        });
+        $this->router->add("/api/layanan/tambah", function(): void {
+            $this->postTambahLayanan();
+        });
+        
         // Penitipan routes - specific paths BEFORE parameterized {id}
         $this->router->add("/api/penitipan/tambah", function(): void {
             $this->postTambahPenitipan();
@@ -229,8 +261,6 @@ class BACKEND{
     }
     
     private function getPenitipanAktif() {
-        include_once __DIR__ . '/penitipan/get_jumlah_penitipan.php';
-        
         $sessionToken = $this->getSessionToken();
         if (empty($sessionToken)) {
             http_response_code(401);
@@ -238,9 +268,8 @@ class BACKEND{
             exit;
         }
         
-        $response = handleGetPenitipanAktif($this->DB_CONN, $sessionToken);
-        http_response_code($response['status']);
-        echo json_encode($response);
+        $GLOBALS['session_token'] = $sessionToken;
+        include __DIR__ . '/penitipan/get_penitipan_aktif.php';
         exit;
     }
     
@@ -610,6 +639,160 @@ class BACKEND{
         http_response_code(200);
         echo json_encode(['status' => 200, 'success' => true, 'message' => 'Account deleted successfully.']);
         exit;
+    }
+    
+    private function getAdminDashboardStats(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        // Get current user
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        // Set globals for the stats API
+        $GLOBALS['user'] = $userResponse['user'];
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
+        
+        include __DIR__ . '/admin/get_dashboard_stats.php';
+        exit;
+    }
+    
+    private function getAdminUsers(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        // Get current user
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        // Set globals for the users API
+        $GLOBALS['user'] = $userResponse['user'];
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
+        
+        include __DIR__ . '/admin/get_users.php';
+        exit;
+    }
+    
+    private function getAdminLayanan(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        // Get current user and verify admin
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        if ($userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        // Fetch all layanan
+        $stmt = $this->DB_CONN->prepare('SELECT id_layanan, nama_layanan, deskripsi, harga FROM Layanan ORDER BY id_layanan ASC');
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Database error']);
+            exit;
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $layanan = [];
+        while ($row = $result->fetch_assoc()) {
+            $layanan[] = $row;
+        }
+        $stmt->close();
+        
+        http_response_code(200);
+        echo json_encode(['status' => 200, 'success' => true, 'layanan' => $layanan]);
+        exit;
+    }
+    
+    private function getAdminPaket(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        // Get current user and verify admin
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        if ($userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        // Fetch all paket
+        $stmt = $this->DB_CONN->prepare('SELECT id_paket, nama_paket, deskripsi, harga_per_hari as harga FROM Paket_Kamar ORDER BY id_paket ASC');
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Database error']);
+            exit;
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $paket = [];
+        while ($row = $result->fetch_assoc()) {
+            $paket[] = $row;
+        }
+        $stmt->close();
+        
+        http_response_code(200);
+        echo json_encode(['status' => 200, 'success' => true, 'paket' => $paket]);
+        exit;
+    }
+    
+    private function getPaket(): void {
+        include_once __DIR__ . '/paket/get_paket.php';
+    }
+    
+    private function postTambahPaket(): void {
+        include_once __DIR__ . '/paket/post_tambah_paket.php';
+    }
+    
+    private function getLayanan(): void {
+        include_once __DIR__ . '/layanan/get_layanan.php';
+    }
+    
+    private function postTambahLayanan(): void {
+        include_once __DIR__ . '/layanan/post_tambah_layanan.php';
     }
 
 }

@@ -103,8 +103,25 @@
         if (userName) {
           userName.textContent = user.nama_lengkap || 'Akun Saya';
         }
-        if (userAvatar && user.foto_profil) {
-          userAvatar.src = user.foto_profil;
+        
+        // Fetch profile picture separately if available
+        if (userAvatar && user.has_foto_profil) {
+          fetch('/api/auth/me/photo', {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + sessionToken,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(photoData) {
+            if (photoData.success && photoData.foto_profil) {
+              userAvatar.src = 'data:image/jpeg;base64,' + photoData.foto_profil;
+            }
+          })
+          .catch(function(err) {
+            console.warn('Could not load profile picture:', err);
+          });
         }
       }
     })
