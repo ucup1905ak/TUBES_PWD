@@ -95,6 +95,7 @@ function fetchUserProfile() {
         profilePhotoDataUrl = null;
         displayUserProfile();
         updateProfilePhoto();
+        updatePhotoButtonLabel();
         if (userProfile.has_foto_profil) {
           fetchUserPhoto();
         }
@@ -129,20 +130,30 @@ function displayUserProfile() {
 }
 
 function updateProfilePhoto() {
-  const photo = document.getElementById('photo');
-  if (!photo) return;
+    const photo = document.getElementById('photo');
+    if (!photo) return;
 
-  if (profilePhotoDataUrl) {
-    photo.style.backgroundImage = `url('${profilePhotoDataUrl}')`;
-    return;
-  }
+    if (profilePhotoDataUrl) {
+        photo.style.backgroundImage = `url('${profilePhotoDataUrl}')`;
+    } else {
+        photo.style.backgroundImage = "url('https://via.placeholder.com/250')";
+    }
 
-  if (userProfile && userProfile.has_foto_profil) {
-    photo.style.backgroundImage = "url('https://via.placeholder.com/250?text=Loading...')";
-  } else {
-    photo.style.backgroundImage = "url('https://via.placeholder.com/250')";
-  }
+    updatePhotoButtonLabel();   // ⬅ Tambahkan ini
 }
+
+function updatePhotoButtonLabel() {
+    const btn = document.getElementById("uploadPhotoBtn");
+
+    if (!btn) return;
+
+    if (userProfile && userProfile.has_foto_profil) {
+        btn.textContent = "Ganti Foto";
+    } else {
+        btn.textContent = "Tambah Foto";
+    }
+}
+
 
 function fetchUserPhoto(forceReload) {
   if (!userProfile || (!forceReload && (isPhotoLoading || profilePhotoDataUrl))) {
