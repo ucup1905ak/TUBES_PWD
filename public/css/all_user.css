@@ -14,7 +14,7 @@ body {
 /* HEADER */
 .header {
     height: 60px;
-    background-color: #0F8A5F;
+    background-color: #2F6F4F;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,7 +58,7 @@ body {
 .sidebar {
     width: 70px;
     color: white;
-    background-color: #0F8A5F;
+    background-color: #2F6F4F;
     border-right: 1px solid white;
     padding-top: 20px;
     transition: width 0.25s;
