@@ -246,14 +246,10 @@ function saveProfile() {
     .then(function(data) {
       if (data.success) {
         userProfile = data.user;
-        if (userProfile) {
-          if (userProfile.foto_profil) {
-            profilePhotoDataUrl = `data:image/jpeg;base64,${userProfile.foto_profil}`;
-            userProfile.has_foto_profil = true;
-          } else {
-            profilePhotoDataUrl = null;
-          }
-          delete userProfile.foto_profil;
+        if (userProfile && userProfile.has_foto_profil) {
+            fetchUserPhoto(true);   // reload foto dari endpoint khusus
+        }else{
+            profilePhotoDataUrl = null; // tidak ada foto → placeholder
         }
         displayUserProfile();
         updateProfilePhoto();

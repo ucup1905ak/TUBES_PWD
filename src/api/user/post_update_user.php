@@ -152,10 +152,26 @@ function handleUpdateUser(mysqli $DB_CONN, string $sessionToken, array $input): 
     // Fetch ulang user
     $updatedUserResponse = getCurrentUser($DB_CONN, $sessionToken, true);
 
+    if ($updatedUserResponse['status'] === 200) {
+        $updatedUser = $updatedUserResponse['user'];
+
+        // Tentukan apakah foto ada
+        $updatedUser['has_foto_profil'] = !empty($updatedUser['foto_profil']);
+
+        // Jangan kirim foto base64 ke FE supaya ringan
+        unset($updatedUser['foto_profil']);
+
+        return [
+            'status' => 200,
+            'success' => true,
+            'message' => 'User updated successfully.',
+            'user' => $updatedUser
+        ];
+    }
+
     return [
-        'status' => 200,
-        'success' => true,
-        'message' => 'User updated successfully.',
-        'user' => $updatedUserResponse['user'] ?? null
+        'status' => 500,
+        'success' => false,
+        'error' => 'Failed to fetch updated user.'
     ];
 }
