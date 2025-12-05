@@ -133,11 +133,35 @@ class BACKEND{
         });
         
         $this->router->add("/api/admin/layanan", function(): void {
-            $this->getAdminLayanan();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $this->createAdminLayanan();
+            } else {
+                $this->getAdminLayanan();
+            }
+        });
+        
+        $this->router->add("/api/admin/layanan/{id}", function($id): void {
+            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                $this->deleteAdminLayanan($id);
+            } else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                $this->updateAdminLayanan($id);
+            }
         });
         
         $this->router->add("/api/admin/paket", function(): void {
-            $this->getAdminPaket();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $this->createAdminPaket();
+            } else {
+                $this->getAdminPaket();
+            }
+        });
+        
+        $this->router->add("/api/admin/paket/{id}", function($id): void {
+            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                $this->deleteAdminPaket($id);
+            } else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                $this->updateAdminPaket($id);
+            }
         });
         
         // Paket and Layanan endpoints (public, no auth required)
@@ -269,6 +293,7 @@ class BACKEND{
         }
         
         $GLOBALS['session_token'] = $sessionToken;
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
         include __DIR__ . '/penitipan/get_penitipan_aktif.php';
         exit;
     }
@@ -780,6 +805,7 @@ class BACKEND{
     }
     
     private function getPaket(): void {
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
         include_once __DIR__ . '/paket/get_paket.php';
     }
     
@@ -788,11 +814,244 @@ class BACKEND{
     }
     
     private function getLayanan(): void {
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
         include_once __DIR__ . '/layanan/get_layanan.php';
     }
     
     private function postTambahLayanan(): void {
         include_once __DIR__ . '/layanan/post_tambah_layanan.php';
+    }
+    
+    // CRUD methods for admin layanan
+    private function createAdminLayanan(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $nama = $input['nama_layanan'] ?? '';
+        $deskripsi = $input['deskripsi'] ?? '';
+        $harga = $input['harga'] ?? 0;
+        
+        if (empty($nama) || empty($deskripsi)) {
+            http_response_code(400);
+            echo json_encode(['status' => 400, 'success' => false, 'error' => 'Nama dan deskripsi harus diisi']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('INSERT INTO Layanan (nama_layanan, deskripsi, harga) VALUES (?, ?, ?)');
+        $stmt->bind_param('ssd', $nama, $deskripsi, $harga);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(201);
+            echo json_encode(['status' => 201, 'success' => true, 'message' => 'Layanan berhasil ditambahkan']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal menambahkan layanan']);
+        }
+        exit;
+    }
+    
+    private function updateAdminLayanan($id): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $nama = $input['nama_layanan'] ?? '';
+        $deskripsi = $input['deskripsi'] ?? '';
+        $harga = $input['harga'] ?? 0;
+        
+        if (empty($nama) || empty($deskripsi)) {
+            http_response_code(400);
+            echo json_encode(['status' => 400, 'success' => false, 'error' => 'Nama dan deskripsi harus diisi']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('UPDATE Layanan SET nama_layanan = ?, deskripsi = ?, harga = ? WHERE id_layanan = ?');
+        $stmt->bind_param('ssdi', $nama, $deskripsi, $harga, $id);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(200);
+            echo json_encode(['status' => 200, 'success' => true, 'message' => 'Layanan berhasil diupdate']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal mengupdate layanan']);
+        }
+        exit;
+    }
+    
+    private function deleteAdminLayanan($id): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('DELETE FROM Layanan WHERE id_layanan = ?');
+        $stmt->bind_param('i', $id);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(200);
+            echo json_encode(['status' => 200, 'success' => true, 'message' => 'Layanan berhasil dihapus']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal menghapus layanan']);
+        }
+        exit;
+    }
+    
+    // CRUD methods for admin paket
+    private function createAdminPaket(): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $nama = $input['nama_paket'] ?? '';
+        $deskripsi = $input['deskripsi'] ?? '';
+        $harga = $input['harga'] ?? 0;
+        
+        if (empty($nama) || empty($deskripsi)) {
+            http_response_code(400);
+            echo json_encode(['status' => 400, 'success' => false, 'error' => 'Nama dan deskripsi harus diisi']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('INSERT INTO Paket_Kamar (nama_paket, deskripsi, harga_per_hari) VALUES (?, ?, ?)');
+        $stmt->bind_param('ssd', $nama, $deskripsi, $harga);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(201);
+            echo json_encode(['status' => 201, 'success' => true, 'message' => 'Paket berhasil ditambahkan']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal menambahkan paket']);
+        }
+        exit;
+    }
+    
+    private function updateAdminPaket($id): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $input = $this->getInput();
+        $nama = $input['nama_paket'] ?? '';
+        $deskripsi = $input['deskripsi'] ?? '';
+        $harga = $input['harga'] ?? 0;
+        
+        if (empty($nama) || empty($deskripsi)) {
+            http_response_code(400);
+            echo json_encode(['status' => 400, 'success' => false, 'error' => 'Nama dan deskripsi harus diisi']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('UPDATE Paket_Kamar SET nama_paket = ?, deskripsi = ?, harga_per_hari = ? WHERE id_paket = ?');
+        $stmt->bind_param('ssdi', $nama, $deskripsi, $harga, $id);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(200);
+            echo json_encode(['status' => 200, 'success' => true, 'message' => 'Paket berhasil diupdate']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal mengupdate paket']);
+        }
+        exit;
+    }
+    
+    private function deleteAdminPaket($id): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'success' => false, 'error' => 'Authorization required']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200 || $userResponse['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['status' => 403, 'success' => false, 'error' => 'Admin access required']);
+            exit;
+        }
+        
+        $stmt = $this->DB_CONN->prepare('DELETE FROM Paket_Kamar WHERE id_paket = ?');
+        $stmt->bind_param('i', $id);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
+            http_response_code(200);
+            echo json_encode(['status' => 200, 'success' => true, 'message' => 'Paket berhasil dihapus']);
+        } else {
+            $stmt->close();
+            http_response_code(500);
+            echo json_encode(['status' => 500, 'success' => false, 'error' => 'Gagal menghapus paket']);
+        }
+        exit;
     }
 
 }

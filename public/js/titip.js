@@ -369,17 +369,13 @@
         .then(res => res.json())
         .then(data => {
             if (data.success && data.layanan && data.layanan.length > 0) {
-                const layananContainer = document.querySelector('.input-group label:contains("Layanan Tambahan")');
-                let targetDiv = layananContainer ? layananContainer.parentElement : null;
-                
-                // Find the div containing checkboxes
-                if (!targetDiv) {
-                    const labels = Array.from(document.querySelectorAll('.input-group label'));
-                    for (let lbl of labels) {
-                        if (lbl.textContent.includes('Layanan Tambahan')) {
-                            targetDiv = lbl.parentElement;
-                            break;
-                        }
+                // Find the layanan container by searching through labels
+                let targetDiv = null;
+                const labels = Array.from(document.querySelectorAll('.input-group label'));
+                for (let lbl of labels) {
+                    if (lbl.textContent.includes('Layanan Tambahan')) {
+                        targetDiv = lbl.parentElement;
+                        break;
                     }
                 }
                 
