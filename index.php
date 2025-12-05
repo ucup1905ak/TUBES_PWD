@@ -250,6 +250,15 @@ $router->add("/admin/kelola", function (): void {
     readfile(__DIR__ . '/public/pages/kelola.xhtml');
     exit;
 });
+$router->add("/admin/detail", function (): void {
+    $user = validateSession(true);
+    if (!$user) {
+        header('Location: /login');
+        exit;
+    }
+    readfile(__DIR__ . '/public/pages/detail_user.xhtml');
+    exit;
+});
 $router->add("/help", function (): void {
     readfile(__DIR__ . '/public/pages/help.xhtml');
     exit;

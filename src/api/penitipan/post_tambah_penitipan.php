@@ -336,8 +336,8 @@ function handleDeletePenitipan(mysqli $DB_CONN, string $sessionToken, int $penit
 
     $userId = $userResponse['user']['id_user'];
 
-    // Delete only if owned by user
-    $stmt = $DB_CONN->prepare("DELETE FROM Penitipan WHERE id_penitipan = ? AND id_user = ?");
+    // Soft delete: mark as cancelled and set deleted_at timestamp
+    $stmt = $DB_CONN->prepare("UPDATE Penitipan SET status = 'cancelled', deleted_at = CURRENT_TIMESTAMP WHERE id_penitipan = ? AND id_user = ?");
     if (!$stmt) {
         return ['status' => 500, 'success' => false, 'error' => 'Database error'];
     }
@@ -346,10 +346,10 @@ function handleDeletePenitipan(mysqli $DB_CONN, string $sessionToken, int $penit
     $stmt->execute();
 
     if ($stmt->affected_rows === 0) {
-        return ['status' => 404, 'success' => false, 'error' => 'Penitipan not found'];
+        return ['status' => 404, 'success' => false, 'error' => 'Penitipan not found or already deleted'];
     }
 
     $stmt->close();
-    return ['status' => 200, 'success' => true, 'message' => 'Penitipan deleted successfully'];
+    return ['status' => 200, 'success' => true, 'message' => 'Penitipan cancelled and moved to history'];
 }
 

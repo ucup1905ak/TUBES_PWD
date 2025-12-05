@@ -132,6 +132,14 @@ class BACKEND{
             $this->getAdminUsers();
         });
         
+        $this->router->add("/api/admin/user/{id}/penitipan", function($id): void {
+            $this->getAdminUserPenitipan($id);
+        });
+        
+        $this->router->add("/api/admin/user/{id}/pets", function($id): void {
+            $this->getAdminUserPets($id);
+        });
+        
         $this->router->add("/api/admin/layanan", function(): void {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $this->createAdminLayanan();
@@ -713,6 +721,54 @@ class BACKEND{
         $GLOBALS['DB_CONN'] = $this->DB_CONN;
         
         include __DIR__ . '/admin/get_users.php';
+        exit;
+    }
+    
+    private function getAdminUserPenitipan($userId): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        $GLOBALS['user'] = $userResponse['user'];
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
+        $GLOBALS['target_user_id'] = (int)$userId;
+        
+        include __DIR__ . '/admin/get_user_penitipan.php';
+        exit;
+    }
+    
+    private function getAdminUserPets($userId): void {
+        $sessionToken = $this->getSessionToken();
+        if (empty($sessionToken)) {
+            http_response_code(401);
+            echo json_encode(['status' => 401, 'error' => 'Authorization required.']);
+            exit;
+        }
+        
+        include_once __DIR__ . '/auth/get_me.php';
+        $userResponse = getCurrentUser($this->DB_CONN, $sessionToken);
+        if ($userResponse['status'] !== 200) {
+            http_response_code($userResponse['status']);
+            echo json_encode($userResponse);
+            exit;
+        }
+        
+        $GLOBALS['user'] = $userResponse['user'];
+        $GLOBALS['DB_CONN'] = $this->DB_CONN;
+        $GLOBALS['target_user_id'] = (int)$userId;
+        
+        include __DIR__ . '/admin/get_user_pets.php';
         exit;
     }
     

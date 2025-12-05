@@ -1,37 +1,37 @@
 <?php
 /**
- * GET /api/penitipan/aktif
- * Returns active penitipan for the authenticated user
+ * GET /api/admin/user/{id}/penitipan
+ * Returns all penitipan (including history) for a specific user
+ * Admin only
  */
 
-include_once __DIR__ . '/../auth/get_me.php';
+$user = $GLOBALS['user'] ?? null;
+$DB_CONN = $GLOBALS['DB_CONN'] ?? null;
+$userId = $GLOBALS['target_user_id'] ?? null;
 
-$sessionToken = $GLOBALS['session_token'] ?? null;
-
-if (empty($sessionToken)) {
-    http_response_code(401);
+if (!$user || !$DB_CONN || !$userId) {
+    http_response_code(500);
     echo json_encode([
-        'status' => 401,
+        'status' => 500,
         'success' => false,
-        'error' => 'Authorization required'
+        'error' => 'Missing required globals'
     ]);
-    return;
+    exit;
 }
 
-$conn = $GLOBALS['DB_CONN'];
-
-// Validate session and get user
-$userResponse = getCurrentUser($conn, $sessionToken);
-if ($userResponse['status'] !== 200) {
-    http_response_code($userResponse['status']);
-    echo json_encode($userResponse);
-    return;
+// Verify admin role
+if ($user['role'] !== 'admin') {
+    http_response_code(403);
+    echo json_encode([
+        'status' => 403,
+        'success' => false,
+        'error' => 'Admin access required'
+    ]);
+    exit;
 }
 
-$userId = $userResponse['user']['id_user'];
-
-// Get active penitipan (status aktif or berlangsung, not cancelled)
-$stmt = $conn->prepare('
+// Get all penitipan for the user (including cancelled/deleted)
+$stmt = $DB_CONN->prepare('
     SELECT 
         p.id_penitipan,
         p.id_pet,
@@ -42,15 +42,13 @@ $stmt = $conn->prepare('
         p.total_biaya,
         p.durasi,
         p.status_penitipan,
+        p.status,
+        p.deleted_at,
         pet.nama_pet AS nama_pet,
-        pet.jenis_pet AS jenis_pet,
-        pet.ras AS ras
+        pet.jenis_pet AS jenis_pet
     FROM Penitipan p
     LEFT JOIN Pet pet ON pet.id_pet = p.id_pet
-    WHERE p.id_user = ? 
-        AND p.status_penitipan IN ("aktif", "berlangsung", "pending")
-        AND (p.status IS NULL OR p.status = "active")
-        AND p.deleted_at IS NULL
+    WHERE p.id_user = ?
     ORDER BY p.tgl_checkin DESC
 ');
 
@@ -60,9 +58,9 @@ if (!$stmt) {
         'status' => 500,
         'success' => false,
         'error' => 'Database error',
-        'details' => $conn->error
+        'details' => $DB_CONN->error
     ]);
-    return;
+    exit;
 }
 
 $stmt->bind_param('i', $userId);

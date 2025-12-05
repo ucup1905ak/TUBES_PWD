@@ -44,6 +44,8 @@ class Database_setup{
 		durasi INT,
 		total_biaya INT,
 		status_penitipan VARCHAR(50),
+		status ENUM('active', 'completed', 'cancelled') DEFAULT 'active',
+		deleted_at TIMESTAMP NULL,
 		FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
 		FOREIGN KEY (id_pet) REFERENCES Pet(id_pet) ON DELETE CASCADE
 	)","CREATE TABLE IF NOT EXISTS Penitipan_Layanan (
