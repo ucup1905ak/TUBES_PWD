@@ -34,7 +34,7 @@ function getCurrentUser(mysqli $DB_CONN, string $sessionToken, bool $includePhot
     $stmt->close();
     
     if ($user) {
-        $hasPhoto = !empty($user['foto_profil']);
+        $hasPhoto = ($user['foto_profil'] !== null && strlen($user['foto_profil']) > 5);
         $user['has_foto_profil'] = $hasPhoto;
 
         if ($includePhoto && $hasPhoto) {
