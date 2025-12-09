@@ -7,7 +7,8 @@ class Database_setup{
 		no_telp VARCHAR(15),
 		alamat TEXT,
 		password VARCHAR(255) NOT NULL,
-		foto_profil MEDIUMBLOB
+		foto_profil MEDIUMBLOB,
+		role ENUM('user', 'admin') DEFAULT 'user'
 	)","CREATE TABLE IF NOT EXISTS Pet (
 		id_pet INT AUTO_INCREMENT PRIMARY KEY,
 		id_user INT,
@@ -38,11 +39,15 @@ class Database_setup{
 		id_pet INT,
 		tgl_checkin DATE,
 		tgl_checkout DATE,
-		id_paket INT,
+		nama_paket VARCHAR(100),
+		layanan JSON,
+		durasi INT,
+		total_biaya INT,
 		status_penitipan VARCHAR(50),
+		status ENUM('active', 'completed', 'cancelled') DEFAULT 'active',
+		deleted_at TIMESTAMP NULL,
 		FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-		FOREIGN KEY (id_pet) REFERENCES Pet(id_pet) ON DELETE CASCADE,
-		FOREIGN KEY (id_paket) REFERENCES Paket_Kamar(id_paket) ON DELETE SET NULL
+		FOREIGN KEY (id_pet) REFERENCES Pet(id_pet) ON DELETE CASCADE
 	)","CREATE TABLE IF NOT EXISTS Penitipan_Layanan (
 		id_penitipan INT,
 		id_layanan INT,

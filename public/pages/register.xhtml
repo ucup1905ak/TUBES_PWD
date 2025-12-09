@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>PawHaven - Sign Up</title>
-        <link rel="stylesheet" type="text/css" href="/public/css/register.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/register.css" />
     </head>
 
     <body>
@@ -17,15 +17,15 @@
 
             <div class="mainPhotoWrap">
                 <div class="decorPaws">&#128062;&#128062;&#128062;</div>
-                <img src="/public/img/1.jpg" alt="Pet Boarding" class="mainPhoto" />
+                <img data-src="/static/img/1.jpg" alt="Pet Boarding" class="mainPhoto" loading="lazy" />
             </div>
 
             <div class="gallery">
                 <div class="galleryCard">
-                    <img src="/public/img/2.jpg" alt="Gallery 2" />
+                    <img data-src="/static/img/2.jpg" alt="Gallery 2" loading="lazy" />
                 </div>
                 <div class="galleryCard">
-                    <img src="/public/img/3.jpg" alt="Gallery 3" />
+                    <img data-src="/static/img/3.jpg" alt="Gallery 3" loading="lazy" />
                 </div>
             </div>
 
@@ -72,6 +72,12 @@
                     placeholder="Your address"
                     required="required"></textarea>
 
+                <label for="role">Account Type</label>
+                <select id="role" name="role" required="required">
+                    <option value="user">User (Customer)</option>
+                    <option value="admin">Admin</option>
+                </select>
+
                 <label>Foto Profil</label>
                 <div class="uploadBox">
                     <button type="button" class="uploadBtn"
@@ -97,7 +103,7 @@
 
     </div>
 
-    <script type="text/javascript" src="/public/js/register.js"></script>
+    <script type="text/javascript" src="/static/js/register.js"></script>
 
     </body>
 </html>

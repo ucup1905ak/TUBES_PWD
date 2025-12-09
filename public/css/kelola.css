@@ -1,0 +1,405 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFFAEA;
+    color: #333;
+}
+
+/* HEADER */
+.header {
+    height: 60px;
+    background-color: #2F6F4F;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    border-bottom: 1px solid white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header .logo {
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-profile {
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 70px;
+    color: white;
+    background-color: #2F6F4F;
+    border-right: 1px solid white;
+    padding-top: 20px;
+    transition: width 0.25s;
+    position: sticky;
+    top: 60px;
+    overflow: hidden;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar:hover {
+    width: 220px;
+}
+
+.menu-list {
+    list-style: none;
+    margin-top: 25px;
+}
+
+.menu-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    gap: 12px;
+}
+
+.menu-list li:hover {
+    background-color: #0C6B48;
+}
+
+.menu-list li.active {
+    background-color: #0A5C47;
+}
+
+.icon-img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.menu-text {
+    margin-left: 0px;
+    font-size: 14px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, max-width 0.3s ease;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* Show text when hover */
+.sidebar:hover .menu-text {
+    opacity: 1;
+    max-width: 200px;
+    transform: translateX(0);
+}
+
+/* CONTENT */
+.content {
+    padding: 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 60px);
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.muted {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* SECTION BOX */
+.section-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Komentar: Tombol tambah */
+.btn-add {
+    padding: 10px 16px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.btn-add:hover {
+    background: #45a049;
+}
+
+/* TABLE */
+.table-box {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 13px;
+}
+
+.data-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    padding: 10px;
+}
+
+/* Komentar: Tombol edit dan hapus */
+.data-table .edit-btn,
+.data-table .delete-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    margin-right: 6px;
+}
+
+.data-table .edit-btn {
+    background: #2196f3;
+    color: white;
+}
+
+.data-table .edit-btn:hover {
+    background: #1976d2;
+}
+
+.data-table .delete-btn {
+    background: #f44336;
+    color: white;
+}
+
+.data-table .delete-btn:hover {
+    background: #da190b;
+}
+
+.no-data {
+    text-align: center;
+    padding: 16px 12px;
+    color: #999;
+}
+
+/* FORM SECTION */
+.form-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.form-container {
+    max-width: 500px;
+}
+
+.form-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Komentar: Tombol save dan cancel */
+.btn-save {
+    flex: 1;
+    padding: 12px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btn-save:hover {
+    background: #45a049;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    background: #999;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btn-cancel:hover {
+    background: #888;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 8px 12px;
+}
+
+.logout-btn {
+    width: 100%;
+    background-color: #d62828;
+    color: white;
+    border: none;
+    padding: 8px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background-color: #c11414;
+}
+
+/* FOOTER */
+.footer {
+    border-top: 1px solid rgb(219, 219, 219);
+    background-color: #FFFAEA;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    color: #666;
+    margin-top: auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .content {
+        padding: 16px 4px;
+        margin-left: 0 !important;
+    }
+    .sidebar {
+        width: 56px;
+    }
+    .sidebar.expanded {
+        width: 160px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 8px 2px;
+    }
+    .sidebar {
+        width: 44px;
+    }
+    .sidebar.expanded {
+        width: 120px;
+    }
+    .header {
+        padding: 0 8px;
+    }
+    .page-title {
+        font-size: 18px;
+    }
+    .data-table th,
+    .data-table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+    .form-container {
+        max-width: 100%;
+    }
+}

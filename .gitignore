@@ -2,13 +2,14 @@
 .env
 .env.local
 .env.production
-
+*.dev
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+*~4
+node_modules
 .env
 # OS files
 .DS_Store
@@ -35,7 +36,7 @@ error_log
 !/tmp/tests/empty
 /logs/*
 !/logs/empty
-
+*.env
 # CakePHP 2 (legacy)
 /app/tmp/*
 /app/Config/core.php

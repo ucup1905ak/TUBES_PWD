@@ -4,6 +4,28 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #e8e8e8;
+    border-color: #bbb;
+}
+
 /* Header */
 .header {
     width: 100%;

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PawHaven - Kelola Layanan & Paket</title>
+        <link rel="stylesheet" href="/static/css/kelola.css" />
+    </head>
+
+    <body>
+        <!-- HEADER -->
+        <div class="header">
+            <h1 class="logo" onclick="location.href='/my'">PawHaven Admin</h1>
+
+            <div class="user-profile" onclick="location.href='/profile'">
+                <img id="user-avatar" src="/static/img/profile.png" alt="Profile" class="profile-img" />
+                <span id="user-name">Admin</span>
+            </div>
+        </div>
+
+        <!-- LAYOUT WRAPPER -->
+        <div class="layout">
+
+            <!-- SIDEBAR -->
+            <div class="sidebar" id="sidebar">
+
+                <ul class="menu-list">
+
+                    <li onclick="location.href='/my'">
+                        <img src="/static/img/home.png" alt="Home" class="icon-img" />
+                        <span class="menu-text">Home</span>
+                    </li>
+
+                    <li onclick="location.href='/admin/users'">
+                        <img src="/static/img/peoples.png" alt="All Users" class="icon-img" />
+                        <span class="menu-text">All User List</span>
+                    </li>
+
+                    <li class="active" onclick="location.href='/admin/kelola'">
+                        <img src="/static/img/settings.png" alt="Kelola" class="icon-img" />
+                        <span class="menu-text">Kelola Layanan & Paket</span>
+                    </li>
+
+                </ul>
+                
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">
+                        <img src="/static/img/log_out.png" alt="Logout" class="icon-img" />
+                        <span class="menu-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="content">
+
+                <h1 class="page-title">Kelola Layanan & Paket</h1>
+                <p class="muted">Kelola layanan dan paket yang tersedia di PawHaven.</p>
+
+                <!-- TABEL LAYANAN -->
+                <div class="section-box">
+                    <div class="section-header">
+                        <h2>Daftar Layanan</h2>
+                        <button class="btn-add" id="btnAddLayanan">+ Tambah Layanan</button>
+                    </div>
+
+                    <div class="table-box">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Layanan</th>
+                                    <th>Deskripsi</th>
+                                    <th>Harga</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="layanan-tbody">
+                                <tr>
+                                    <td colspan="5" class="no-data">Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- FORM TAMBAH/EDIT LAYANAN (hidden by default) -->
+                <div class="form-section" id="formLayanan" style="display:none;">
+                    <div class="form-container">
+                        <h3 id="formLayananTitle">Tambah Layanan Baru</h3>
+                        
+                        <div class="form-group">
+                            <label>Nama Layanan</label>
+                            <input type="text" id="inputNamaLayanan" placeholder="Masukkan nama layanan" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Deskripsi</label>
+                            <textarea id="inputDeskripsiLayanan" placeholder="Masukkan deskripsi layanan"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Harga</label>
+                            <input type="number" id="inputHargaLayanan" placeholder="Masukkan harga" />
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-save" id="btnSaveLayanan">Simpan</button>
+                            <button class="btn-cancel" id="btnCancelLayanan">Batal</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL PAKET -->
+                <div class="section-box" style="margin-top: 40px;">
+                    <div class="section-header">
+                        <h2>Daftar Paket</h2>
+                        <button class="btn-add" id="btnAddPaket">+ Tambah Paket</button>
+                    </div>
+
+                    <div class="table-box">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Paket</th>
+                                    <th>Deskripsi</th>
+                                    <th>Harga</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="paket-tbody">
+                                <tr>
+                                    <td colspan="5" class="no-data">Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- FORM TAMBAH/EDIT PAKET (hidden by default) -->
+                <div class="form-section" id="formPaket" style="display:none;">
+                    <div class="form-container">
+                        <h3 id="formPaketTitle">Tambah Paket Baru</h3>
+                        
+                        <div class="form-group">
+                            <label>Nama Paket</label>
+                            <input type="text" id="inputNamaPaket" placeholder="Masukkan nama paket" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Deskripsi</label>
+                            <textarea id="inputDeskripsiPaket" placeholder="Masukkan deskripsi paket"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Harga</label>
+                            <input type="number" id="inputHargaPaket" placeholder="Masukkan harga" />
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-save" id="btnSavePaket">Simpan</button>
+                            <button class="btn-cancel" id="btnCancelPaket">Batal</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+
+        <script type="text/javascript" src="/static/js/kelola.js"></script>
+    </body>
+</html>

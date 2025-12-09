@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Riwayat Penitipan - PawHaven</title>
+    <link rel="stylesheet" href="/static/css/riwayat.css" />
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
+
+        <div class="user-profile" onclick="location.href='/profile'">
+            <img id="user-avatar" src="/static/img/profile.png" alt="Profile" class="profile-img" />
+            <span id="user-name"></span>
+        </div>
+    </div>
+
+    <!-- LAYOUT WRAPPER -->
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+
+            <ul class="menu-list">
+
+                <li onclick="location.href='/my'">
+                    <img src="/static/img/home.png" alt="Home" class="icon-img" />
+                    <span class="menu-text">Home Dashboard</span>
+                </li>
+
+                <li onclick="location.href='/titip'">
+                    <img src="/static/img/paw.png" alt="Titip Hewan" class="icon-img" />
+                    <span class="menu-text">Titip Hewan</span>
+                </li>
+
+                <li class="active" onclick="location.href='/riwayat'">
+                    <img src="/static/img/history.png" alt="Riwayat" class="icon-img" />
+                    <span class="menu-text">Riwayat</span>
+                </li>
+
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
+                    <img src="/static/img/log_out.png" alt="Logout" class="icon-img" />
+                    <span class="menu-text">Logout</span>
+                </button>
+                
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+
+            <h1 class="welcome">Riwayat Penitipan</h1>
+            <p class="muted">Daftar lengkap penitipan hewan peliharaan Anda.</p>
+
+            <div id="riwayatList" class="riwayat-container">
+                <!-- JS akan mengisi data nota di sini -->
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/static/js/riwayat.js"></script>
+</body>
+</html>

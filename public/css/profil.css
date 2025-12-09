@@ -1,108 +1,479 @@
-body {
+/* RESET */
+* {
     margin: 0;
     padding: 0;
-    font-family: "Segoe UI", sans-serif;
-    background-color: #f4eed7;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    box-sizing: border-box;
 }
 
-.header {
-    background-color: #0b7a5a;
-    color: white;
-    text-align: center;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFFAEA;
+    color: #333;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Paw print background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 15px 0 5px 0;
-    font-size: 18px;
-    font-weight: bold;
+    height: 100%;
+    background-image: 
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png'),
+        url('/public/img/paw.png');
+    background-repeat: no-repeat;
+    background-position:
+        8% 12%,
+        88% 18%,
+        5% 65%,
+        82% 72%,
+        45% 85%,
+        15% 35%,
+        75% 45%,
+        50% 25%;
+    background-size: 140px 140px;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    filter: brightness(0.6) sepia(0.3);
 }
 
-.header .title {
-    font-size: 26px;
-    font-weight: 900;
-    display: block;
-    margin-top: -4px;
-}
-
-.profile-wrapper {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 70px;
-}
-
-.photo-area {
-    width: 250px;
-    height: 250px;
-    background-color: #cfcfcf;
-    border-radius: 50%;
-}
-
-.fields {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.label {
-    font-weight: bold;
-    display: block;
-    margin-left: 10px;
-    margin-bottom: 4px;
-}
-
-.input-box {
-    background-color: white;
-    padding: 18px 20px;
-    width: 350px;
-    border-radius: 120px;
-    font-size: 14px;
-}
-
-.field.username { 
-    margin-left: -40px; 
-}
-.field.email { 
-    margin-left: 40px; 
-}
-
-.field.notelp { 
-    margin-left: 120px; 
-}
-
-.field.jenishewan { 
-    margin-left: 40px; 
-}
-
-.field.alamat { 
-    margin-left: -40px; 
-}
-
-.bottom-buttons {
-    margin-top: 40px;
-    width: 70%;
+/* HEADER */
+.header {
+    height: 60px;
+    background-color: #0F8A5F;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    border-bottom: 1px solid white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header .logo {
+    cursor: pointer;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-profile {
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Komentar: Gelapkan background username saat di halaman profil */
+.user-profile.active {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+/* PROFILE CONTAINER & HEADER */
+.profile-container {
+    position: relative;
+    z-index: 2;
+    padding: 15px 20px 10px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.back-btn {
+    padding: 10px 16px;
+    background-color: #0F8A5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    align-self: flex-start;
+}
+
+.back-btn:hover {
+    background-color: #0d6a47;
+}
+
+.profile-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    text-align: center;
+}
+
+/* PROFILE CENTERED CARD */
+.profile-content-centered {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0px 10px 15px 10px;
+    position: relative;
+    z-index: 2;
+    margin-top: -10px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 32px 36px 32px 36px;
+    min-width: 320px;
+    max-width: 520px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    background-size: cover;
+    background-position: center;
+    border: 4px solid #0F8A5F;
+    flex-shrink: 0;
+}
+
+/* Atur supaya tombol upload berada di bawah foto */
+.profile-photo + #uploadPhotoBtn {
+    display: block;
+    margin-left: 4px;
+}
+
+
+.profile-userinfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.profile-username {
+    font-size: 22px;
+    font-weight: bold;
+    color: #222;
+}
+.profile-username-input {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+}
+.profile-email {
+    font-size: 14px;
+    color: #666;
+}
+
+/* PROFILE SECTIONS */
+.profile-section {
+    width: 100%;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-section-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0F8A5F;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-role {
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.profile-role-input {
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    background: white;
+    cursor: pointer;
+}
+
+.profile-alamat {
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.profile-alamat-input {
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.profile-notelp {
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.profile-notelp-input {
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+}
+
+.profile-buttons {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.delete-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    background-color: #d62828;
+    color: white;
+    order: 1;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+}
+.delete-btn:hover {
+    background-color: #b81f1f;
+}
+.delete-btn.hidden,
+.edit-mode ~ .delete-btn {
+    display: none;
 }
 
 .btn {
-    padding: 12px 28px;
-    border-radius: 12px;
+    padding: 10px 22px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
 }
-
-.logout-btn { 
-    background-color: white;
-    margin-left: -190px;
-}
-
-.delete-btn { 
-    background-color: #d62828; 
+.edit-btn {
+    background-color: #0F8A5F;
     color: white;
-    margin-right: -190px; 
+    order: 3;
 }
+.edit-btn:hover {
+    background-color: #0d6a47;
+}
+.save-btn {
+    background-color: #28a745;
+    color: white;
+    order: 3;
+    margin-right: auto;
+}
+.save-btn:hover {
+    background-color: #218838;
+}
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    order: 4;
+}
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+
+
+/* FOOTER */
+.footer {
+    border-top: 1px solid rgb(219, 219, 219);
+    background-color: #FFFAEA;
+    text-align: center;
+    font-size: 14px;
+    padding: 8px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 900px) {
+    .profile-card {
+        padding: 36px 36px 32px 36px;
+        max-width: 480px;
+    }
+    .profile-top {
+        gap: 24px;
+    }
+    .profile-photo {
+        width: 100px;
+        height: 100px;
+        border: 3px solid #0F8A5F;
+    }
+    .profile-username {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 15px 15px;
+    }
+    .profile-title {
+        font-size: 24px;
+        margin: 15px 0 20px 0;
+    }
+    .profile-card {
+        padding: 32px 24px 28px 24px;
+        max-width: 100%;
+        gap: 24px;
+    }
+    .profile-top {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+    }
+    .profile-photo {
+        width: 90px;
+        height: 90px;
+    }
+    .profile-username {
+        font-size: 20px;
+    }
+    .profile-email {
+        font-size: 14px;
+    }
+    .profile-userinfo {
+        align-items: center;
+    }
+    .profile-section {
+        padding: 14px 16px;
+        gap: 8px;
+    }
+    .profile-buttons {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .button-spacer {
+        width: 100%;
+    }
+    .btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        flex: 1;
+        min-width: 90px;
+        order: initial !important;
+    }
+}
+
+#uploadPhotoBtn {
+    padding: 8px 16px;
+    background-color: #0F8A5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-top: 6px;
+}
+
+#uploadPhotoBtn:hover {
+    background-color: #0d6a47;
+}
+
+#deletePhotoBtn {
+    background-color: #d62828;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+#deletePhotoBtn:hover {
+    background-color: #b81f1f;
+}
+
+.profile-photo-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.profile-photo-group .btn {
+    width: 120px;
+    text-align: center;
+}
+
+.green-btn {
+    background-color: #0F8A5F;
+    color: white;
+}
+
+.green-btn:hover {
+    background-color: #0d6a47;
+}
+
+.red-btn {
+    background-color: #d62828;
+    color: white;
+}
+
+.red-btn:hover {
+    background-color: #b81f1f;
+}
+

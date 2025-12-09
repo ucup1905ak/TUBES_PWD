@@ -100,9 +100,13 @@ async function login() {
         const data = await response.json();
 
         if (response.ok && data.status === 200) {
-            // Store session token and expiration time
+            // Store session token and expiration time in localStorage
             localStorage.setItem('session_token', data.session_token);
             localStorage.setItem('session_expires_at', data.expires_at);
+            
+            // Also store in cookie for server-side access (expires in 7 days)
+            const expires = new Date(data.expires_at);
+            document.cookie = `session_token=${data.session_token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
             
             // Redirect to dashboard
             window.location.href = '/my';

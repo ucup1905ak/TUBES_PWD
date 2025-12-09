@@ -4,60 +4,80 @@
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="id" xml:lang="id">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PawHaven - Profil</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PawHaven - Profil</title>
 
-    <link rel="stylesheet" type="text/css" href="/public/css/profil.css" />
-    <script type="text/javascript" src="/public/js/profil.js"></script>
-</head>
+        <link rel="stylesheet" type="text/css" href="/static/css/profil.css" />
+    </head>
 
-<body>
+    <body>
 
-    <div class="header">
-        PawHaven
-        <span class="title">Profil</span>
-    </div>
+        <!-- HEADER -->
+        <div class="header">
+            <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
 
-    <div class="profile-wrapper">
-
-        <div class="photo-area" id="photo"></div>
-
-        <div class="fields">
-
-            <div class="field username">
-                <span class="label">Username</span>
-                <div class="input-box" id="username"></div>
+            <div class="user-profile">
+                <span id="user-name" onclick="location.href='/profile'">Akun Saya</span>
             </div>
-
-            <div class="field email">
-                <span class="label">Email</span>
-                <div class="input-box" id="email"></div>
-            </div>
-
-            <div class="field notelp">
-                <span class="label">No Telp</span>
-                <div class="input-box" id="notelp"></div>
-            </div>
-
-            <div class="field jenishewan">
-                <span class="label">Jenis Hewan</span>
-                <div class="input-box" id="jenis"></div>
-            </div>
-
-            <div class="field alamat">
-                <span class="label">Alamat</span>
-                <div class="input-box" id="alamat"></div>
-            </div>
-
         </div>
-    </div>
 
-    <div class="bottom-buttons">
-        <button class="btn logout-btn" id="logoutBtn">Log Out</button>
-        <button class="btn delete-btn" id="deleteBtn">Delete Account</button>
-    </div>
 
-</body>
+        <!-- MAIN CONTENT -->
+        <div class="profile-container">
+            <button class="back-btn" onclick="location.href='/my'">← Kembali</button>
+
+            <div class="profile-content-centered">
+                <div class="profile-card">
+                    <h2 class="profile-title">Profile</h2>
+                    <div class="profile-top">
+                        <div class="profile-photo" id="photo"></div>
+                        
+                        <div class="profile-photo-group">
+                            <input type="file" id="photo-input" accept="image/*" style="display:none;">
+                            <button id="uploadPhotoBtn" class="btn" style="margin-top: 10px;">Ganti Foto</button>
+                            <button id="deletePhotoBtn" class="btn" style="margin-top: 6px; background-color:#d62828;">Hapus Foto</button>
+                        </div>
+
+                        <div class="profile-userinfo">
+                            <div class="profile-username view-mode" id="username"></div>
+                            <input type="text" class="profile-username-input edit-mode" id="username-input" style="display:none;" />
+                            <div class="profile-email" id="email"></div>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <label class="profile-section-label">Role</label>
+                        <div class="profile-role view-mode" id="role"></div>
+                        <select class="profile-role-input edit-mode" id="role-input" style="display:none;">
+                            <option value="user">User (Customer)</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="profile-section">
+                        <label class="profile-section-label">Alamat</label>
+                        <div class="profile-alamat view-mode" id="alamat"></div>
+                        <textarea class="profile-alamat-input edit-mode" id="alamat-input" style="display:none;"></textarea>
+                    </div>
+
+                    <div class="profile-section">
+                        <label class="profile-section-label">Nomor Telp</label>
+                        <div class="profile-notelp view-mode" id="notelp"></div>
+                        <input type="text" class="profile-notelp-input edit-mode" id="notelp-input" style="display:none;" />
+                    </div>
+                    <div class="profile-buttons">
+                        <button class="btn delete-btn" id="deleteBtn">Delete Account</button>
+                        <div class="button-spacer"></div>
+                        <button class="btn edit-btn" id="editBtn">Edit Profile</button>
+                        <button class="btn save-btn" id="saveBtn" style="display:none;">Save Changes</button>
+                        <button class="btn cancel-btn" id="cancelBtn" style="display:none;">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="/static/js/profil.js"></script>
+
+    </body>
 </html>

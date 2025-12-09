@@ -1,96 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>PawHaven - Form Penitipan</title>
-    <link rel="stylesheet" href="../css/titip.css" />
-    <script src="../js/titip.js" defer="defer"></script>
+    <link rel="stylesheet" href="/static/css/titip.css" />
 </head>
 
 <body>
 
+    <!-- HEADER -->
     <div class="header">
-        PawHaven Pet Boarding
+        <h1 class="logo" onclick="location.href='/my'">PawHaven</h1>
+
+        <div class="user-profile" onclick="location.href='/profile'">
+            <img id="user-avatar" src="/static/img/profile.png" alt="Profile" class="profile-img" />
+            <span id="user-name"></span>
+        </div>
     </div>
 
-    <!-- Dekorasi -->
-    <div class="decor decor-1"></div>
-    <div class="decor decor-2"></div>
+    <!-- LAYOUT WRAPPER -->
+    <div class="layout">
 
-    <div class="main-wrapper fadeIn">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
 
-        <!-- FORM -->
-        <div class="form-card">
+            <ul class="menu-list">
 
-            <div class="title">Form Penitipan &amp; Data Pet</div>
+                <li onclick="location.href='/my'">
+                    <img src="/static/img/home.png" alt="Home" class="icon-img" />
+                    <span class="menu-text">Home Dashboard</span>
+                </li>
 
-            <div class="input-group">
-                <label>Nama Pet</label>
-                <input type="text" />
+                <li class="active" onclick="location.href='/titip'">
+                    <img src="/static/img/paw.png" alt="Titip Hewan" class="icon-img" />
+                    <span class="menu-text">Titip Hewan</span>
+                </li>
+
+                <li onclick="location.href='/riwayat'">
+                    <img src="/static/img/history.png" alt="Riwayat" class="icon-img" />
+                    <span class="menu-text">Riwayat</span>
+                </li>
+
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn" onclick="location.href='/logout'">
+                    <img src="/static/img/log_out.png" alt="Logout" class="icon-img" />
+                    <span class="menu-text">Logout</span>
+                </button>
+                
             </div>
-
-            <div class="input-group">
-                <label>Jenis Pet</label>
-                <input type="text" />
-            </div>
-
-            <div class="row">
-                <div class="input-group half">
-                    <label>Ras</label>
-                    <input type="text" />
-                </div>
-
-                <div class="input-group half">
-                    <label>Umur</label>
-                    <input type="text" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-group half">
-                    <label>Jenis Kelamin</label>
-                    <input type="text" />
-                </div>
-
-                <div class="input-group half">
-                    <label>Warna</label>
-                    <input type="text" />
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Alergi</label>
-                <input type="text" />
-            </div>
-
-            <div class="input-group">
-                <label>Catatan Medis</label>
-                <textarea></textarea>
-            </div>
-
-            <div class="row">
-                <div class="input-group half">
-                    <label>Tanggal Check-in</label>
-                    <input type="date" />
-                </div>
-
-                <div class="input-group half">
-                    <label>Tanggal Check-out</label>
-                    <input type="date" />
-                </div>
-            </div>
-
-            <button class="submit-btn">Simpan Data</button>
         </div>
 
-        <!-- PHOTO SIDE -->
-        <div class="photo-side">
-            <img src="../img/Titip(1).jpg" alt="Pet Photo" />
-        </div>
+        <!-- MAIN CONTENT -->
+        <div class="content">
 
+        <div class="main-wrapper fadeIn">
+            <button class="back-btn" onclick="window.history.back()" style="margin-bottom: 16px;">← Kembali</button>
+
+            <!-- FORM -->
+            <form class="form-card" id="titipForm">
+
+                <div class="title">Form Penitipan &amp; Data Pet</div>
+
+                    <!-- Pet Selection or Add New -->
+                    <div class="input-group">
+                        <label for="pet_select">Pilih Pet</label>
+                        <select id="pet_select" name="pet_select">
+                            <option value="">-- Pilih pet yang sudah ada --</option>
+                            <option value="new">+ Tambah Pet Baru</option>
+                        </select>
+                    </div>
+
+                    <!-- New Pet Fields -->
+                    <div id="newPetFields" style="display: none;">
+                        <div class="input-group">
+                            <label for="nama_pet">Nama Pet *</label>
+                            <input type="text" id="nama_pet" name="nama_pet" />
+                        </div>
+
+                        <div class="input-group">
+                            <label for="jenis_pet">Jenis Pet</label>
+                            <input type="text" id="jenis_pet" name="jenis_pet" placeholder="Kucing, Anjing, dll" />
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group half">
+                                <label for="ras">Ras</label>
+                                <input type="text" id="ras" name="ras" />
+                            </div>
+
+                            <div class="input-group half">
+                                <label for="umur">Umur (tahun)</label>
+                                <input type="number" id="umur" name="umur" min="0" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group half">
+                                <label for="jenis_kelamin">Jenis Kelamin</label>
+                                <select id="jenis_kelamin" name="jenis_kelamin">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Jantan">Jantan</option>
+                                    <option value="Betina">Betina</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group half">
+                                <label for="warna">Warna</label>
+                                <input type="text" id="warna" name="warna" />
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="alergi">Alergi</label>
+                            <input type="text" id="alergi" name="alergi" placeholder="Jika ada" />
+                        </div>
+
+                        <div class="input-group">
+                            <label for="catatan_medis">Catatan Medis</label>
+                            <textarea id="catatan_medis" name="catatan_medis"
+                                placeholder="Informasi kesehatan penting"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Penitipan Fields -->
+                    <div class="row">
+                        <div class="input-group half">
+                            <label for="tgl_checkin">Tanggal Check-in *</label>
+                            <input type="date" id="tgl_checkin" name="tgl_checkin" required="required" />
+                        </div>
+
+                        <div class="input-group half">
+                            <label for="tgl_checkout">Tanggal Check-out *</label>
+                            <input type="date" id="tgl_checkout" name="tgl_checkout" required="required" />
+                        </div>
+                    </div>
+
+                    <!-- Kamar -->
+                    <div class="input-group">
+                        <label for="kamar">Pilih Kamar *</label>
+                        <select id="kamar" name="kamar" required="required">
+                            <option value="">-- Pilih kamar --</option>
+                            <option value="reguler">Reguler</option>
+                            <option value="premium">Premium</option>
+                            <option value="vip">VIP</option>
+                        </select>
+                    </div>
+
+                    <!-- Layanan tambahan -->
+                    <div class="input-group">
+                        <label>Layanan Tambahan (opsional)</label>
+
+                        <label class="checkbox-option"><input type="checkbox" class="layanan" value="grooming" /> Grooming</label>
+                        <label class="checkbox-option"><input type="checkbox" class="layanan" value="kuku" /> Potong Kuku</label>
+                        <label class="checkbox-option"><input type="checkbox" class="layanan" value="spa" /> Spa Treatment</label>
+                    </div>
+
+                    <!-- Durasi -->
+                    <div class="input-group">
+                        <label for="durasi">Durasi Penitipan</label>
+                        <input type="text" id="durasi" name="durasi" readonly="readonly" />
+                    </div>
+
+                    <!-- Total Biaya -->
+                    <div class="input-group">
+                        <label for="total">Total Biaya</label>
+                        <input type="text" id="total" name="total" readonly="readonly" />
+                    </div>
+
+                     <button type="submit" class="submit-btn">Simpan Penitipan</button>
+            </form>
+
+            <!-- PHOTO SIDE -->
+            <div class="photo-side">
+                <img src="/static/img/Titip(1).jpg" alt="Pet Photo" />
+            </div>
+        </div>
     </div>
 
+    <script type="text/javascript" src="/static/js/titip.js"></script>
 </body>
 </html>
 
