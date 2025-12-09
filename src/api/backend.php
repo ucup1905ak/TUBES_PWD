@@ -20,11 +20,35 @@ class BACKEND{
                                     $DB_PASSWORD,
                                     $DB_NAME
                                     ) : void {
-                                        // echo 'connecting to db';
-        $con = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
-
-        if ($con->connect_errno) {
-            die("Connection failed: " . $con->connect_error);
+        // echo 'connecting to db';
+        
+        // Check if this is Azure MySQL (requires SSL)
+        $isAzureMySQL = strpos($DB_HOST, '.mysql.database.azure.com') !== false;
+        
+        if ($isAzureMySQL) {
+            // Azure MySQL requires SSL connection
+            $con = mysqli_init();
+            
+            if (!$con) {
+                die("mysqli_init failed");
+            }
+            
+            // Set SSL options for Azure MySQL
+            mysqli_ssl_set($con, NULL, NULL, NULL, NULL, NULL);
+            
+            // Connect with SSL
+            mysqli_real_connect($con, $DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT, NULL, MYSQLI_CLIENT_SSL);
+            
+            if (mysqli_connect_errno()) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+        } else {
+            // Standard MySQL connection for localhost/cPanel
+            $con = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
+            
+            if ($con->connect_errno) {
+                die("Connection failed: " . $con->connect_error);
+            }
         }
 
         $this->DB_CONN = $con;

@@ -73,10 +73,25 @@ function validateSession(bool $requireAdmin = false): ?array {
     $dbPass = $_ENV['DB_PASSWORD'] ?? $env['DB_PASSWORD'] ?? '123';
     $dbName = $_ENV['DB_NAME'] ?? $env['DB_NAME'] ?? 'pwd';
     
-    $conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
+    // Check if this is Azure MySQL (requires SSL)
+    $isAzureMySQL = strpos($dbHost, '.mysql.database.azure.com') !== false;
     
-    if ($conn->connect_error) {
-        return null;
+    if ($isAzureMySQL) {
+        // Azure MySQL requires SSL connection
+        $conn = mysqli_init();
+        if ($conn) {
+            mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+            mysqli_real_connect($conn, $dbHost, $dbUser, $dbPass, $dbName, $dbPort, NULL, MYSQLI_CLIENT_SSL);
+        }
+        if (!$conn || mysqli_connect_errno()) {
+            return null;
+        }
+    } else {
+        // Standard MySQL connection
+        $conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
+        if ($conn->connect_error) {
+            return null;
+        }
     }
     
     include_once __DIR__ . '/src/api/auth/get_me.php';
