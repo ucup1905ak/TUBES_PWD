@@ -64,14 +64,16 @@ function validateSession(bool $requireAdmin = false): ?array {
     
     // Validate session with database
     require_once __DIR__ . '/src/config/env.php';
-    $env = loadEnvToArray('.env.dev');
-    $conn = new mysqli(
-        $env['DB_HOST'] ?? 'localhost',
-        $env['DB_USER'] ?? 'root',
-        $env['DB_PASSWORD'] ?? '123',
-        $env['DB_NAME'] ?? 'pwd',
-        (int)($env['DB_PORT'] ?? 3306)
-    );
+    $env = loadEnvToArray(__DIR__ . '/.env');
+    
+    // Prefer environment variables
+    $dbHost = $_ENV['DB_HOST'] ?? $env['DB_HOST'] ?? 'localhost';
+    $dbPort = (int)($_ENV['DB_PORT'] ?? $env['DB_PORT'] ?? 3306);
+    $dbUser = $_ENV['DB_USER'] ?? $env['DB_USER'] ?? 'root';
+    $dbPass = $_ENV['DB_PASSWORD'] ?? $env['DB_PASSWORD'] ?? '123';
+    $dbName = $_ENV['DB_NAME'] ?? $env['DB_NAME'] ?? 'pwd';
+    
+    $conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
     
     if ($conn->connect_error) {
         return null;
@@ -284,15 +286,8 @@ $router->add("/test/env", function (): void {
 if (strpos($path, '/api') === 0) {
     header('Content-Type: application/json');
     $apiBackend = new BACKEND($router);
-    $env = loadEnvToArray('.env.dev');
-    $apiBackend->connectDB(
-        $env['DB_HOST'] ?? 'localhost',
-        (int)($env['DB_PORT'] ?? 3306),
-        $env['DB_USER'] ?? 'root',
-        $env['DB_PASSWORD'] ?? '123',
-        $env['DB_NAME'] ?? 'pwd',
-    );
-    // $apiBackend->setupDatabase();
+    $apiBackend->connectDB();
+    $apiBackend->setupDatabase();
     $apiBackend->run($path);
     exit;
 }
