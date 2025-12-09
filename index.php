@@ -286,8 +286,17 @@ $router->add("/test/env", function (): void {
 if (strpos($path, '/api') === 0) {
     header('Content-Type: application/json');
     $apiBackend = new BACKEND($router);
-    $apiBackend->connectDB();
-    $apiBackend->setupDatabase();
+    
+    // Load database credentials from environment or .env file
+    $env = loadEnvToArray(__DIR__ . '/.env');
+    $dbHost = $_ENV['DB_HOST'] ?? $env['DB_HOST'] ?? 'localhost';
+    $dbPort = (int)($_ENV['DB_PORT'] ?? $env['DB_PORT'] ?? 3306);
+    $dbUser = $_ENV['DB_USER'] ?? $env['DB_USER'] ?? 'root';
+    $dbPass = $_ENV['DB_PASSWORD'] ?? $env['DB_PASSWORD'] ?? '123';
+    $dbName = $_ENV['DB_NAME'] ?? $env['DB_NAME'] ?? 'pwd';
+    
+    $apiBackend->connectDB($dbHost, $dbPort, $dbUser, $dbPass, $dbName);
+    // $apiBackend->setupDatabase();
     $apiBackend->run($path);
     exit;
 }
