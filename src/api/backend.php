@@ -14,53 +14,6 @@ include __DIR__ . '/../config/database_setup.php';
 class BACKEND{
     private $router;
     private $DB_CONN;
-<<<<<<< HEAD
-    public function connectDB() : void {
-        // Load environment variables
-        $env = loadEnvToArray(__DIR__ . '/../../.env');
-        
-        // Get database configuration from environment
-        $dbHost = $_ENV['DB_HOST'] ?? $env['DB_HOST'] ?? 'localhost';
-        $dbPort = (int)($_ENV['DB_PORT'] ?? $env['DB_PORT'] ?? 3306);
-        $dbUser = $_ENV['DB_USER'] ?? $env['DB_USER'] ?? 'root';
-        $dbPass = $_ENV['DB_PASSWORD'] ?? $env['DB_PASSWORD'] ?? '';
-        $dbName = $_ENV['DB_NAME'] ?? $env['DB_NAME'] ?? 'pwd';
-        
-        // Check if Azure MySQL (SSL required)
-        $useSSL = $_ENV['DB_USE_SSL'] ?? $env['DB_USE_SSL'] ?? 'false';
-        $sslCert = $_ENV['DB_SSL_CERT'] ?? $env['DB_SSL_CERT'] ?? '';
-        
-        $con = mysqli_init();
-        
-        if ($useSSL === 'true' && !empty($sslCert)) {
-            // Azure MySQL with SSL
-            $certPath = __DIR__ . '/' . $sslCert;
-            if (file_exists($certPath)) {
-                mysqli_ssl_set($con, NULL, NULL, $certPath, NULL, NULL);
-                mysqli_real_connect($con, $dbHost, $dbUser, $dbPass, $dbName, $dbPort, NULL, MYSQLI_CLIENT_SSL);
-            } else {
-                // Fallback without SSL if cert not found
-                mysqli_real_connect($con, $dbHost, $dbUser, $dbPass, $dbName, $dbPort);
-            }
-        } else {
-            // Standard MySQL connection (localhost/cPanel)
-            mysqli_real_connect($con, $dbHost, $dbUser, $dbPass, $dbName, $dbPort);
-        }
-        
-        if (!$con) {
-            error_log('Database connection failed: ' . mysqli_connect_error());
-            http_response_code(500);
-            echo json_encode(['error' => 'Database connection failed']);
-            exit;
-        }
-        
-        $this->DB_CONN = $con;
-    }
-    public function setupDatabase(): void{
-        // echo '<br>setting up database.';
-        $DB = new Database_setup($this->DB_CONN);
-        $DB->initializeTables();
-=======
     public function connectDB($DB_HOST,
                                     $DB_PORT,
                                     $DB_USER,
@@ -77,7 +30,6 @@ class BACKEND{
         $this->DB_CONN = $con;
         $setup = new Database_setup($this->DB_CONN);
         $setup->initializeTables();
->>>>>>> df37086e989bb7bad275dce25491bf2263a0025e
     }
     public function __construct($router){
         $this->router = $router;
